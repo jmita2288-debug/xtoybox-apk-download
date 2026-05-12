@@ -1,0 +1,13 @@
+{
+  "appName": "XTOYBOX",
+  "latestVersionName": "1.0.5",
+  "latestVersionCode": 105,
+  "apkUrl": "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk",
+  "pageUrl": "https://jmita2288-debug.github.io/xtoybox-apk-download/",
+  "releaseNotes": [
+    "Melhorias visuais",
+    "Ajustes na biblioteca",
+    "Correções gerais"
+  ],
+  "publishedAt": "2026-05-12"
+}
