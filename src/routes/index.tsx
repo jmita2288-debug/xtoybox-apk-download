@@ -210,7 +210,7 @@ function Index() {
             </div>
           </div>
           <a
-            href="#download-apk"
+            href="https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk"
             className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition hover:opacity-90 sm:w-auto"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
