@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
 
 export const Route = createFileRoute("/")({
@@ -6,15 +7,71 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [creditsOpen, setCreditsOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="border-b border-border/60">
-        <div className="mx-auto flex max-w-5xl items-center gap-3 px-6 py-4">
-          <img src={logo} alt="XTOYBOX" className="h-9 w-9 rounded-md object-cover" />
-          <span className="text-base font-semibold tracking-wide">XTOYBOX</span>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="XTOYBOX" className="h-9 w-9 rounded-md object-cover" />
+            <span className="text-base font-semibold tracking-wide">XTOYBOX</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setCreditsOpen(true)}
+            className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-card/40 px-3 py-1.5 text-sm text-muted-foreground transition hover:text-foreground hover:bg-card"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4">
+              <circle cx="12" cy="8" r="3.2" strokeWidth="1.8" />
+              <path d="M5 20c1.2-3.4 4-5 7-5s5.8 1.6 7 5" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+            Créditos
+          </button>
         </div>
       </header>
+
+      {creditsOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 px-4"
+          onClick={() => setCreditsOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-semibold">Créditos</h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Para dúvidas ou para reportar bugs, entre em contato:
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCreditsOpen(false)}
+                aria-label="Fechar"
+                className="rounded-md p-1 text-muted-foreground transition hover:text-foreground"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5">
+                  <path d="M6 6l12 12M18 6L6 18" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div className="mt-5 rounded-lg border border-border/70 bg-background/40 p-4">
+              <div className="font-medium">Alexandreios</div>
+              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-primary">
+                  <path d="M19.5 5.3A17 17 0 0015.4 4l-.2.4a15.6 15.6 0 00-6.4 0L8.6 4a17 17 0 00-4.1 1.3A17.7 17.7 0 002 17.5a17.1 17.1 0 005.2 2.6l.4-.6a12 12 0 01-1.9-.9l.4-.3a12.2 12.2 0 0011.8 0l.4.3c-.6.4-1.2.7-1.9.9l.4.6a17.1 17.1 0 005.2-2.6 17.6 17.6 0 00-2.5-12.2zM9.3 15.1c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1zm5.4 0c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1z" />
+                </svg>
+                Discord: <span className="font-mono text-foreground">@alex690920</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="mx-auto max-w-3xl px-6 pt-16 pb-20 text-center">
