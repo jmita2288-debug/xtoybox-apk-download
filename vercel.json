@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/client",
+  "buildCommand": "node scripts/build-static.mjs",
+  "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
     {
