@@ -9,9 +9,18 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [creditsOpen, setCreditsOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const creditsButtonRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!creditsOpen) return;
+    if (!creditsOpen) {
+      if (wasOpenRef.current) {
+        creditsButtonRef.current?.focus();
+        wasOpenRef.current = false;
+      }
+      return;
+    }
+    wasOpenRef.current = true;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setCreditsOpen(false);
     };
@@ -31,6 +40,7 @@ function Index() {
           </div>
           <button
             type="button"
+            ref={creditsButtonRef}
             onClick={() => setCreditsOpen(true)}
             className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-card/40 px-3 py-1.5 text-sm text-muted-foreground transition hover:text-foreground hover:bg-card"
           >
