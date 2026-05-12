@@ -39,14 +39,14 @@ function Index() {
           onClick={() => setCreditsOpen(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl"
+            className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-lg font-semibold">Créditos</h3>
+                <h3 className="text-lg font-semibold">Informações</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Para dúvidas ou para reportar bugs, entre em contato:
+                  Créditos do projeto e contato para reportar bugs.
                 </p>
               </div>
               <button
@@ -60,14 +60,42 @@ function Index() {
                 </svg>
               </button>
             </div>
-            <div className="mt-5 rounded-lg border border-border/70 bg-background/40 p-4">
-              <div className="font-medium">Alexandreios</div>
-              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-primary">
-                  <path d="M19.5 5.3A17 17 0 0015.4 4l-.2.4a15.6 15.6 0 00-6.4 0L8.6 4a17 17 0 00-4.1 1.3A17.7 17.7 0 002 17.5a17.1 17.1 0 005.2 2.6l.4-.6a12 12 0 01-1.9-.9l.4-.3a12.2 12.2 0 0011.8 0l.4.3c-.6.4-1.2.7-1.9.9l.4.6a17.1 17.1 0 005.2-2.6 17.6 17.6 0 00-2.5-12.2zM9.3 15.1c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1zm5.4 0c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1z" />
-                </svg>
-                Discord: <span className="font-mono text-foreground">@alex690920</span>
-              </div>
+            <div className="mt-5 space-y-4">
+              <section className="rounded-lg border border-border/70 bg-background/40 p-4">
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-foreground/90">
+                  Créditos
+                </h4>
+                <div className="mt-3 space-y-3 text-sm text-muted-foreground leading-relaxed">
+                  <p>XTOYBOX é baseado no projeto open source XStreaming.</p>
+                  <p>
+                    Copyright (c) 2024 Geocld.
+                    <br />
+                    Licenciado sob a licença MIT.
+                  </p>
+                  <p>
+                    Modificações, melhorias de interface, ajustes de sistema e otimizações por
+                    Alexandreios.
+                  </p>
+                  <p>
+                    Este é um projeto não oficial, sem vínculo com Xbox, Microsoft ou qualquer
+                    serviço oficial relacionado.
+                  </p>
+                </div>
+              </section>
+              <section className="rounded-lg border border-border/70 bg-background/40 p-4">
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-foreground/90">
+                  Reportar bugs
+                </h4>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Para reportar bugs ou tirar dúvidas, entre em contato pelo Discord:
+                </p>
+                <div className="mt-3 flex items-center gap-2 text-sm">
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-primary">
+                    <path d="M19.5 5.3A17 17 0 0015.4 4l-.2.4a15.6 15.6 0 00-6.4 0L8.6 4a17 17 0 00-4.1 1.3A17.7 17.7 0 002 17.5a17.1 17.1 0 005.2 2.6l.4-.6a12 12 0 01-1.9-.9l.4-.3a12.2 12.2 0 0011.8 0l.4.3c-.6.4-1.2.7-1.9.9l.4.6a17.1 17.1 0 005.2-2.6 17.6 17.6 0 00-2.5-12.2zM9.3 15.1c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1zm5.4 0c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1z" />
+                  </svg>
+                  <span className="font-mono text-foreground">@alex690920</span>
+                </div>
+              </section>
             </div>
           </div>
         </div>
