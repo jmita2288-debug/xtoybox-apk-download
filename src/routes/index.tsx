@@ -25,7 +25,7 @@ function Index() {
         />
         <h1 className="mt-8 text-4xl font-semibold tracking-tight sm:text-5xl">XTOYBOX</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          App Android para jogar na nuvem em Português Brasil.
+          App Android para jogar na nuvem.
         </p>
         <p className="mt-2 text-sm text-muted-foreground/80">
           Projeto independente baseado no XStreaming.
@@ -36,8 +36,8 @@ function Index() {
       <section className="mx-auto max-w-3xl px-6 py-10">
         <h2 className="text-2xl font-semibold">Sobre o app</h2>
         <p className="mt-4 text-muted-foreground leading-relaxed">
-          O XTOYBOX é uma versão modificada do XStreaming. Ele traz interface em Português Brasil,
-          ajustes visuais e melhorias para uso no Android, celular e TV Box.
+          O XTOYBOX é uma versão modificada do XStreaming, com ajustes na interface, navegação e
+          experiência de uso no Android, celular e TV Box.
         </p>
       </section>
 
@@ -47,8 +47,8 @@ function Index() {
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {[
             {
-              title: "Português Brasil",
-              text: "Menus e textos adaptados.",
+              title: "Textos ajustados",
+              text: "Menus mais claros e diretos.",
               icon: (
                 <path d="M4 5h16M4 12h16M4 19h10" strokeWidth="2" strokeLinecap="round" />
               ),
@@ -105,8 +105,8 @@ function Index() {
       {/* Aviso */}
       <section className="mx-auto max-w-3xl px-6 py-10">
         <div className="rounded-lg border border-border/80 bg-card/60 p-5 text-sm text-muted-foreground">
-          XTOYBOX é um projeto independente baseado no projeto open source XStreaming. Não possui
-          vínculo, parceria ou afiliação com Xbox, Microsoft ou qualquer marca relacionada.
+          XTOYBOX é um projeto independente baseado no XStreaming. Não possui vínculo, parceria ou
+          afiliação com Xbox, Microsoft ou marcas relacionadas.
         </div>
       </section>
 
@@ -134,8 +134,8 @@ function Index() {
             Baixar APK
           </a>
           <p className="mt-4 text-xs text-muted-foreground">
-            Depois de baixar, talvez seja necessário permitir a instalação de apps de fontes
-            desconhecidas no Android.
+            Depois de baixar, talvez seja necessário permitir a instalação de fontes desconhecidas
+            no Android.
           </p>
         </div>
       </section>
