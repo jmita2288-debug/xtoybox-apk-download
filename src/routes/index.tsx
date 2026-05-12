@@ -106,7 +106,7 @@ function Index() {
         <img
           src={logo}
           alt="Logo XTOYBOX"
-          className="mx-auto h-40 w-40 rounded-2xl object-cover shadow-lg"
+          className="mx-auto h-28 w-28 rounded-2xl object-cover shadow-lg"
         />
         <h1 className="mt-8 text-4xl font-semibold tracking-tight sm:text-5xl">XTOYBOX</h1>
         <p className="mt-4 text-lg text-muted-foreground">
