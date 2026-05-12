@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
 
 export const Route = createFileRoute("/")({
@@ -8,6 +8,18 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [creditsOpen, setCreditsOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!creditsOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setCreditsOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    dialogRef.current?.focus();
+    return () => window.removeEventListener("keydown", onKey);
+  }, [creditsOpen]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -39,6 +51,8 @@ function Index() {
           onClick={() => setCreditsOpen(false)}
         >
           <div
+            ref={dialogRef}
+            tabIndex={-1}
             className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
