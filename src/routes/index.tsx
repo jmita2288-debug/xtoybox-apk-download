@@ -6,11 +6,51 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+type LatestMetadata = {
+  latestVersionName: string;
+  latestVersionCode: number;
+  apkUrl: string;
+  pageUrl?: string;
+  releaseNotes?: string[];
+  publishedAt?: string;
+};
+
+const fallbackDownload = {
+  latestVersionName: "1.0.5",
+  latestVersionCode: 5,
+  apkUrl:
+    "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk",
+};
+
 export function Index() {
   const [creditsOpen, setCreditsOpen] = useState(false);
+  const [latest, setLatest] = useState<LatestMetadata>(fallbackDownload);
   const dialogRef = useRef<HTMLDivElement>(null);
   const creditsButtonRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+
+    fetch("/latest.json", { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("latest.json indisponível");
+        return response.json() as Promise<LatestMetadata>;
+      })
+      .then((data) => {
+        if (!active) return;
+        if (data.latestVersionName && data.apkUrl) {
+          setLatest(data);
+        }
+      })
+      .catch(() => {
+        // Mantém o fallback para não quebrar o botão caso o JSON falhe.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!creditsOpen) {
@@ -230,11 +270,13 @@ export function Index() {
             />
             <div>
               <div className="font-medium">XTOYBOX APK</div>
-              <div className="text-sm text-muted-foreground">Versão v1.0.5</div>
+              <div className="text-sm text-muted-foreground">
+                Versão v{latest.latestVersionName}
+              </div>
             </div>
           </div>
           <a
-            href="https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk"
+            href={latest.apkUrl}
             className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition hover:opacity-90 sm:w-auto"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
