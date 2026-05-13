@@ -1,8 +1,8 @@
 {
   "appName": "XTOYBOX",
-  "latestVersionName": "1.0.6",
-  "latestVersionCode": 6,
-  "apkUrl": "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.6-latest/XTOYBOX-v1.0.6.apk",
+  "latestVersionName": "1.0.7",
+  "latestVersionCode": 7,
+  "apkUrl": "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.7-latest/XTOYBOX-v1.0.7.apk",
   "pageUrl": "https://xtoybox-apk-download.vercel.app/",
   "releaseNotes": [
     "Correções gerais",
