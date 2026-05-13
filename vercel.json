@@ -1,19 +1,11 @@
 {
-  "buildCommand": "npm run build",
   "installCommand": "npm install",
+  "buildCommand": "npx vite build --config vite.config.vercel.ts",
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/latest.json",
-      "destination": "/client/latest.json"
-    },
-    {
-      "source": "/assets/(.*)",
-      "destination": "/client/assets/$1"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/client/index.html"
+      "destination": "/index.html"
     }
   ]
 }
