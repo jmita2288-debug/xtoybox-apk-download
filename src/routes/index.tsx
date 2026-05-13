@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Index() {
+export function Index() {
   const [creditsOpen, setCreditsOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const creditsButtonRef = useRef<HTMLButtonElement>(null);
