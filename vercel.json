@@ -2,6 +2,13 @@
   "installCommand": "npm install",
   "buildCommand": "npx vite build --config vite.config.vercel.ts",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/downloads/XTOYBOX-latest.apk",
+      "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-latest.apk",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
