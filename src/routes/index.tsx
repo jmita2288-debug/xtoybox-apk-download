@@ -358,18 +358,21 @@ export function Index() {
                 className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
               >
                 <div
-                  className={`group overflow-hidden rounded-2xl border bg-card transition-all duration-300 ${
+                  className={`group mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
                     activeSlide === i
                       ? "border-primary/30"
                       : "border-border/60 sm:opacity-80"
                   }`}
                   style={{ boxShadow: "var(--shadow-card)" }}
                 >
-                  <div className="aspect-[9/19] w-full overflow-hidden bg-background/40">
+                  <div className="aspect-[941/1672] w-full overflow-hidden bg-background/40">
                     <img
                       src={s.src}
                       alt={s.alt}
+                      width={941}
+                      height={1672}
                       loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                   </div>
