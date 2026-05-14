@@ -27,7 +27,7 @@ export type ApkMetadata = {
   downloadsTotal: number | null;
   apkSizeBytes: number | null;
   apkSizeFormatted: string | null;
-  source: "latest-json" | "latest-json-github" | "latest-json-stats" | "fallback";
+  source: "server-api" | "latest-json" | "latest-json-github" | "latest-json-stats" | "fallback";
   latest: LatestMetadata;
 };
 
@@ -93,6 +93,12 @@ function buildMetadata(
   };
 }
 
+async function fetchServerApkMetadata() {
+  const response = await fetch(`/api/apk-metadata?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) return null;
+  return (await response.json()) as ApkMetadata;
+}
+
 export async function fetchLatestMetadata(): Promise<LatestMetadata> {
   const response = await fetch("/latest.json", { cache: "no-store" });
 
@@ -149,6 +155,11 @@ async function fetchGitHubReleaseData(latest: LatestMetadata) {
 }
 
 export async function fetchApkMetadata(): Promise<ApkMetadata> {
+  const serverMetadata = await fetchServerApkMetadata().catch(() => null);
+  if (serverMetadata?.apkUrl && serverMetadata.versionName) {
+    return serverMetadata;
+  }
+
   let latest = fallbackLatestMetadata;
   let latestOk = false;
 
