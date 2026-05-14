@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import faviconPng from "@/assets/logo-xtoybox.png";
 
 function NotFoundComponent() {
   return (
@@ -84,9 +85,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-      { rel: "shortcut icon", href: "/favicon.svg" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "icon", type: "image/png", href: faviconPng },
+      { rel: "shortcut icon", type: "image/png", href: faviconPng },
+      { rel: "apple-touch-icon", href: faviconPng },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg?v=3" },
     ],
   }),
   shellComponent: RootShell,
