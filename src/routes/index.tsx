@@ -1,6 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
+import screenHome from "@/assets/screens/home.png";
+import screenLibrary from "@/assets/screens/library.png";
+import screenGame from "@/assets/screens/game.png";
+import screenFriends from "@/assets/screens/friends.png";
+import screenProfile from "@/assets/screens/profile.png";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Autoplay from "embla-carousel-autoplay";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -22,12 +42,29 @@ const fallbackDownload = {
     "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk",
 };
 
+const DISCORD_URL = "https://discord.gg/SEU-LINK-AQUI";
+
+const screens = [
+  { src: screenHome, alt: "Tela inicial do XTOYBOX" },
+  { src: screenLibrary, alt: "Biblioteca de jogos" },
+  { src: screenGame, alt: "Detalhes do jogo" },
+  { src: screenFriends, alt: "Lista de amigos" },
+  { src: screenProfile, alt: "Perfil do usuário" },
+];
+
+type InfoSection = "credits" | "discord" | "terms";
+
 export function Index() {
-  const [creditsOpen, setCreditsOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
   const [latest, setLatest] = useState<LatestMetadata>(fallbackDownload);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
   const dialogRef = useRef<HTMLDivElement>(null);
-  const creditsButtonRef = useRef<HTMLButtonElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
+  const autoplayRef = useRef(
+    Autoplay({ delay: 4500, stopOnInteraction: true, stopOnMouseEnter: true }),
+  );
 
   useEffect(() => {
     let active = true;
@@ -53,21 +90,33 @@ export function Index() {
   }, []);
 
   useEffect(() => {
-    if (!creditsOpen) {
+    if (!infoOpen) {
       if (wasOpenRef.current) {
-        creditsButtonRef.current?.focus();
+        menuTriggerRef.current?.focus();
         wasOpenRef.current = false;
       }
       return;
     }
     wasOpenRef.current = true;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setCreditsOpen(false);
+      if (e.key === "Escape") setInfoOpen(null);
     };
     window.addEventListener("keydown", onKey);
     dialogRef.current?.focus();
     return () => window.removeEventListener("keydown", onKey);
-  }, [creditsOpen]);
+  }, [infoOpen]);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    const update = () => setActiveSlide(carouselApi.selectedScrollSnap());
+    update();
+    carouselApi.on("select", update);
+    carouselApi.on("reInit", update);
+    return () => {
+      carouselApi.off("select", update);
+      carouselApi.off("reInit", update);
+    };
+  }, [carouselApi]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -78,27 +127,41 @@ export function Index() {
             <img src={logo} alt="XTOYBOX" className="h-9 w-9 rounded-md object-cover" />
             <span className="text-base font-semibold tracking-wide">XTOYBOX</span>
           </div>
-          <button
-            type="button"
-            ref={creditsButtonRef}
-            onClick={() => setCreditsOpen(true)}
-            className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-card/40 px-3 py-1.5 text-sm text-muted-foreground transition hover:text-foreground hover:bg-card"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4">
-              <circle cx="12" cy="8" r="3.2" strokeWidth="1.8" />
-              <path d="M5 20c1.2-3.4 4-5 7-5s5.8 1.6 7 5" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-            Créditos
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                ref={menuTriggerRef}
+                type="button"
+                aria-label="Abrir menu"
+                className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-card/40 px-3 py-1.5 text-sm text-muted-foreground transition hover:text-foreground hover:bg-card"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4">
+                  <path d="M4 7h16M4 12h16M4 17h16" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+                <span className="hidden sm:inline">Menu</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onSelect={() => setInfoOpen("credits")}>
+                Créditos
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setInfoOpen("discord")}>
+                Discord / Suporte
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setInfoOpen("terms")}>
+                Termos de uso
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
-      {creditsOpen && (
+      {infoOpen && (
         <div
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 px-4"
-          onClick={() => setCreditsOpen(false)}
+          onClick={() => setInfoOpen(null)}
         >
           <div
             ref={dialogRef}
@@ -108,14 +171,20 @@ export function Index() {
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-lg font-semibold">Informações</h3>
+                <h3 className="text-lg font-semibold">
+                  {infoOpen === "credits" && "Créditos"}
+                  {infoOpen === "discord" && "Suporte e bugs"}
+                  {infoOpen === "terms" && "Termos de uso"}
+                </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Créditos do projeto e contato para reportar bugs.
+                  {infoOpen === "credits" && "Informações sobre o projeto."}
+                  {infoOpen === "discord" && "Tire dúvidas ou reporte bugs."}
+                  {infoOpen === "terms" && "Leia antes de instalar."}
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => setCreditsOpen(false)}
+                onClick={() => setInfoOpen(null)}
                 aria-label="Fechar"
                 className="rounded-md p-1 text-muted-foreground transition hover:text-foreground"
               >
@@ -124,42 +193,58 @@ export function Index() {
                 </svg>
               </button>
             </div>
-            <div className="mt-5 space-y-4">
-              <section className="rounded-lg border border-border/70 bg-background/40 p-4">
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-foreground/90">
-                  Créditos
-                </h4>
-                <div className="mt-3 space-y-3 text-sm text-muted-foreground leading-relaxed">
+            <div className="mt-5 max-h-[65vh] overflow-y-auto rounded-lg border border-border/70 bg-background/40 p-4 text-sm text-muted-foreground leading-relaxed">
+              {infoOpen === "credits" && (
+                <div className="space-y-3">
                   <p>XTOYBOX é baseado no projeto open source XStreaming.</p>
+                  <p>Copyright (c) 2024 Geocld.</p>
+                  <p>Licenciado sob a licença MIT.</p>
+                  <p>Modificações, melhorias e otimizações por Alexandreios (XTOYBOX).</p>
+                  <p>Projeto não oficial, sem vínculo com Xbox ou Microsoft.</p>
+                </div>
+              )}
+              {infoOpen === "discord" && (
+                <div className="space-y-4">
                   <p>
-                    Copyright (c) 2024 Geocld.
-                    <br />
-                    Licenciado sob a licença MIT.
+                    Use o Discord para tirar dúvidas, reportar bugs ou acompanhar avisos do
+                    projeto.
+                  </p>
+                  <a
+                    href={DISCORD_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition hover:opacity-90"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                      <path d="M19.5 5.3A17 17 0 0015.4 4l-.2.4a15.6 15.6 0 00-6.4 0L8.6 4a17 17 0 00-4.1 1.3A17.7 17.7 0 002 17.5a17.1 17.1 0 005.2 2.6l.4-.6a12 12 0 01-1.9-.9l.4-.3a12.2 12.2 0 0011.8 0l.4.3c-.6.4-1.2.7-1.9.9l.4.6a17.1 17.1 0 005.2-2.6 17.6 17.6 0 00-2.5-12.2zM9.3 15.1c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1zm5.4 0c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1z" />
+                    </svg>
+                    Entrar no Discord
+                  </a>
+                </div>
+              )}
+              {infoOpen === "terms" && (
+                <div className="space-y-3">
+                  <p>
+                    O XTOYBOX é um projeto independente baseado em software open source. Ele não
+                    possui vínculo, parceria ou afiliação com Xbox, Microsoft ou qualquer marca
+                    relacionada.
                   </p>
                   <p>
-                    Modificações, melhorias de interface, ajustes de sistema e otimizações por
-                    Alexandreios.
+                    O aplicativo é distribuído como APK externo, fora de lojas oficiais. Antes de
+                    instalar ou inserir sua conta no aplicativo, o usuário deve entender que esse
+                    tipo de instalação exige cuidado.
                   </p>
                   <p>
-                    Este é um projeto não oficial, sem vínculo com Xbox, Microsoft ou qualquer
-                    serviço oficial relacionado.
+                    Não é possível prometer 100% de segurança em um APK externo. Use apenas
+                    versões baixadas pelo site oficial do projeto e verifique se está usando a
+                    versão mais recente.
+                  </p>
+                  <p>
+                    Ao usar o XTOYBOX, o usuário entende esses pontos e assume a responsabilidade
+                    pelo uso do aplicativo.
                   </p>
                 </div>
-              </section>
-              <section className="rounded-lg border border-border/70 bg-background/40 p-4">
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-foreground/90">
-                  Reportar bugs
-                </h4>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Para reportar bugs ou tirar dúvidas, entre em contato pelo Discord:
-                </p>
-                <div className="mt-3 flex items-center gap-2 text-sm">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-primary">
-                    <path d="M19.5 5.3A17 17 0 0015.4 4l-.2.4a15.6 15.6 0 00-6.4 0L8.6 4a17 17 0 00-4.1 1.3A17.7 17.7 0 002 17.5a17.1 17.1 0 005.2 2.6l.4-.6a12 12 0 01-1.9-.9l.4-.3a12.2 12.2 0 0011.8 0l.4.3c-.6.4-1.2.7-1.9.9l.4.6a17.1 17.1 0 005.2-2.6 17.6 17.6 0 00-2.5-12.2zM9.3 15.1c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1zm5.4 0c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1z" />
-                  </svg>
-                  <span className="font-mono text-foreground">@alex690920</span>
-                </div>
-              </section>
+              )}
             </div>
           </div>
         </div>
@@ -188,6 +273,57 @@ export function Index() {
           O XTOYBOX é uma versão modificada do XStreaming, com ajustes na interface, navegação e
           experiência de uso no Android, celular e TV Box.
         </p>
+      </section>
+
+      {/* Carrossel de telas */}
+      <section className="mx-auto max-w-5xl px-6 py-10">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold">Telas do app</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Uma prévia da interface no Android.
+            </p>
+          </div>
+        </div>
+        <Carousel
+          opts={{ loop: true, align: "center" }}
+          plugins={[autoplayRef.current]}
+          setApi={setCarouselApi}
+          className="relative"
+        >
+          <CarouselContent className="-ml-4">
+            {screens.map((s) => (
+              <CarouselItem
+                key={s.alt}
+                className="pl-4 basis-4/5 sm:basis-1/2 md:basis-1/3"
+              >
+                <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-lg shadow-primary/5">
+                  <img
+                    src={s.src}
+                    alt={s.alt}
+                    loading="lazy"
+                    className="h-[420px] w-full object-cover object-top sm:h-[460px]"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden sm:flex -left-4" />
+          <CarouselNext className="hidden sm:flex -right-4" />
+        </Carousel>
+        <div className="mt-5 flex justify-center gap-2">
+          {screens.map((s, i) => (
+            <button
+              key={s.alt}
+              type="button"
+              aria-label={`Ir para slide ${i + 1}`}
+              onClick={() => carouselApi?.scrollTo(i)}
+              className={`h-1.5 rounded-full transition-all ${
+                activeSlide === i ? "w-6 bg-primary" : "w-2 bg-border"
+              }`}
+            />
+          ))}
+        </div>
       </section>
 
       {/* Recursos */}
