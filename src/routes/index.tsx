@@ -100,6 +100,15 @@ export function Index() {
     };
   }, []);
 
+  // Pré-carrega os prints do carrossel para evitar pop-in e garantir nitidez.
+  useEffect(() => {
+    screens.forEach((s) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = s.src;
+    });
+  }, []);
+
   useEffect(() => {
     if (!infoOpen) {
       if (wasOpenRef.current) {
@@ -368,10 +377,13 @@ export function Index() {
                   <div className="aspect-[941/1672] w-full overflow-hidden bg-background/40">
                     <img
                       src={s.src}
+                      srcSet={`${s.src} 941w`}
+                      sizes="(min-width: 768px) 320px, (min-width: 640px) 45vw, 280px"
                       alt={s.alt}
                       width={941}
                       height={1672}
-                      loading="lazy"
+                      loading={i === 0 ? "eager" : "lazy"}
+                      fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
                       className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                     />
