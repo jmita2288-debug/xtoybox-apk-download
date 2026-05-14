@@ -34,6 +34,8 @@ import {
   Cloud,
   Type,
   ShieldAlert,
+  Info,
+  CheckCircle2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -306,11 +308,32 @@ export function Index() {
 
       {/* Sobre */}
       <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-semibold">Sobre o app</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          O XTOYBOX é uma versão modificada do XStreaming, com ajustes na interface, navegação e
-          experiência de uso no Android, celular e TV Box.
-        </p>
+        <div
+          className="rounded-2xl border border-border/70 bg-card/60 p-6 sm:p-8"
+          style={{ boxShadow: "var(--shadow-card)" }}
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary">
+              <Info className="h-4 w-4" />
+            </div>
+            <h2 className="text-2xl font-semibold">Sobre o app</h2>
+          </div>
+          <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
+            O XTOYBOX é uma versão modificada do XStreaming, com ajustes na interface,
+            navegação e experiência de uso no Android, celular e TV Box.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
+              Android
+            </span>
+            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
+              TV Box
+            </span>
+            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
+              Open source
+            </span>
+          </div>
+        </div>
       </section>
 
       {/* Carrossel de telas */}
@@ -329,28 +352,37 @@ export function Index() {
           setApi={setCarouselApi}
           className="relative"
         >
-          <CarouselContent className="-ml-4">
-            {screens.map((s) => (
+          <CarouselContent className="-ml-4 py-4">
+            {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
-                className="pl-4 basis-4/5 sm:basis-1/2 md:basis-1/3"
+                className="pl-4 basis-[78%] sm:basis-1/2 md:basis-1/3"
               >
                 <div
-                  className="group overflow-hidden rounded-2xl border border-border/70 bg-card transition-transform duration-300 hover:-translate-y-1"
-                  style={{ boxShadow: "var(--shadow-card)" }}
+                  className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-card to-background/40 transition-all duration-500 ${
+                    activeSlide === i
+                      ? "border-primary/40 scale-100 opacity-100"
+                      : "border-border/60 scale-[0.94] opacity-70"
+                  }`}
+                  style={{
+                    boxShadow:
+                      activeSlide === i ? "var(--shadow-glow)" : "var(--shadow-card)",
+                  }}
                 >
-                  <img
-                    src={s.src}
-                    alt={s.alt}
-                    loading="lazy"
-                    className="h-[420px] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03] sm:h-[460px]"
-                  />
+                  <div className="aspect-[9/19.5] w-full overflow-hidden">
+                    <img
+                      src={s.src}
+                      alt={s.alt}
+                      loading="lazy"
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex -left-4 border-border/70 bg-card/80 backdrop-blur" />
-          <CarouselNext className="hidden sm:flex -right-4 border-border/70 bg-card/80 backdrop-blur" />
+          <CarouselPrevious className="hidden sm:flex -left-2 h-10 w-10 border-border/70 bg-card/80 text-foreground backdrop-blur hover:bg-card" />
+          <CarouselNext className="hidden sm:flex -right-2 h-10 w-10 border-border/70 bg-card/80 text-foreground backdrop-blur hover:bg-card" />
         </Carousel>
         <div className="mt-5 flex justify-center gap-2">
           {screens.map((s, i) => (
@@ -396,12 +428,42 @@ export function Index() {
       </section>
 
       {/* Aviso */}
+      {/* Como instalar */}
+      <section className="mx-auto max-w-3xl px-6 py-12">
+        <h2 className="text-2xl font-semibold">Como instalar</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Quatro passos rápidos para começar a usar.
+        </p>
+        <ol className="mt-6 grid gap-3 sm:grid-cols-2">
+          {[
+            "Baixe o APK pelo botão acima.",
+            "Permita instalação de fontes desconhecidas no Android.",
+            "Abra o arquivo APK baixado.",
+            "Instale e abra o XTOYBOX.",
+          ].map((step, i) => (
+            <li
+              key={step}
+              className="flex items-start gap-3 rounded-xl border border-border/70 bg-card/60 p-4 transition-colors duration-200 hover:border-border hover:bg-card"
+            >
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-xs font-semibold text-primary">
+                {i + 1}
+              </div>
+              <span className="text-sm text-foreground/90">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Aviso */}
       <section className="mx-auto max-w-3xl px-6 py-8">
-        <div className="flex items-start gap-3 rounded-lg border border-border/70 bg-card/40 p-4 text-sm text-muted-foreground">
-          <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/80" />
+        <div className="flex items-start gap-4 rounded-xl border border-border/70 bg-card/50 p-5 text-sm leading-relaxed text-muted-foreground">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary/80">
+            <ShieldAlert className="h-4 w-4" />
+          </div>
           <p>
-            XTOYBOX é um projeto independente baseado no XStreaming. Não possui vínculo, parceria
-            ou afiliação com Xbox, Microsoft ou marcas relacionadas.
+            <span className="font-medium text-foreground">Projeto independente.</span>{" "}
+            O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou afiliação
+            com Xbox, Microsoft ou marcas relacionadas.
           </p>
         </div>
       </section>
