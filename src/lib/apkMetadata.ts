@@ -8,6 +8,13 @@ export type LatestMetadata = {
   publishedAt?: string;
 };
 
+type DownloadStats = {
+  totalDownloads?: number;
+  versions?: Record<string, number>;
+  updatedAt?: string | null;
+  lastVersion?: string;
+};
+
 export type ApkMetadata = {
   appName: string;
   versionName: string;
@@ -20,7 +27,7 @@ export type ApkMetadata = {
   downloadsTotal: number | null;
   apkSizeBytes: number | null;
   apkSizeFormatted: string | null;
-  source: "latest-json" | "latest-json-github" | "fallback";
+  source: "latest-json" | "latest-json-github" | "latest-json-stats" | "fallback";
   latest: LatestMetadata;
 };
 
@@ -110,6 +117,12 @@ export async function fetchLatestMetadata(): Promise<LatestMetadata> {
   };
 }
 
+async function fetchDownloadStats() {
+  const response = await fetch(`/download-stats.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) return null;
+  return (await response.json()) as DownloadStats;
+}
+
 async function fetchGitHubReleaseData(latest: LatestMetadata) {
   const version = normalizeVersion(latest.latestVersionName);
   const tag = `xtoybox-v${version}-latest`;
@@ -146,15 +159,20 @@ export async function fetchApkMetadata(): Promise<ApkMetadata> {
     latestOk = false;
   }
 
-  const github = await fetchGitHubReleaseData(latest).catch(() => null);
+  const [github, stats] = await Promise.all([
+    fetchGitHubReleaseData(latest).catch(() => null),
+    fetchDownloadStats().catch(() => null),
+  ]);
+
+  const statsDownloads = typeof stats?.totalDownloads === "number" ? stats.totalDownloads : null;
   const latestWithDate = github?.publishedAt && !latest.publishedAt
     ? { ...latest, publishedAt: github.publishedAt }
     : latest;
 
   return buildMetadata(
     latestWithDate,
-    github?.downloadsTotal ?? null,
+    statsDownloads ?? github?.downloadsTotal ?? null,
     github?.apkSizeBytes ?? null,
-    github ? "latest-json-github" : latestOk ? "latest-json" : "fallback",
+    statsDownloads != null ? "latest-json-stats" : github ? "latest-json-github" : latestOk ? "latest-json" : "fallback",
   );
 }
