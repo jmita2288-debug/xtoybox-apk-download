@@ -6,6 +6,7 @@ import screenLibrary from "@/assets/screens/library.png";
 import screenGame from "@/assets/screens/game.png";
 import screenFriends from "@/assets/screens/friends.png";
 import screenProfile from "@/assets/screens/profile.png";
+import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
   Carousel,
   CarouselContent,
@@ -26,21 +27,23 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type LatestMetadata = {
-  latestVersionName: string;
-  latestVersionCode: number;
-  apkUrl: string;
-  pageUrl?: string;
-  releaseNotes?: string[];
-  publishedAt?: string;
-};
-
-const fallbackDownload = {
-  latestVersionName: "1.0.5",
-  latestVersionCode: 5,
-  apkUrl:
-    "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk",
-};
+function createFallbackApkMetadata(): ApkMetadata {
+  return {
+    appName: fallbackLatestMetadata.appName ?? "XTOYBOX",
+    versionName: fallbackLatestMetadata.latestVersionName,
+    versionCode: fallbackLatestMetadata.latestVersionCode,
+    apkUrl: fallbackLatestMetadata.apkUrl,
+    pageUrl: fallbackLatestMetadata.pageUrl,
+    releaseNotes: fallbackLatestMetadata.releaseNotes ?? [],
+    publishedAt: fallbackLatestMetadata.publishedAt ?? null,
+    lastUpdated: fallbackLatestMetadata.publishedAt ?? null,
+    downloadsTotal: null,
+    apkSizeBytes: null,
+    apkSizeFormatted: null,
+    source: "fallback",
+    latest: fallbackLatestMetadata,
+  };
+}
 
 const DISCORD_URL = "https://discord.gg/SEU-LINK-AQUI";
 
@@ -56,7 +59,7 @@ type InfoSection = "credits" | "discord" | "terms";
 
 export function Index() {
   const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
-  const [latest, setLatest] = useState<LatestMetadata>(fallbackDownload);
+  const [apkMetadata, setApkMetadata] = useState<ApkMetadata>(() => createFallbackApkMetadata());
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -69,19 +72,13 @@ export function Index() {
   useEffect(() => {
     let active = true;
 
-    fetch("/latest.json", { cache: "no-store" })
-      .then((response) => {
-        if (!response.ok) throw new Error("latest.json indisponível");
-        return response.json() as Promise<LatestMetadata>;
-      })
-      .then((data) => {
+    fetchApkMetadata()
+      .then((metadata) => {
         if (!active) return;
-        if (data.latestVersionName && data.apkUrl) {
-          setLatest(data);
-        }
+        setApkMetadata(metadata);
       })
       .catch(() => {
-        // Mantém o fallback para não quebrar o botão caso o JSON falhe.
+        // Mantém o fallback para não quebrar o botão caso latest.json ou GitHub falhem.
       });
 
     return () => {
@@ -215,9 +212,6 @@ export function Index() {
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition hover:opacity-90"
                   >
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                      <path d="M19.5 5.3A17 17 0 0015.4 4l-.2.4a15.6 15.6 0 00-6.4 0L8.6 4a17 17 0 00-4.1 1.3A17.7 17.7 0 002 17.5a17.1 17.1 0 005.2 2.6l.4-.6a12 12 0 01-1.9-.9l.4-.3a12.2 12.2 0 0011.8 0l.4.3c-.6.4-1.2.7-1.9.9l.4.6a17.1 17.1 0 005.2-2.6 17.6 17.6 0 00-2.5-12.2zM9.3 15.1c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1zm5.4 0c-1 0-1.9-.9-1.9-2.1 0-1.1.8-2.1 1.9-2.1s1.9 1 1.9 2.1c0 1.2-.8 2.1-1.9 2.1z" />
-                    </svg>
                     Entrar no Discord
                   </a>
                 </div>
@@ -331,56 +325,13 @@ export function Index() {
         <h2 className="text-2xl font-semibold">Recursos</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {[
-            {
-              title: "Textos ajustados",
-              text: "Menus mais claros e diretos.",
-              icon: (
-                <path d="M4 5h16M4 12h16M4 19h10" strokeWidth="2" strokeLinecap="round" />
-              ),
-            },
-            {
-              title: "Interface ajustada",
-              text: "Visual mais limpo e organizado.",
-              icon: (
-                <path d="M4 6h16v4H4zM4 14h10v4H4z" strokeWidth="2" strokeLinejoin="round" />
-              ),
-            },
-            {
-              title: "Jogos na nuvem",
-              text: "Acesso aos jogos compatíveis.",
-              icon: (
-                <path
-                  d="M7 18a4 4 0 010-8 5 5 0 019.6-1.5A4 4 0 0117 18H7z"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                />
-              ),
-            },
-            {
-              title: "Android e TV Box",
-              text: "Pensado para telas pequenas e grandes.",
-              icon: (
-                <path
-                  d="M3 7h14v8H3zM17 9h4v4h-4zM7 19v-4M13 19v-4"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              ),
-            },
+            { title: "Textos ajustados", text: "Menus mais claros e diretos." },
+            { title: "Interface ajustada", text: "Visual mais limpo e organizado." },
+            { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis." },
+            { title: "Android e TV Box", text: "Pensado para telas pequenas e grandes." },
           ].map((c) => (
-            <div
-              key={c.title}
-              className="rounded-xl border border-border bg-card p-5"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                className="h-6 w-6 text-primary"
-              >
-                {c.icon}
-              </svg>
-              <h3 className="mt-4 font-medium">{c.title}</h3>
+            <div key={c.title} className="rounded-xl border border-border bg-card p-5">
+              <h3 className="font-medium">{c.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{c.text}</p>
             </div>
           ))}
@@ -396,7 +347,15 @@ export function Index() {
       </section>
 
       {/* Download */}
-      <section className="mx-auto max-w-3xl px-6 py-10">
+      <section
+        className="mx-auto max-w-3xl px-6 py-10"
+        data-apk-version={apkMetadata.versionName}
+        data-apk-version-code={apkMetadata.versionCode}
+        data-apk-downloads={apkMetadata.downloadsTotal ?? ""}
+        data-apk-size={apkMetadata.apkSizeFormatted ?? ""}
+        data-apk-updated-at={apkMetadata.lastUpdated ?? ""}
+        data-apk-metadata-source={apkMetadata.source}
+      >
         <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
           <div className="flex items-center gap-4">
             <img
@@ -407,17 +366,14 @@ export function Index() {
             <div>
               <div className="font-medium">XTOYBOX APK</div>
               <div className="text-sm text-muted-foreground">
-                Versão v{latest.latestVersionName}
+                Versão v{apkMetadata.versionName}
               </div>
             </div>
           </div>
           <a
-            href={latest.apkUrl}
+            href={apkMetadata.apkUrl}
             className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition hover:opacity-90 sm:w-auto"
           >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-              <path d="M7.5 10.5a1 1 0 00-1 1v5a1 1 0 102 0v-5a1 1 0 00-1-1zm9 0a1 1 0 00-1 1v5a1 1 0 102 0v-5a1 1 0 00-1-1zM8 18.5a1.5 1.5 0 003 0V19h2v-.5a1.5 1.5 0 003 0V11H8v7.5zM5.5 7.7l-.9-1.6a.4.4 0 01.7-.4l.9 1.7A6.5 6.5 0 0112 6c1.4 0 2.7.3 3.8.9l.9-1.7a.4.4 0 01.7.4l-.9 1.6A5.7 5.7 0 0119 12H5a5.7 5.7 0 01.5-4.3zM9 9.5a.6.6 0 100-1.2.6.6 0 000 1.2zm6 0a.6.6 0 100-1.2.6.6 0 000 1.2z" />
-            </svg>
             Baixar APK
           </a>
           <p className="mt-4 text-xs text-muted-foreground">
