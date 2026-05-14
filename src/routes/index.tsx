@@ -370,6 +370,71 @@ export function Index() {
               </div>
             </div>
           </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              {
+                label: "Versão",
+                value: `v${apkMetadata.versionName}`,
+                icon: (
+                  <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" strokeWidth="1.6" strokeLinejoin="round" />
+                ),
+              },
+              {
+                label: "Downloads",
+                value:
+                  apkMetadata.downloadsTotal != null
+                    ? apkMetadata.downloadsTotal.toLocaleString("pt-BR")
+                    : "Indisponível",
+                icon: (
+                  <>
+                    <path d="M12 3v12m0 0l-4-4m4 4l4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" strokeWidth="1.8" strokeLinecap="round" />
+                  </>
+                ),
+              },
+              {
+                label: "Atualizado",
+                value: apkMetadata.lastUpdated
+                  ? new Date(apkMetadata.lastUpdated).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "Indisponível",
+                icon: (
+                  <>
+                    <rect x="3" y="5" width="18" height="16" rx="2" strokeWidth="1.6" />
+                    <path d="M3 9h18M8 3v4M16 3v4" strokeWidth="1.6" strokeLinecap="round" />
+                  </>
+                ),
+              },
+              {
+                label: "Tamanho",
+                value: apkMetadata.apkSizeFormatted ?? "Indisponível",
+                icon: (
+                  <>
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeWidth="1.6" strokeLinecap="round" />
+                    <path d="M7 10l5 5 5-5M12 15V3" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </>
+                ),
+              },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-border/70 bg-background/40 p-3"
+              >
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4">
+                    {stat.icon}
+                  </svg>
+                  <span className="text-[11px] uppercase tracking-wide">{stat.label}</span>
+                </div>
+                <div className="mt-1.5 truncate text-sm font-medium text-foreground">
+                  {stat.value}
+                </div>
+              </div>
+            ))}
+          </div>
           <a
             href={apkMetadata.apkUrl}
             className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition hover:opacity-90 sm:w-auto"
