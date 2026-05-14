@@ -427,32 +427,6 @@ export function Index() {
       </section>
 
       {/* Aviso */}
-      {/* Como instalar */}
-      <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-semibold">Como instalar</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Quatro passos rápidos para começar a usar.
-        </p>
-        <ol className="mt-6 grid gap-3 sm:grid-cols-2">
-          {[
-            "Baixe o APK pelo botão acima.",
-            "Permita instalação de fontes desconhecidas no Android.",
-            "Abra o arquivo APK baixado.",
-            "Instale e abra o XTOYBOX.",
-          ].map((step, i) => (
-            <li
-              key={step}
-              className="flex items-start gap-3 rounded-xl border border-border/70 bg-card/60 p-4 transition-colors duration-200 hover:border-border hover:bg-card"
-            >
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-xs font-semibold text-primary">
-                {i + 1}
-              </div>
-              <span className="text-sm text-foreground/90">{step}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
       {/* Aviso */}
       <section className="mx-auto max-w-3xl px-6 py-8">
         <div className="flex items-start gap-4 rounded-xl border border-border/70 bg-card/50 p-5 text-sm leading-relaxed text-muted-foreground">
