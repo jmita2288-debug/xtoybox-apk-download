@@ -35,7 +35,6 @@ import {
   Type,
   ShieldAlert,
   Info,
-  CheckCircle2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
