@@ -1,5 +1,8 @@
 {
-  "totalDownloads": 0,
-  "versions": {},
-  "updatedAt": null
+  "totalDownloads": 1,
+  "versions": {
+    "1.0.8": 1
+  },
+  "updatedAt": "2026-05-14T18:51:47.802Z",
+  "lastVersion": "1.0.8"
 }
