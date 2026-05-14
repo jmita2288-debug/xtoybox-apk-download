@@ -436,7 +436,7 @@ export function Index() {
             ))}
           </div>
           <a
-            href={apkMetadata.apkUrl}
+            href="/api/download"
             className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition hover:opacity-90 sm:w-auto"
           >
             Baixar APK
