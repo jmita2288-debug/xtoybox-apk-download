@@ -351,29 +351,26 @@ export function Index() {
           setApi={setCarouselApi}
           className="relative"
         >
-          <CarouselContent className="-ml-4 py-4">
+          <CarouselContent className="-ml-4 py-2">
             {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
-                className="pl-4 basis-[78%] sm:basis-1/2 md:basis-1/3"
+                className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
               >
                 <div
-                  className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-card to-background/40 transition-all duration-500 ${
+                  className={`group overflow-hidden rounded-2xl border bg-card transition-all duration-300 ${
                     activeSlide === i
-                      ? "border-primary/40 scale-100 opacity-100"
-                      : "border-border/60 scale-[0.94] opacity-70"
+                      ? "border-primary/30"
+                      : "border-border/60 sm:opacity-80"
                   }`}
-                  style={{
-                    boxShadow:
-                      activeSlide === i ? "var(--shadow-glow)" : "var(--shadow-card)",
-                  }}
+                  style={{ boxShadow: "var(--shadow-card)" }}
                 >
-                  <div className="aspect-[9/19.5] w-full overflow-hidden">
+                  <div className="aspect-[9/19] w-full overflow-hidden bg-background/40">
                     <img
                       src={s.src}
                       alt={s.alt}
                       loading="lazy"
-                      className="h-full w-full object-contain"
+                      className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                   </div>
                 </div>
@@ -438,6 +435,39 @@ export function Index() {
             O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou afiliação
             com Xbox, Microsoft ou marcas relacionadas.
           </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto max-w-3xl px-6 py-8">
+        <h2 className="text-2xl font-semibold">Perguntas frequentes</h2>
+        <div className="mt-5 divide-y divide-border/60 overflow-hidden rounded-xl border border-border/70 bg-card/50">
+          {[
+            {
+              q: "Como instalar o APK?",
+              a: "Baixe o arquivo pelo botão acima, abra-o no Android e siga as instruções de instalação.",
+            },
+            {
+              q: "Funciona em quais dispositivos?",
+              a: "Android em celulares e TV Box. Não há versão para iOS, PC ou consoles.",
+            },
+            {
+              q: "Por que pede permissão de fontes desconhecidas?",
+              a: "O Android exige essa permissão para instalar APKs fora da Play Store. Pode ser desativada depois.",
+            },
+          ].map((item) => (
+            <details key={item.q} className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors hover:bg-card">
+                <span>{item.q}</span>
+                <span className="text-muted-foreground transition-transform duration-200 group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">
+                {item.a}
+              </div>
+            </details>
+          ))}
         </div>
       </section>
 
