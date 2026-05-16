@@ -80,6 +80,91 @@ function requireField(fields, key) {
   return value.slice(0, key === 'description' ? 5000 : 200);
 }
 
+function buildEmailHtml({ name, appVersion, deviceModel, deviceType, description }, file) {
+  const attachmentLabel = file
+    ? `<div style="margin-top:14px;padding:14px 16px;background:#0b0f0d;border:1px solid #202820;border-radius:14px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7d887f;margin-bottom:6px;">Anexo</div>
+        <div style="font-size:15px;color:#ffffff;font-weight:700;">${esc(file.filename)} <span style="font-size:12px;color:#7d887f;font-weight:400;">(${esc(file.contentType)})</span></div>
+      </div>`
+    : '';
+
+  return `
+<div style="margin:0;padding:0;background:#080b0a;font-family:Arial,Helvetica,sans-serif;color:#f3f5f4;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#080b0a;padding:32px 12px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#101411;border:1px solid #23301f;border-radius:22px;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.35);">
+          <tr>
+            <td style="padding:34px 28px 26px;background:linear-gradient(180deg,#14210f 0%,#101411 100%);text-align:center;border-bottom:1px solid #22301e;">
+              <img src="https://xtoybox.cloud/favicon.png?v=6" alt="XTOYBOX" width="92" height="92" style="display:block;margin:0 auto 18px;border-radius:18px;border:1px solid rgba(132,255,0,.25);box-shadow:0 0 28px rgba(132,255,0,.22);" />
+              <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#88ef24;font-weight:700;margin-bottom:8px;">XTOYBOX</div>
+              <h1 style="margin:0;font-size:28px;line-height:1.2;color:#ffffff;">Novo bug reportado</h1>
+              <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#a8b0aa;">Um usuário enviou um relatório pelo formulário do site.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:26px 28px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:14px 16px;background:#0b0f0d;border:1px solid #202820;border-radius:14px;">
+                    <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7d887f;margin-bottom:6px;">Nome ou apelido</div>
+                    <div style="font-size:16px;color:#ffffff;font-weight:700;">${esc(name)}</div>
+                  </td>
+                </tr>
+              </table>
+
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:14px;">
+                <tr>
+                  <td width="50%" style="padding-right:7px;">
+                    <div style="padding:14px 16px;background:#0b0f0d;border:1px solid #202820;border-radius:14px;">
+                      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7d887f;margin-bottom:6px;">Versão</div>
+                      <div style="font-size:15px;color:#ffffff;font-weight:700;">${esc(appVersion)}</div>
+                    </div>
+                  </td>
+                  <td width="50%" style="padding-left:7px;">
+                    <div style="padding:14px 16px;background:#0b0f0d;border:1px solid #202820;border-radius:14px;">
+                      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7d887f;margin-bottom:6px;">Tipo</div>
+                      <div style="font-size:15px;color:#ffffff;font-weight:700;">${esc(deviceType)}</div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:14px;">
+                <tr>
+                  <td style="padding:14px 16px;background:#0b0f0d;border:1px solid #202820;border-radius:14px;">
+                    <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7d887f;margin-bottom:6px;">Modelo do aparelho</div>
+                    <div style="font-size:15px;color:#ffffff;font-weight:700;">${esc(deviceModel)}</div>
+                  </td>
+                </tr>
+              </table>
+
+              ${attachmentLabel}
+
+              <div style="margin-top:22px;padding:18px;background:#0b0f0d;border:1px solid #263522;border-radius:16px;">
+                <div style="font-size:13px;text-transform:uppercase;letter-spacing:.13em;color:#88ef24;font-weight:700;margin-bottom:10px;">Descrição do bug</div>
+                <p style="margin:0;font-size:15px;line-height:1.7;color:#d7ddd8;white-space:pre-wrap;">${esc(description)}</p>
+              </div>
+
+              <div style="margin-top:22px;padding:14px 16px;border-radius:14px;background:rgba(132,255,0,.08);border:1px solid rgba(132,255,0,.18);">
+                <p style="margin:0;font-size:13px;line-height:1.6;color:#b9c4bb;">Verifique a versão informada, o tipo de aparelho e tente reproduzir o problema antes de preparar uma correção.</p>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px 28px;border-top:1px solid #202820;background:#0b0f0d;">
+              <p style="margin:0;text-align:center;font-size:12px;line-height:1.6;color:#747d76;">Relatório enviado pelo formulário oficial do XTOYBOX.<br />Projeto independente, sem vínculo com Xbox ou Microsoft.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>`;
+}
+
 async function sendEmail(fields, file) {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
@@ -109,16 +194,7 @@ async function sendEmail(fields, file) {
     });
   }
 
-  const html = `
-    <h2>Novo bug reportado no XTOYBOX</h2>
-    <p><b>Nome/apelido:</b> ${esc(name)}</p>
-    <p><b>Versao:</b> ${esc(appVersion)}</p>
-    <p><b>Aparelho:</b> ${esc(deviceModel)}</p>
-    <p><b>Tipo:</b> ${esc(deviceType)}</p>
-    <hr />
-    <p style="white-space:pre-wrap"><b>Descricao:</b><br />${esc(description)}</p>
-    ${file ? `<p><b>Anexo:</b> ${esc(file.filename)} (${esc(file.contentType)})</p>` : ''}
-  `;
+  const html = buildEmailHtml({ name, appVersion, deviceModel, deviceType, description }, file);
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
