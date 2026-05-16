@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, Bug, Send, Paperclip } from "lucide-react";
 
@@ -44,9 +44,7 @@ const initialState: FormState = {
 export function ReportarBugsPage() {
   const [form, setForm] = useState<FormState>(initialState);
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(
-    null,
-  );
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -65,23 +63,15 @@ export function ReportarBugsPage() {
       data.append("description", form.description);
       if (form.file) data.append("attachment", form.file);
 
-      let apiAvailable = false;
-      try {
-        const res = await fetch("/api/report-bug", { method: "POST", body: data });
-        apiAvailable = res.ok;
-      } catch {
-        apiAvailable = false;
-      }
-
-      if (apiAvailable) {
+      const res = await fetch("/api/report-bug", { method: "POST", body: data });
+      if (res.ok) {
         setMessage({ type: "success", text: "Relatório enviado com sucesso. Obrigado!" });
         setForm(initialState);
       } else {
-        setMessage({
-          type: "success",
-          text: "Formulário preparado. O envio será ativado em breve.",
-        });
+        setMessage({ type: "error", text: "Não foi possível enviar agora. Tente novamente mais tarde." });
       }
+    } catch {
+      setMessage({ type: "error", text: "Não foi possível enviar agora. Tente novamente mais tarde." });
     } finally {
       setSubmitting(false);
     }
@@ -94,13 +84,10 @@ export function ReportarBugsPage() {
     <main className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border/60 bg-card/30">
         <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-4">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
-          >
+          <a href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />
             Voltar
-          </Link>
+          </a>
           <div className="inline-flex items-center gap-2 text-sm font-medium">
             <Bug className="h-4 w-4 text-primary" />
             Reportar bugs
@@ -112,15 +99,11 @@ export function ReportarBugsPage() {
         <div className="mb-8">
           <h1 className="text-2xl font-semibold tracking-tight">Reportar um bug</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Preencha os campos abaixo com o máximo de detalhes possível. Isso ajuda a identificar
-            e corrigir o problema mais rápido.
+            Preencha os campos abaixo com o máximo de detalhes possível. Isso ajuda a identificar e corrigir o problema mais rápido.
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5 rounded-2xl border border-border/70 bg-card/40 p-6 shadow-sm"
-        >
+        <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-border/70 bg-card/40 p-6 shadow-sm">
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="space-y-1.5">
               <label htmlFor="name" className="text-sm font-medium">Nome ou apelido</label>
