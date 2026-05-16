@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
 import screenHome from "@/assets/screens/home.png";
@@ -59,8 +59,6 @@ function createFallbackApkMetadata(): ApkMetadata {
   };
 }
 
-const DISCORD_URL = "https://discord.gg/SEU-LINK-AQUI";
-
 const screens = [
   { src: screenHome, alt: "Tela inicial do XTOYBOX" },
   { src: screenLibrary, alt: "Biblioteca de jogos" },
@@ -69,7 +67,7 @@ const screens = [
   { src: screenProfile, alt: "Perfil do usuário" },
 ];
 
-type InfoSection = "credits" | "discord" | "terms";
+type InfoSection = "credits" | "terms";
 
 export function Index() {
   const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
@@ -167,8 +165,8 @@ export function Index() {
               <DropdownMenuItem onSelect={() => setInfoOpen("credits")}>
                 Créditos
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("discord")}>
-                Discord / Suporte
+              <DropdownMenuItem asChild>
+                <Link to="/reportar-bugs">Reportar bugs</Link>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setInfoOpen("terms")}>
                 Termos de uso
@@ -195,12 +193,10 @@ export function Index() {
               <div>
                 <h3 className="text-lg font-semibold">
                   {infoOpen === "credits" && "Créditos"}
-                  {infoOpen === "discord" && "Suporte e bugs"}
                   {infoOpen === "terms" && "Termos de uso"}
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {infoOpen === "credits" && "Informações sobre o projeto."}
-                  {infoOpen === "discord" && "Tire dúvidas ou reporte bugs."}
                   {infoOpen === "terms" && "Leia antes de instalar."}
                 </p>
               </div>
@@ -223,22 +219,6 @@ export function Index() {
                   <p>Licenciado sob a licença MIT.</p>
                   <p>Modificações, melhorias e otimizações por Alexandreios (XTOYBOX).</p>
                   <p>Projeto não oficial, sem vínculo com Xbox ou Microsoft.</p>
-                </div>
-              )}
-              {infoOpen === "discord" && (
-                <div className="space-y-4">
-                  <p>
-                    Use o Discord para tirar dúvidas, reportar bugs ou acompanhar avisos do
-                    projeto.
-                  </p>
-                  <a
-                    href={DISCORD_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition hover:opacity-90"
-                  >
-                    Entrar no Discord
-                  </a>
                 </div>
               )}
               {infoOpen === "terms" && (
