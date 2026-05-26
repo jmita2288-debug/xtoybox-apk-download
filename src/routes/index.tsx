@@ -341,36 +341,6 @@ export function Index() {
         </div>
       </section>
 
-      {/* Sobre */}
-      <section className="mx-auto max-w-3xl px-6 py-12">
-        <div
-          className="rounded-2xl border border-border/70 bg-card/60 p-6 sm:p-8"
-          style={{ boxShadow: "var(--shadow-card)" }}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary">
-              <Info className="h-4 w-4" />
-            </div>
-            <h2 className="text-2xl font-semibold">Sobre o app</h2>
-          </div>
-          <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-            O XTOYBOX é uma versão modificada do XStreaming, com ajustes na interface,
-            navegação e experiência de uso no Android, celular e TV Box.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
-              Android
-            </span>
-            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
-              TV Box
-            </span>
-            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
-              Open source
-            </span>
-          </div>
-        </div>
-      </section>
-
       {/* Carrossel de telas */}
       <section className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-6 flex items-end justify-between gap-4">
