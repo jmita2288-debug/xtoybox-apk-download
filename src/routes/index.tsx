@@ -6,6 +6,8 @@ import screenLibrary from "@/assets/screens/library.png";
 import screenGame from "@/assets/screens/game.png";
 import screenFriends from "@/assets/screens/friends.png";
 import screenProfile from "@/assets/screens/profile.png";
+import screenForza1 from "@/assets/screens/gameplay-forza-1.jpeg";
+import screenForza2 from "@/assets/screens/gameplay-forza-2.jpeg";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
   Carousel,
@@ -59,15 +61,19 @@ function createFallbackApkMetadata(): ApkMetadata {
   };
 }
 
-const screens = [
-  { src: screenHome, alt: "Tela inicial do XTOYBOX" },
-  { src: screenLibrary, alt: "Biblioteca de jogos" },
-  { src: screenGame, alt: "Detalhes do jogo" },
-  { src: screenFriends, alt: "Lista de amigos" },
-  { src: screenProfile, alt: "Perfil do usuário" },
+type ScreenOrientation = "portrait" | "landscape";
+
+const screens: { src: string; alt: string; orientation: ScreenOrientation }[] = [
+  { src: screenHome, alt: "Tela inicial do XTOYBOX", orientation: "portrait" },
+  { src: screenLibrary, alt: "Biblioteca de jogos", orientation: "portrait" },
+  { src: screenForza1, alt: "Jogando Forza Horizon na nuvem", orientation: "landscape" },
+  { src: screenGame, alt: "Detalhes do jogo", orientation: "portrait" },
+  { src: screenForza2, alt: "Controles em tela durante o jogo", orientation: "landscape" },
+  { src: screenFriends, alt: "Lista de amigos", orientation: "portrait" },
+  { src: screenProfile, alt: "Perfil do usuário", orientation: "portrait" },
 ];
 
-type InfoSection = "credits" | "terms";
+type InfoSection = "credits" | "terms" | "about";
 
 export function Index() {
   const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
