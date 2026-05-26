@@ -435,21 +435,6 @@ export function Index() {
         </div>
       </section>
 
-      {/* Aviso */}
-      {/* Aviso */}
-      <section className="mx-auto max-w-3xl px-6 py-8">
-        <div className="flex items-start gap-4 rounded-xl border border-border/70 bg-card/50 p-5 text-sm leading-relaxed text-muted-foreground">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary/80">
-            <ShieldAlert className="h-4 w-4" />
-          </div>
-          <p>
-            <span className="font-medium text-foreground">Projeto independente.</span>{" "}
-            O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou afiliação
-            com Xbox, Microsoft ou marcas relacionadas.
-          </p>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-6 py-8">
         <h2 className="text-2xl font-semibold">Perguntas frequentes</h2>
