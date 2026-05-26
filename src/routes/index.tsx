@@ -359,17 +359,29 @@ export function Index() {
             {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
-                className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
+                className={`pl-4 basis-full ${
+                  s.orientation === "landscape"
+                    ? "sm:basis-full md:basis-2/3"
+                    : "sm:basis-1/2 md:basis-1/3"
+                }`}
               >
                 <div
-                  className={`group mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
+                  className={`group mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
+                    s.orientation === "landscape" ? "max-w-full" : "max-w-[280px]"
+                  } ${
                     activeSlide === i
                       ? "border-primary/30"
                       : "border-border/60 sm:opacity-80"
                   }`}
                   style={{ boxShadow: "var(--shadow-card)" }}
                 >
-                  <div className="aspect-[941/1672] w-full overflow-hidden bg-background/40 flex items-center justify-center">
+                  <div
+                    className={`w-full overflow-hidden bg-background/40 flex items-center justify-center ${
+                      s.orientation === "landscape"
+                        ? "aspect-video"
+                        : "aspect-[941/1672]"
+                    }`}
+                  >
                     <img
                       src={s.src}
                       sizes="(min-width: 768px) 320px, (min-width: 640px) 45vw, 280px"
@@ -377,11 +389,7 @@ export function Index() {
                       loading={i === 0 ? "eager" : "lazy"}
                       fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
-                      className={`transition-transform duration-500 group-hover:scale-[1.02] ${
-                        s.orientation === "landscape"
-                          ? "w-full h-auto object-contain"
-                          : "h-full w-full object-contain"
-                      }`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                   </div>
                 </div>
