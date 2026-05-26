@@ -371,18 +371,19 @@ export function Index() {
                   }`}
                   style={{ boxShadow: "var(--shadow-card)" }}
                 >
-                  <div className="aspect-[941/1672] w-full overflow-hidden bg-background/40">
+                  <div className="aspect-[941/1672] w-full overflow-hidden bg-background/40 flex items-center justify-center">
                     <img
                       src={s.src}
-                      srcSet={`${s.src} 941w`}
                       sizes="(min-width: 768px) 320px, (min-width: 640px) 45vw, 280px"
                       alt={s.alt}
-                      width={941}
-                      height={1672}
                       loading={i === 0 ? "eager" : "lazy"}
                       fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
-                      className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                      className={`transition-transform duration-500 group-hover:scale-[1.02] ${
+                        s.orientation === "landscape"
+                          ? "w-full h-auto object-contain"
+                          : "h-full w-full object-contain"
+                      }`}
                     />
                   </div>
                 </div>
