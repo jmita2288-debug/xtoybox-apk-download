@@ -6,6 +6,8 @@ import screenLibrary from "@/assets/screens/library.png";
 import screenGame from "@/assets/screens/game.png";
 import screenFriends from "@/assets/screens/friends.png";
 import screenProfile from "@/assets/screens/profile.png";
+import screenForza1 from "@/assets/screens/gameplay-forza-1.jpeg";
+import screenForza2 from "@/assets/screens/gameplay-forza-2.jpeg";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
   Carousel,
@@ -33,8 +35,6 @@ import {
   Smartphone,
   Cloud,
   Type,
-  ShieldAlert,
-  Info,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -59,15 +59,19 @@ function createFallbackApkMetadata(): ApkMetadata {
   };
 }
 
-const screens = [
-  { src: screenHome, alt: "Tela inicial do XTOYBOX" },
-  { src: screenLibrary, alt: "Biblioteca de jogos" },
-  { src: screenGame, alt: "Detalhes do jogo" },
-  { src: screenFriends, alt: "Lista de amigos" },
-  { src: screenProfile, alt: "Perfil do usuário" },
+type ScreenOrientation = "portrait" | "landscape";
+
+const screens: { src: string; alt: string; orientation: ScreenOrientation }[] = [
+  { src: screenHome, alt: "Tela inicial do XTOYBOX", orientation: "portrait" },
+  { src: screenLibrary, alt: "Biblioteca de jogos", orientation: "portrait" },
+  { src: screenForza1, alt: "Jogando Forza Horizon na nuvem", orientation: "landscape" },
+  { src: screenGame, alt: "Detalhes do jogo", orientation: "portrait" },
+  { src: screenForza2, alt: "Controles em tela durante o jogo", orientation: "landscape" },
+  { src: screenFriends, alt: "Lista de amigos", orientation: "portrait" },
+  { src: screenProfile, alt: "Perfil do usuário", orientation: "portrait" },
 ];
 
-type InfoSection = "credits" | "terms";
+type InfoSection = "credits" | "terms" | "about";
 
 export function Index() {
   const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
@@ -162,6 +166,9 @@ export function Index() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onSelect={() => setInfoOpen("about")}>
+                Sobre o app
+              </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setInfoOpen("credits")}>
                 Créditos
               </DropdownMenuItem>
@@ -192,10 +199,12 @@ export function Index() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="text-lg font-semibold">
+                  {infoOpen === "about" && "Sobre o app"}
                   {infoOpen === "credits" && "Créditos"}
                   {infoOpen === "terms" && "Termos de uso"}
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
+                  {infoOpen === "about" && "Projeto independente baseado no XStreaming."}
                   {infoOpen === "credits" && "Informações sobre o projeto."}
                   {infoOpen === "terms" && "Leia antes de instalar."}
                 </p>
@@ -212,6 +221,30 @@ export function Index() {
               </button>
             </div>
             <div className="mt-5 max-h-[65vh] overflow-y-auto rounded-lg border border-border/70 bg-background/40 p-4 text-sm text-muted-foreground leading-relaxed">
+              {infoOpen === "about" && (
+                <div className="space-y-3">
+                  <p>
+                    <span className="font-medium text-foreground">Projeto independente.</span>{" "}
+                    O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou
+                    afiliação com Xbox, Microsoft ou marcas relacionadas.
+                  </p>
+                  <p>
+                    É uma versão modificada com ajustes na interface, navegação e experiência
+                    de uso no Android, celular e TV Box.
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1 text-xs">
+                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
+                      Android
+                    </span>
+                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
+                      TV Box
+                    </span>
+                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
+                      Open source
+                    </span>
+                  </div>
+                </div>
+              )}
               {infoOpen === "credits" && (
                 <div className="space-y-3">
                   <p>XTOYBOX é baseado no projeto open source XStreaming.</p>
@@ -254,22 +287,34 @@ export function Index() {
         className="relative overflow-hidden"
         style={{ backgroundImage: "var(--gradient-hero)" }}
       >
+        {/* Backdrop sutil com o logo do app */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+        >
+          <img
+            src={logo}
+            alt=""
+            className="h-[420px] w-[420px] max-w-none select-none opacity-[0.04] blur-2xl sm:h-[560px] sm:w-[560px]"
+          />
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background"
+        />
         <div className="mx-auto max-w-3xl px-6 pt-16 pb-16 text-center sm:pt-20 sm:pb-20">
-          <div className="animate-fade-up">
+          <div className="relative animate-fade-up">
             <img
               src={logo}
               alt="Logo XTOYBOX"
-              className="mx-auto h-24 w-24 rounded-2xl object-cover ring-1 ring-border/70"
+              className="mx-auto h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
               style={{ boxShadow: "var(--shadow-glow)" }}
             />
-            <h1 className="mt-7 text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
               XTOYBOX
             </h1>
-            <p className="mt-3 text-lg text-muted-foreground">
+            <p className="mt-3 text-base text-muted-foreground">
               App Android para jogar na nuvem.
-            </p>
-            <p className="mt-1.5 text-sm text-muted-foreground/80">
-              Projeto independente baseado no XStreaming.
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -294,36 +339,6 @@ export function Index() {
         </div>
       </section>
 
-      {/* Sobre */}
-      <section className="mx-auto max-w-3xl px-6 py-12">
-        <div
-          className="rounded-2xl border border-border/70 bg-card/60 p-6 sm:p-8"
-          style={{ boxShadow: "var(--shadow-card)" }}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary">
-              <Info className="h-4 w-4" />
-            </div>
-            <h2 className="text-2xl font-semibold">Sobre o app</h2>
-          </div>
-          <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-            O XTOYBOX é uma versão modificada do XStreaming, com ajustes na interface,
-            navegação e experiência de uso no Android, celular e TV Box.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
-              Android
-            </span>
-            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
-              TV Box
-            </span>
-            <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-muted-foreground">
-              Open source
-            </span>
-          </div>
-        </div>
-      </section>
-
       {/* Carrossel de telas */}
       <section className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-6 flex items-end justify-between gap-4">
@@ -344,28 +359,37 @@ export function Index() {
             {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
-                className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
+                className={`pl-4 basis-full ${
+                  s.orientation === "landscape"
+                    ? "sm:basis-full md:basis-2/3"
+                    : "sm:basis-1/2 md:basis-1/3"
+                }`}
               >
                 <div
-                  className={`group mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
+                  className={`group mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
+                    s.orientation === "landscape" ? "max-w-full" : "max-w-[280px]"
+                  } ${
                     activeSlide === i
                       ? "border-primary/30"
                       : "border-border/60 sm:opacity-80"
                   }`}
                   style={{ boxShadow: "var(--shadow-card)" }}
                 >
-                  <div className="aspect-[941/1672] w-full overflow-hidden bg-background/40">
+                  <div
+                    className={`w-full overflow-hidden bg-background/40 flex items-center justify-center ${
+                      s.orientation === "landscape"
+                        ? "aspect-video"
+                        : "aspect-[941/1672]"
+                    }`}
+                  >
                     <img
                       src={s.src}
-                      srcSet={`${s.src} 941w`}
                       sizes="(min-width: 768px) 320px, (min-width: 640px) 45vw, 280px"
                       alt={s.alt}
-                      width={941}
-                      height={1672}
                       loading={i === 0 ? "eager" : "lazy"}
                       fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
-                      className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                   </div>
                 </div>
@@ -415,21 +439,6 @@ export function Index() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Aviso */}
-      {/* Aviso */}
-      <section className="mx-auto max-w-3xl px-6 py-8">
-        <div className="flex items-start gap-4 rounded-xl border border-border/70 bg-card/50 p-5 text-sm leading-relaxed text-muted-foreground">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary/80">
-            <ShieldAlert className="h-4 w-4" />
-          </div>
-          <p>
-            <span className="font-medium text-foreground">Projeto independente.</span>{" "}
-            O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou afiliação
-            com Xbox, Microsoft ou marcas relacionadas.
-          </p>
         </div>
       </section>
 
