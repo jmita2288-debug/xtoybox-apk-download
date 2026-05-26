@@ -168,6 +168,9 @@ export function Index() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onSelect={() => setInfoOpen("about")}>
+                Sobre o app
+              </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setInfoOpen("credits")}>
                 Créditos
               </DropdownMenuItem>
