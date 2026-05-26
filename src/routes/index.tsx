@@ -289,22 +289,34 @@ export function Index() {
         className="relative overflow-hidden"
         style={{ backgroundImage: "var(--gradient-hero)" }}
       >
+        {/* Backdrop sutil com o logo do app */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+        >
+          <img
+            src={logo}
+            alt=""
+            className="h-[420px] w-[420px] max-w-none select-none opacity-[0.04] blur-2xl sm:h-[560px] sm:w-[560px]"
+          />
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background"
+        />
         <div className="mx-auto max-w-3xl px-6 pt-16 pb-16 text-center sm:pt-20 sm:pb-20">
-          <div className="animate-fade-up">
+          <div className="relative animate-fade-up">
             <img
               src={logo}
               alt="Logo XTOYBOX"
-              className="mx-auto h-24 w-24 rounded-2xl object-cover ring-1 ring-border/70"
+              className="mx-auto h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
               style={{ boxShadow: "var(--shadow-glow)" }}
             />
-            <h1 className="mt-7 text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
               XTOYBOX
             </h1>
-            <p className="mt-3 text-lg text-muted-foreground">
+            <p className="mt-3 text-base text-muted-foreground">
               App Android para jogar na nuvem.
-            </p>
-            <p className="mt-1.5 text-sm text-muted-foreground/80">
-              Projeto independente baseado no XStreaming.
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
