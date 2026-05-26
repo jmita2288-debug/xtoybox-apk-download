@@ -35,8 +35,6 @@ import {
   Smartphone,
   Cloud,
   Type,
-  ShieldAlert,
-  Info,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
