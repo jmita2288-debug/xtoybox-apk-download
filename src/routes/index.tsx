@@ -201,10 +201,12 @@ export function Index() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="text-lg font-semibold">
+                  {infoOpen === "about" && "Sobre o app"}
                   {infoOpen === "credits" && "Créditos"}
                   {infoOpen === "terms" && "Termos de uso"}
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
+                  {infoOpen === "about" && "Projeto independente baseado no XStreaming."}
                   {infoOpen === "credits" && "Informações sobre o projeto."}
                   {infoOpen === "terms" && "Leia antes de instalar."}
                 </p>
@@ -221,6 +223,30 @@ export function Index() {
               </button>
             </div>
             <div className="mt-5 max-h-[65vh] overflow-y-auto rounded-lg border border-border/70 bg-background/40 p-4 text-sm text-muted-foreground leading-relaxed">
+              {infoOpen === "about" && (
+                <div className="space-y-3">
+                  <p>
+                    <span className="font-medium text-foreground">Projeto independente.</span>{" "}
+                    O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou
+                    afiliação com Xbox, Microsoft ou marcas relacionadas.
+                  </p>
+                  <p>
+                    É uma versão modificada com ajustes na interface, navegação e experiência
+                    de uso no Android, celular e TV Box.
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1 text-xs">
+                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
+                      Android
+                    </span>
+                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
+                      TV Box
+                    </span>
+                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
+                      Open source
+                    </span>
+                  </div>
+                </div>
+              )}
               {infoOpen === "credits" && (
                 <div className="space-y-3">
                   <p>XTOYBOX é baseado no projeto open source XStreaming.</p>
