@@ -30,11 +30,9 @@ import {
   Package,
   Calendar,
   HardDrive,
-  Sparkles,
   Tv,
   Smartphone,
   Cloud,
-  Type,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -204,8 +202,8 @@ export function Index() {
                   {infoOpen === "terms" && "Termos de uso"}
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {infoOpen === "about" && "Projeto independente baseado no XStreaming."}
-                  {infoOpen === "credits" && "Informações sobre o projeto."}
+                  {infoOpen === "about" && "Conheça a base e o objetivo do projeto."}
+                  {infoOpen === "credits" && "Informações sobre a origem do projeto."}
                   {infoOpen === "terms" && "Leia antes de instalar."}
                 </p>
               </div>
@@ -224,13 +222,18 @@ export function Index() {
               {infoOpen === "about" && (
                 <div className="space-y-3">
                   <p>
-                    <span className="font-medium text-foreground">Projeto independente.</span>{" "}
-                    O XTOYBOX é baseado no XStreaming e não possui vínculo, parceria ou
-                    afiliação com Xbox, Microsoft ou marcas relacionadas.
+                    <span className="font-medium text-foreground">XTOYBOX</span> é um app Android
+                    criado a partir de uma base open source, com modificações e melhorias próprias
+                    voltadas para jogar na nuvem em celulares e TV Box.
                   </p>
                   <p>
-                    É uma versão modificada com ajustes na interface, navegação e experiência
-                    de uso no Android, celular e TV Box.
+                    O projeto reúne ajustes de navegação, organização da biblioteca, suporte ao uso
+                    em telas maiores e melhorias no controle virtual para deixar a experiência mais
+                    prática no dia a dia.
+                  </p>
+                  <p>
+                    É um projeto independente, sem vínculo, parceria ou afiliação com Xbox,
+                    Microsoft ou marcas relacionadas.
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 text-xs">
                     <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">
@@ -247,33 +250,26 @@ export function Index() {
               )}
               {infoOpen === "credits" && (
                 <div className="space-y-3">
-                  <p>XTOYBOX é baseado no projeto open source XStreaming.</p>
+                  <p>Base open source: XStreaming.</p>
                   <p>Copyright (c) 2024 Geocld.</p>
                   <p>Licenciado sob a licença MIT.</p>
                   <p>Modificações, melhorias e otimizações por Alexandreios (XTOYBOX).</p>
-                  <p>Projeto não oficial, sem vínculo com Xbox ou Microsoft.</p>
                 </div>
               )}
               {infoOpen === "terms" && (
                 <div className="space-y-3">
                   <p>
-                    O XTOYBOX é um projeto independente baseado em software open source. Ele não
-                    possui vínculo, parceria ou afiliação com Xbox, Microsoft ou qualquer marca
-                    relacionada.
-                  </p>
-                  <p>
                     O aplicativo é distribuído como APK externo, fora de lojas oficiais. Antes de
-                    instalar ou inserir sua conta no aplicativo, o usuário deve entender que esse
-                    tipo de instalação exige cuidado.
+                    instalar ou inserir sua conta no aplicativo, entenda que esse tipo de instalação
+                    exige cuidado.
                   </p>
                   <p>
-                    Não é possível prometer 100% de segurança em um APK externo. Use apenas
-                    versões baixadas pelo site oficial do projeto e verifique se está usando a
-                    versão mais recente.
+                    Baixe apenas pelo site oficial do projeto e verifique se está usando a versão
+                    mais recente disponível.
                   </p>
                   <p>
-                    Ao usar o XTOYBOX, o usuário entende esses pontos e assume a responsabilidade
-                    pelo uso do aplicativo.
+                    Nenhum APK externo deve ser tratado como risco zero. Use por sua conta e mantenha
+                    o app atualizado para receber correções e melhorias.
                   </p>
                 </div>
               )}
@@ -314,7 +310,7 @@ export function Index() {
               XTOYBOX
             </h1>
             <p className="mt-3 text-base text-muted-foreground">
-              App Android para jogar na nuvem.
+              App Android para jogar na nuvem, com foco em celular e TV Box.
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -345,7 +341,7 @@ export function Index() {
           <div>
             <h2 className="text-2xl font-semibold">Telas do app</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Uma prévia da interface no Android.
+              Uma prévia do uso no Android.
             </p>
           </div>
         </div>
@@ -419,10 +415,10 @@ export function Index() {
         <h2 className="text-2xl font-semibold">Recursos</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {[
-            { title: "Textos ajustados", text: "Menus mais claros e diretos.", Icon: Type },
-            { title: "Interface ajustada", text: "Visual mais limpo e organizado.", Icon: Sparkles },
-            { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis.", Icon: Cloud },
-            { title: "Android e TV Box", text: "Pensado para telas pequenas e grandes.", Icon: Tv },
+            { title: "Base open source", text: "Construído sobre uma base aberta, com modificações próprias.", Icon: Package },
+            { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis direto pelo Android.", Icon: Cloud },
+            { title: "Celular e TV Box", text: "Uso pensado para telas pequenas e grandes.", Icon: Tv },
+            { title: "Atualizações diretas", text: "Novas versões e correções pelo site oficial.", Icon: Smartphone },
           ].map(({ title, text, Icon }) => (
             <div
               key={title}
@@ -571,7 +567,7 @@ export function Index() {
       {/* Footer */}
       <footer className="mt-6 border-t border-border/60">
         <div className="mx-auto max-w-5xl px-6 py-8 text-center text-sm text-muted-foreground">
-          XTOYBOX — projeto independente baseado em software open source.
+          XTOYBOX — app Android baseado em open source, com desenvolvimento independente.
         </div>
       </footer>
     </div>
