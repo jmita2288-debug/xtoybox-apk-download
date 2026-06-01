@@ -222,17 +222,21 @@ export function Index() {
               {infoOpen === "about" && (
                 <div className="space-y-3">
                   <p>
-                    <span className="font-medium text-foreground">XTOYBOX</span> é um app Android
-                    criado a partir de uma base open source, com modificações e melhorias próprias
-                    voltadas para jogar na nuvem em celulares e TV Box.
+                    XTOYBOX é um app Android criado a partir de uma base open source, com
+                    modificações e melhorias próprias para jogar na nuvem em celulares e TV Box.
                   </p>
                   <p>
-                    O projeto reúne ajustes de navegação, organização da biblioteca, suporte ao uso
-                    em telas maiores e melhorias no controle virtual para deixar a experiência mais
-                    prática no dia a dia.
+                    O projeto reúne ajustes de navegação, scripts, organização da biblioteca,
+                    melhorias no streaming de jogos e suporte otimizado para deixar a experiência
+                    mais estável, fluida e sem atrapalhar a jogabilidade.
                   </p>
                   <p>
-                    É um projeto independente, sem vínculo, parceria ou afiliação com Xbox,
+                    No futuro, o XTOYBOX vai receber novas funções, correções e melhorias para
+                    oferecer uma experiência ainda melhor aos usuários, principalmente no uso com
+                    jogos em nuvem e Remote Play.
+                  </p>
+                  <p>
+                    Este é um projeto independente, sem vínculo, parceria ou afiliação com Xbox,
                     Microsoft ou marcas relacionadas.
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 text-xs">
