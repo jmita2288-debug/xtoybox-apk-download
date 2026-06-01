@@ -1,9 +1,9 @@
 {
-  "totalDownloads": 400,
+  "totalDownloads": 401,
   "versions": {
     "1.0.8": 399,
-    "1.0.12": 1
+    "1.0.12": 2
   },
-  "updatedAt": "2026-06-01T07:25:22.649Z",
+  "updatedAt": "2026-06-01T07:29:22.960Z",
   "lastVersion": "1.0.12"
 }
