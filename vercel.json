@@ -4,8 +4,8 @@
   "outputDirectory": "dist",
   "redirects": [
     {
-      "source": "/downloads/XTOYBOX-v1.0.8.apk",
-      "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.0.8.apk",
+      "source": "/downloads/XTOYBOX-v1.0.12.apk",
+      "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.0.12.apk",
       "permanent": false
     },
     {
@@ -18,20 +18,6 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/(.*)\\.(png|jpg|jpeg|webp|avif|svg|ico|woff2)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
     }
   ]
 }

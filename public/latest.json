@@ -1,13 +1,17 @@
 {
   "appName": "XTOYBOX",
-  "latestVersionName": "1.0.8",
-  "latestVersionCode": 8,
-  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.0.8.apk",
-  "pageUrl": "https://xtoybox.cloud/",
+  "latestVersionName": "1.0.12",
+  "latestVersionCode": 12,
+  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.0.12.apk",
+  "pageUrl": "https://xtoybox-apk-download.vercel.app/",
+  "testRelease": false,
   "releaseNotes": [
-    "Correções gerais",
-    "Ajustes na interface",
-    "Melhorias no app"
+    "Atualizacao global do XTOYBOX 1.0.12",
+    "Home TV mais limpa e sem texto artificial de comandos",
+    "Modo TV Box com escala menor e mais margem segura",
+    "Biblioteca TV mais compacta e menos ampliada",
+    "Controle virtual com visual renovado, multitoque e animacao do analogico",
+    "Melhorias gerais de interface e estabilidade visual"
   ],
-  "publishedAt": "2026-05-13"
+  "publishedAt": "2026-06-01"
 }
