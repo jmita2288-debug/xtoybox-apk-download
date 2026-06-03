@@ -77,45 +77,14 @@ const DropdownMenuTrigger = React.forwardRef<
 });
 DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
 
-function CommunityMenuLink() {
-  return (
-    <a
-      href={XTOYBOX_COMMUNITY_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-xl border border-primary/25 bg-primary/10 p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/45 hover:bg-primary/15 focus:outline-none focus:ring-2 focus:ring-primary/40"
-    >
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-transform duration-200 group-hover:scale-105">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5" aria-hidden="true">
-          <path d="M17 20c0-1.7-2.2-3-5-3s-5 1.3-5 3" strokeWidth="2" strokeLinecap="round" />
-          <path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" strokeWidth="2" />
-          <path d="M19 9v4M21 11h-4" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
-          Comunidade XTOYBOX
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-3.5 w-3.5 text-primary" aria-hidden="true">
-            <path d="M7 17 17 7M9 7h8v8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </span>
-        <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">
-          Entre no Discord para novidades, suporte e avisos.
-        </span>
-      </span>
-    </a>
-  );
-}
+const menuItemClass =
+  "relative flex cursor-pointer select-none items-center rounded-lg px-3 py-2 text-sm font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground";
 
 const DropdownMenuContent = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
-    align?: "start" | "center" | "end";
-    sideOffset?: number;
-    showCommunityLink?: boolean;
-  }
->(({ className, align = "end", sideOffset = 10, style, children, showCommunityLink = true, ...props }, ref) => {
-  const { open } = useMenu();
+  React.HTMLAttributes<HTMLDivElement> & { align?: "start" | "center" | "end"; sideOffset?: number }
+>(({ className, align = "end", sideOffset = 8, style, children, ...props }, ref) => {
+  const { open, setOpen } = useMenu();
   if (!open) return null;
   const alignClass = align === "start" ? "left-0" : align === "center" ? "left-1/2 -translate-x-1/2" : "right-0";
 
@@ -124,24 +93,23 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       style={{ top: `calc(100% + ${sideOffset}px)`, ...style }}
       className={cn(
-        "absolute z-50 w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-border/80 bg-popover/95 p-2 text-popover-foreground shadow-xl shadow-black/20 backdrop-blur-md",
+        "absolute z-50 w-56 overflow-hidden rounded-xl border border-border/80 bg-popover/95 p-1.5 text-popover-foreground shadow-lg backdrop-blur-md",
         alignClass,
         className,
       )}
       {...props}
     >
-      {showCommunityLink && (
-        <>
-          <div className="px-1 pb-2 pt-1">
-            <div className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/80">
-              Menu XTOYBOX
-            </div>
-            <CommunityMenuLink />
-          </div>
-          <div className="my-1 h-px bg-border/70" />
-        </>
-      )}
-      <div className="space-y-1">{children}</div>
+      <a
+        href={XTOYBOX_COMMUNITY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(menuItemClass, "text-primary hover:text-primary")}
+        onClick={() => setOpen(false)}
+      >
+        Comunidade XTOYBOX
+      </a>
+      <div className="my-1 h-px bg-border/70" />
+      {children}
     </div>
   );
 });
@@ -157,7 +125,7 @@ const DropdownMenuItem = React.forwardRef<
 >(({ className, inset, asChild, children, onSelect, onClick, ...props }, ref) => {
   const { setOpen } = useMenu();
   const itemClass = cn(
-    "relative flex cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium outline-none transition-all duration-200 hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground active:scale-[0.99]",
+    menuItemClass,
     inset && "pl-8",
     className,
   );
