@@ -144,6 +144,18 @@
 }
 
 @layer base {
+  .dark body {
+    background-color: #0a0d0a;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 15% 0%, rgba(138, 240, 0, 0.08), transparent 60%),
+      radial-gradient(ellipse 60% 45% at 85% 10%, rgba(138, 240, 0, 0.05), transparent 65%),
+      radial-gradient(ellipse 90% 70% at 50% 100%, rgba(138, 240, 0, 0.04), transparent 70%),
+      linear-gradient(180deg, #0d1110 0%, #0a0d0a 50%, #080a08 100%);
+    background-attachment: fixed;
+  }
+}
+
+@layer base {
   :root {
     --gradient-hero: radial-gradient(
         ellipse 80% 60% at 50% 0%,
