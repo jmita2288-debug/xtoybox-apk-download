@@ -33,6 +33,11 @@ import {
   Tv,
   Smartphone,
   Cloud,
+  Info,
+  Heart,
+  Bug,
+  FileText,
+  Users,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -157,24 +162,72 @@ export function Index() {
                 ref={menuTriggerRef}
                 type="button"
                 aria-label="Abrir menu"
-                className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-card/40 px-3 py-1.5 text-sm text-muted-foreground transition-[color,background-color,border-color] duration-200 hover:text-foreground hover:bg-card hover:border-border"
+                className="inline-flex items-center gap-2 rounded-lg border border-border/70 bg-card/40 px-3 py-1.5 text-sm text-muted-foreground transition-[color,background-color,border-color] duration-200 hover:text-foreground hover:bg-card hover:border-border"
               >
                 <MenuIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">Menu</span>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onSelect={() => setInfoOpen("about")}>
-                Sobre o app
+            <DropdownMenuContent align="end" className="w-64">
+              <div className="px-3 pt-2 pb-1.5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                  Menu
+                </p>
+              </div>
+              <DropdownMenuItem
+                onSelect={() => setInfoOpen("about")}
+                className="gap-3 py-2.5"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+                  <Info className="h-4 w-4" />
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span>Sobre o app</span>
+                  <span className="text-xs font-normal text-muted-foreground">
+                    O que é o XTOYBOX
+                  </span>
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("credits")}>
-                Créditos
+              <DropdownMenuItem
+                onSelect={() => setInfoOpen("credits")}
+                className="gap-3 py-2.5"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+                  <Heart className="h-4 w-4" />
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span>Créditos</span>
+                  <span className="text-xs font-normal text-muted-foreground">
+                    Quem torna isso possível
+                  </span>
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/reportar-bugs">Reportar bugs</Link>
+              <DropdownMenuItem asChild className="gap-3 py-2.5">
+                <Link to="/reportar-bugs">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+                    <Bug className="h-4 w-4" />
+                  </span>
+                  <span className="flex flex-col leading-tight">
+                    <span>Reportar bugs</span>
+                    <span className="text-xs font-normal text-muted-foreground">
+                      Encontrou um problema?
+                    </span>
+                  </span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("terms")}>
-                Termos de uso
+              <DropdownMenuItem
+                onSelect={() => setInfoOpen("terms")}
+                className="gap-3 py-2.5"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+                  <FileText className="h-4 w-4" />
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span>Termos de uso</span>
+                  <span className="text-xs font-normal text-muted-foreground">
+                    Regras e condições
+                  </span>
+                </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
