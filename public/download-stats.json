@@ -1,10 +1,10 @@
 {
-  "totalDownloads": 800,
+  "totalDownloads": 801,
   "versions": {
     "1.0.8": 399,
     "1.0.12": 392,
-    "1.0.13": 9
+    "1.0.13": 10
   },
-  "updatedAt": "2026-06-09T12:52:00.438Z",
+  "updatedAt": "2026-06-09T13:15:50.032Z",
   "lastVersion": "1.0.13"
 }
