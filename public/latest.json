@@ -1,8 +1,8 @@
 {
   "appName": "XTOYBOX",
-  "latestVersionName": "1.0.12",
-  "latestVersionCode": 12,
-  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.0.12.apk",
+  "latestVersionName": "1.0.13",
+  "latestVersionCode": 13,
+  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.0.13.apk",
   "pageUrl": "https://xtoybox-apk-download.vercel.app/",
   "testRelease": false,
   "releaseNotes": [
@@ -13,5 +13,5 @@
     "Controle virtual com visual renovado, multitoque e animacao do analogico",
     "Melhorias gerais de interface e estabilidade visual"
   ],
-  "publishedAt": "2026-06-01"
+  "publishedAt": "2026-06-09"
 }
