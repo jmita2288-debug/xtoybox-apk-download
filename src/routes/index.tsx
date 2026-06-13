@@ -37,7 +37,8 @@ import {
   Heart,
   Bug,
   FileText,
-  Users,
+  ChevronDown,
+  ShieldCheck,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -146,14 +147,24 @@ export function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/75 backdrop-blur-xl">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"
+        />
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3">
           <div className="flex items-center gap-3">
-            <img
-              src={logo}
-              alt="XTOYBOX"
-              className="h-9 w-9 rounded-lg object-cover ring-1 ring-border/70"
-            />
+            <div className="relative">
+              <img
+                src={logo}
+                alt="XTOYBOX"
+                className="h-9 w-9 rounded-lg object-cover ring-1 ring-border/70"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -z-10 rounded-lg bg-primary/20 blur-md"
+              />
+            </div>
             <span className="text-base font-semibold tracking-wide">XTOYBOX</span>
           </div>
           <DropdownMenu>
@@ -357,16 +368,31 @@ export function Index() {
         />
         <div className="mx-auto max-w-3xl px-6 pt-16 pb-16 text-center sm:pt-20 sm:pb-20">
           <div className="relative animate-fade-up">
-            <img
-              src={logo}
-              alt="Logo XTOYBOX"
-              className="mx-auto h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
-              style={{ boxShadow: "var(--shadow-glow)" }}
-            />
-            <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <div className="relative mx-auto h-20 w-20">
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -z-10 rounded-2xl bg-primary/30 blur-2xl"
+              />
+              <img
+                src={logo}
+                alt="Logo XTOYBOX"
+                className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
+                style={{ boxShadow: "var(--shadow-glow)" }}
+              />
+            </div>
+            <div className="mt-5 flex justify-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                </span>
+                Disponível para Android
+              </span>
+            </div>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
               XTOYBOX
             </h1>
-            <p className="mt-3 text-base text-muted-foreground">
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
               App Android para jogar na nuvem, com foco em celular e TV Box.
             </p>
 
@@ -393,22 +419,25 @@ export function Index() {
       </section>
 
       {/* Carrossel de telas */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        <div className="mb-6 flex items-end justify-between gap-4">
+      <section className="mx-auto max-w-5xl px-6 py-14">
+        <div className="mb-7 flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold">Telas do app</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+              Galeria
+            </span>
+            <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Telas do app</h2>
+            <p className="mt-1.5 text-sm text-muted-foreground">
               Uma prévia do uso no Android.
             </p>
           </div>
         </div>
         <Carousel
-          opts={{ loop: true, align: "center" }}
+          opts={{ loop: true, align: "center", duration: 30, dragFree: false }}
           plugins={[autoplayRef.current]}
           setApi={setCarouselApi}
           className="relative"
         >
-          <CarouselContent className="-ml-4 py-2">
+          <CarouselContent className="-ml-4 py-4">
             {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
@@ -419,14 +448,19 @@ export function Index() {
                 }`}
               >
                 <div
-                  className={`group mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
+                  className={`group relative mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-500 ease-out sm:max-w-none ${
                     s.orientation === "landscape" ? "max-w-full" : "max-w-[280px]"
                   } ${
                     activeSlide === i
-                      ? "border-primary/30"
-                      : "border-border/60 sm:opacity-80"
+                      ? "border-primary/40 scale-100 opacity-100"
+                      : "border-border/60 sm:scale-[0.94] sm:opacity-60"
                   }`}
-                  style={{ boxShadow: "var(--shadow-card)" }}
+                  style={{
+                    boxShadow:
+                      activeSlide === i
+                        ? "var(--shadow-glow), var(--shadow-card)"
+                        : "var(--shadow-card)",
+                  }}
                 >
                   <div
                     className={`w-full overflow-hidden bg-background/40 flex items-center justify-center ${
@@ -442,15 +476,19 @@ export function Index() {
                       loading={i === 0 ? "eager" : "lazy"}
                       fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                     />
                   </div>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5"
+                  />
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex -left-2 h-10 w-10 border-border/70 bg-card/80 text-foreground backdrop-blur hover:bg-card" />
-          <CarouselNext className="hidden sm:flex -right-2 h-10 w-10 border-border/70 bg-card/80 text-foreground backdrop-blur hover:bg-card" />
+          <CarouselPrevious className="hidden sm:flex -left-3 h-11 w-11 rounded-full border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur transition-all hover:scale-105 hover:border-primary/40 hover:bg-card" />
+          <CarouselNext className="hidden sm:flex -right-3 h-11 w-11 rounded-full border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur transition-all hover:scale-105 hover:border-primary/40 hover:bg-card" />
         </Carousel>
         <div className="mt-5 flex justify-center gap-2">
           {screens.map((s, i) => (
@@ -468,9 +506,17 @@ export function Index() {
       </section>
 
       {/* Recursos */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        <h2 className="text-2xl font-semibold">Recursos</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <section className="mx-auto max-w-5xl px-6 py-14">
+        <div className="mb-7">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+            Destaques
+          </span>
+          <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Recursos</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            O que torna o XTOYBOX uma boa escolha.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
           {[
             { title: "Base open source", text: "Construído sobre uma base aberta, com modificações próprias.", Icon: Package },
             { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis direto pelo Android.", Icon: Cloud },
@@ -479,14 +525,18 @@ export function Index() {
           ].map(({ title, text, Icon }) => (
             <div
               key={title}
-              className="group rounded-xl border border-border/70 bg-card/60 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:bg-card"
+              className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-card hover:shadow-lg"
             >
-              <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary transition-colors duration-200 group-hover:border-primary/40">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.04] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <div className="relative flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/60 text-primary transition-all duration-300 group-hover:scale-110 group-hover:border-primary/40 group-hover:bg-primary/10">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-medium">{title}</h3>
+                  <h3 className="font-semibold">{title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{text}</p>
                 </div>
               </div>
@@ -496,9 +546,14 @@ export function Index() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-3xl px-6 py-8">
-        <h2 className="text-2xl font-semibold">Perguntas frequentes</h2>
-        <div className="mt-5 divide-y divide-border/60 overflow-hidden rounded-xl border border-border/70 bg-card/50">
+      <section className="mx-auto max-w-3xl px-6 py-12">
+        <div className="mb-6">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+            Dúvidas
+          </span>
+          <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Perguntas frequentes</h2>
+        </div>
+        <div className="divide-y divide-border/60 overflow-hidden rounded-xl border border-border/70 bg-card/50">
           {[
             {
               q: "Como instalar o APK?",
@@ -516,9 +571,7 @@ export function Index() {
             <details key={item.q} className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors hover:bg-card">
                 <span>{item.q}</span>
-                <span className="text-muted-foreground transition-transform duration-200 group-open:rotate-45">
-                  +
-                </span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180 group-open:text-primary" />
               </summary>
               <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">
                 {item.a}
@@ -539,10 +592,14 @@ export function Index() {
         data-apk-metadata-source={apkMetadata.source}
       >
         <div
-          className="rounded-2xl border border-border/70 bg-card p-6 sm:p-8"
+          className="relative overflow-hidden rounded-2xl border border-border/70 bg-card p-6 sm:p-8"
           style={{ boxShadow: "var(--shadow-card)" }}
         >
-          <div className="flex items-center justify-between gap-4">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl"
+          />
+          <div className="relative flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img
                 src={logo}
@@ -560,7 +617,7 @@ export function Index() {
               Android
             </span>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               {
                 label: "Versão",
@@ -608,13 +665,14 @@ export function Index() {
           </div>
           <a
             href="/api/download"
-            className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.01] active:scale-[0.99] sm:w-auto"
+            className="group relative mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.01] hover:brightness-110 active:scale-[0.99] sm:w-auto"
             style={{ boxShadow: "var(--shadow-glow)" }}
           >
             <Download className="h-5 w-5 transition-transform duration-200 group-hover:translate-y-0.5" />
             Baixar APK
           </a>
-          <p className="mt-4 text-xs text-muted-foreground">
+          <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-primary/70" />
             Depois de baixar, talvez seja necessário permitir a instalação de fontes desconhecidas
             no Android.
           </p>
@@ -622,9 +680,19 @@ export function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-6 border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-6 py-8 text-center text-sm text-muted-foreground">
-          XTOYBOX — app Android baseado em open source, com desenvolvimento independente.
+      <footer className="relative mt-10 border-t border-border/60">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent"
+        />
+        <div className="mx-auto max-w-5xl px-6 py-10 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <img src={logo} alt="" className="h-6 w-6 rounded-md object-cover opacity-80" />
+            <span className="text-sm font-semibold tracking-wide">XTOYBOX</span>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            App Android baseado em open source, com desenvolvimento independente.
+          </p>
         </div>
       </footer>
     </div>
