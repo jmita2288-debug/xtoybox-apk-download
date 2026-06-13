@@ -619,7 +619,7 @@ export function Index() {
               Android
             </span>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               {
                 label: "Versão",
