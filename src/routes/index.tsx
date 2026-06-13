@@ -594,10 +594,14 @@ export function Index() {
         data-apk-metadata-source={apkMetadata.source}
       >
         <div
-          className="rounded-2xl border border-border/70 bg-card p-6 sm:p-8"
+          className="relative overflow-hidden rounded-2xl border border-border/70 bg-card p-6 sm:p-8"
           style={{ boxShadow: "var(--shadow-card)" }}
         >
-          <div className="flex items-center justify-between gap-4">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl"
+          />
+          <div className="relative flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img
                 src={logo}
