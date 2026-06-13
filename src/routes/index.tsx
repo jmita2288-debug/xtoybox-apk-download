@@ -370,16 +370,31 @@ export function Index() {
         />
         <div className="mx-auto max-w-3xl px-6 pt-16 pb-16 text-center sm:pt-20 sm:pb-20">
           <div className="relative animate-fade-up">
-            <img
-              src={logo}
-              alt="Logo XTOYBOX"
-              className="mx-auto h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
-              style={{ boxShadow: "var(--shadow-glow)" }}
-            />
-            <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <div className="relative mx-auto h-20 w-20">
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -z-10 rounded-2xl bg-primary/30 blur-2xl"
+              />
+              <img
+                src={logo}
+                alt="Logo XTOYBOX"
+                className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
+                style={{ boxShadow: "var(--shadow-glow)" }}
+              />
+            </div>
+            <div className="mt-5 flex justify-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                </span>
+                Disponível para Android
+              </span>
+            </div>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
               XTOYBOX
             </h1>
-            <p className="mt-3 text-base text-muted-foreground">
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
               App Android para jogar na nuvem, com foco em celular e TV Box.
             </p>
 
