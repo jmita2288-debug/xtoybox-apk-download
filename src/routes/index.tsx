@@ -667,13 +667,14 @@ export function Index() {
           </div>
           <a
             href="/api/download"
-            className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.01] active:scale-[0.99] sm:w-auto"
+            className="group relative mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.01] hover:brightness-110 active:scale-[0.99] sm:w-auto"
             style={{ boxShadow: "var(--shadow-glow)" }}
           >
             <Download className="h-5 w-5 transition-transform duration-200 group-hover:translate-y-0.5" />
             Baixar APK
           </a>
-          <p className="mt-4 text-xs text-muted-foreground">
+          <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-primary/70" />
             Depois de baixar, talvez seja necessário permitir a instalação de fontes desconhecidas
             no Android.
           </p>
