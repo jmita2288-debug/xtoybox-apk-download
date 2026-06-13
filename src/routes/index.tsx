@@ -38,6 +38,9 @@ import {
   Bug,
   FileText,
   Users,
+  ChevronDown,
+  Sparkles,
+  ShieldCheck,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
