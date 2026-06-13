@@ -37,9 +37,7 @@ import {
   Heart,
   Bug,
   FileText,
-  Users,
   ChevronDown,
-  Sparkles,
   ShieldCheck,
 } from "lucide-react";
 
