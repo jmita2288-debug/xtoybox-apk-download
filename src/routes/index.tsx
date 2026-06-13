@@ -439,7 +439,7 @@ export function Index() {
           setApi={setCarouselApi}
           className="relative"
         >
-          <CarouselContent className="-ml-4 py-2">
+          <CarouselContent className="-ml-4 py-4">
             {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
@@ -450,14 +450,19 @@ export function Index() {
                 }`}
               >
                 <div
-                  className={`group mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-300 sm:max-w-none ${
+                  className={`group relative mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-500 ease-out sm:max-w-none ${
                     s.orientation === "landscape" ? "max-w-full" : "max-w-[280px]"
                   } ${
                     activeSlide === i
-                      ? "border-primary/30"
-                      : "border-border/60 sm:opacity-80"
+                      ? "border-primary/40 scale-100 opacity-100"
+                      : "border-border/60 sm:scale-[0.94] sm:opacity-60"
                   }`}
-                  style={{ boxShadow: "var(--shadow-card)" }}
+                  style={{
+                    boxShadow:
+                      activeSlide === i
+                        ? "var(--shadow-glow), var(--shadow-card)"
+                        : "var(--shadow-card)",
+                  }}
                 >
                   <div
                     className={`w-full overflow-hidden bg-background/40 flex items-center justify-center ${
@@ -473,15 +478,19 @@ export function Index() {
                       loading={i === 0 ? "eager" : "lazy"}
                       fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                     />
                   </div>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5"
+                  />
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex -left-2 h-10 w-10 border-border/70 bg-card/80 text-foreground backdrop-blur hover:bg-card" />
-          <CarouselNext className="hidden sm:flex -right-2 h-10 w-10 border-border/70 bg-card/80 text-foreground backdrop-blur hover:bg-card" />
+          <CarouselPrevious className="hidden sm:flex -left-3 h-11 w-11 rounded-full border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur transition-all hover:scale-105 hover:border-primary/40 hover:bg-card" />
+          <CarouselNext className="hidden sm:flex -right-3 h-11 w-11 rounded-full border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur transition-all hover:scale-105 hover:border-primary/40 hover:bg-card" />
         </Carousel>
         <div className="mt-5 flex justify-center gap-2">
           {screens.map((s, i) => (
