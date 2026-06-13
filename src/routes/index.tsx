@@ -508,9 +508,17 @@ export function Index() {
       </section>
 
       {/* Recursos */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        <h2 className="text-2xl font-semibold">Recursos</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <section className="mx-auto max-w-5xl px-6 py-14">
+        <div className="mb-7">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+            Destaques
+          </span>
+          <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Recursos</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            O que torna o XTOYBOX uma boa escolha.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
           {[
             { title: "Base open source", text: "Construído sobre uma base aberta, com modificações próprias.", Icon: Package },
             { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis direto pelo Android.", Icon: Cloud },
@@ -519,14 +527,18 @@ export function Index() {
           ].map(({ title, text, Icon }) => (
             <div
               key={title}
-              className="group rounded-xl border border-border/70 bg-card/60 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:bg-card"
+              className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-card hover:shadow-lg"
             >
-              <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/50 text-primary transition-colors duration-200 group-hover:border-primary/40">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.04] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <div className="relative flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/60 text-primary transition-all duration-300 group-hover:scale-110 group-hover:border-primary/40 group-hover:bg-primary/10">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-medium">{title}</h3>
+                  <h3 className="font-semibold">{title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{text}</p>
                 </div>
               </div>
@@ -536,9 +548,14 @@ export function Index() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-3xl px-6 py-8">
-        <h2 className="text-2xl font-semibold">Perguntas frequentes</h2>
-        <div className="mt-5 divide-y divide-border/60 overflow-hidden rounded-xl border border-border/70 bg-card/50">
+      <section className="mx-auto max-w-3xl px-6 py-12">
+        <div className="mb-6">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+            Dúvidas
+          </span>
+          <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Perguntas frequentes</h2>
+        </div>
+        <div className="divide-y divide-border/60 overflow-hidden rounded-xl border border-border/70 bg-card/50">
           {[
             {
               q: "Como instalar o APK?",
@@ -556,9 +573,7 @@ export function Index() {
             <details key={item.q} className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors hover:bg-card">
                 <span>{item.q}</span>
-                <span className="text-muted-foreground transition-transform duration-200 group-open:rotate-45">
-                  +
-                </span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180 group-open:text-primary" />
               </summary>
               <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">
                 {item.a}
