@@ -421,17 +421,20 @@ export function Index() {
       </section>
 
       {/* Carrossel de telas */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        <div className="mb-6 flex items-end justify-between gap-4">
+      <section className="mx-auto max-w-5xl px-6 py-14">
+        <div className="mb-7 flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold">Telas do app</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+              Galeria
+            </span>
+            <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Telas do app</h2>
+            <p className="mt-1.5 text-sm text-muted-foreground">
               Uma prévia do uso no Android.
             </p>
           </div>
         </div>
         <Carousel
-          opts={{ loop: true, align: "center" }}
+          opts={{ loop: true, align: "center", duration: 30, dragFree: false }}
           plugins={[autoplayRef.current]}
           setApi={setCarouselApi}
           className="relative"
