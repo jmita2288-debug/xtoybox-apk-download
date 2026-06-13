@@ -149,14 +149,24 @@ export function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/75 backdrop-blur-xl">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"
+        />
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3">
           <div className="flex items-center gap-3">
-            <img
-              src={logo}
-              alt="XTOYBOX"
-              className="h-9 w-9 rounded-lg object-cover ring-1 ring-border/70"
-            />
+            <div className="relative">
+              <img
+                src={logo}
+                alt="XTOYBOX"
+                className="h-9 w-9 rounded-lg object-cover ring-1 ring-border/70"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -z-10 rounded-lg bg-primary/20 blur-md"
+              />
+            </div>
             <span className="text-base font-semibold tracking-wide">XTOYBOX</span>
           </div>
           <DropdownMenu>
