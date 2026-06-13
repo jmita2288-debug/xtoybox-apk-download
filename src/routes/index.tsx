@@ -680,9 +680,19 @@ export function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-6 border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-6 py-8 text-center text-sm text-muted-foreground">
-          XTOYBOX — app Android baseado em open source, com desenvolvimento independente.
+      <footer className="relative mt-10 border-t border-border/60">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent"
+        />
+        <div className="mx-auto max-w-5xl px-6 py-10 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <img src={logo} alt="" className="h-6 w-6 rounded-md object-cover opacity-80" />
+            <span className="text-sm font-semibold tracking-wide">XTOYBOX</span>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            App Android baseado em open source, com desenvolvimento independente.
+          </p>
         </div>
       </footer>
     </div>
