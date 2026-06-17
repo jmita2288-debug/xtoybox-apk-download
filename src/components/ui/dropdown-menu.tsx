@@ -3,8 +3,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-const XTOYBOX_COMMUNITY_URL = "https://discord.gg/abh27Dwktt";
-
 type MenuContextValue = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -84,7 +82,7 @@ const DropdownMenuContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { align?: "start" | "center" | "end"; sideOffset?: number }
 >(({ className, align = "end", sideOffset = 8, style, children, ...props }, ref) => {
-  const { open, setOpen } = useMenu();
+  const { open } = useMenu();
   if (!open) return null;
   const alignClass = align === "start" ? "left-0" : align === "center" ? "left-1/2 -translate-x-1/2" : "right-0";
 
@@ -99,22 +97,6 @@ const DropdownMenuContent = React.forwardRef<
       )}
       {...props}
     >
-      <a
-        href={XTOYBOX_COMMUNITY_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={cn(menuItemClass, "gap-3 py-2.5 text-primary hover:text-primary")}
-        onClick={() => setOpen(false)}
-      >
-        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/15 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </span>
-        <span className="flex flex-col leading-tight">
-          <span>Comunidade XTOYBOX</span>
-          <span className="text-xs font-normal text-primary/70">Entre no Discord</span>
-        </span>
-      </a>
-      <div className="my-1 h-px bg-border/70" />
       {children}
     </div>
   );
