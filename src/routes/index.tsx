@@ -1,13 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
-import screenHome from "@/assets/screens/home.png";
-import screenLibrary from "@/assets/screens/library.png";
-import screenGame from "@/assets/screens/game.png";
-import screenFriends from "@/assets/screens/friends.png";
-import screenProfile from "@/assets/screens/profile.png";
-import screenForza1 from "@/assets/screens/gameplay-forza-1.jpeg";
-import screenForza2 from "@/assets/screens/gameplay-forza-2.jpeg";
+import screenPerfilAsset from "@/assets/screens/perfil.png.asset.json";
+import screenBibliotecaAsset from "@/assets/screens/biblioteca.png.asset.json";
+import screenConquistasAsset from "@/assets/screens/conquistas.png.asset.json";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
   Carousel,
@@ -65,16 +61,10 @@ function createFallbackApkMetadata(): ApkMetadata {
   };
 }
 
-type ScreenOrientation = "portrait" | "landscape";
-
-const screens: { src: string; alt: string; orientation: ScreenOrientation }[] = [
-  { src: screenHome, alt: "Tela inicial do XTOYBOX", orientation: "portrait" },
-  { src: screenLibrary, alt: "Biblioteca de jogos", orientation: "portrait" },
-  { src: screenForza1, alt: "Jogando Forza Horizon na nuvem", orientation: "landscape" },
-  { src: screenGame, alt: "Detalhes do jogo", orientation: "portrait" },
-  { src: screenForza2, alt: "Controles em tela durante o jogo", orientation: "landscape" },
-  { src: screenFriends, alt: "Lista de amigos", orientation: "portrait" },
-  { src: screenProfile, alt: "Perfil do usuário", orientation: "portrait" },
+const screens: { src: string; alt: string }[] = [
+  { src: screenPerfilAsset.url, alt: "Tela de Perfil do XTOYBOX" },
+  { src: screenBibliotecaAsset.url, alt: "Tela da Biblioteca de jogos" },
+  { src: screenConquistasAsset.url, alt: "Tela de Conquistas com progresso dos jogos" },
 ];
 
 type InfoSection = "credits" | "terms" | "about";
@@ -406,21 +396,15 @@ export function Index() {
             {screens.map((s, i) => (
               <CarouselItem
                 key={s.alt}
-                className={`pl-4 basis-full ${
-                  s.orientation === "landscape" ? "sm:basis-full md:basis-2/3" : "sm:basis-1/2 md:basis-1/3"
-                }`}
+                className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
               >
                 <div
-                  className={`group relative mx-auto w-full overflow-hidden rounded-2xl border bg-card transition-all duration-500 ease-out sm:max-w-none ${
-                    s.orientation === "landscape" ? "max-w-full" : "max-w-[280px]"
-                  } ${activeSlide === i ? "scale-100 border-primary/35 opacity-100" : "border-border/60 sm:scale-[0.94] sm:opacity-65"}`}
+                  className={`group relative mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border bg-card transition-all duration-500 ease-out sm:max-w-none ${
+                    activeSlide === i ? "scale-100 border-primary/35 opacity-100" : "border-border/60 sm:scale-[0.94] sm:opacity-65"
+                  }`}
                   style={{ boxShadow: activeSlide === i ? "var(--shadow-glow), var(--shadow-card)" : "var(--shadow-card)" }}
                 >
-                  <div
-                    className={`flex w-full items-center justify-center overflow-hidden bg-background/40 ${
-                      s.orientation === "landscape" ? "aspect-video" : "aspect-[941/1672]"
-                    }`}
-                  >
+                  <div className="flex aspect-[9/16] w-full items-center justify-center overflow-hidden bg-background/40">
                     <img
                       src={s.src}
                       sizes="(min-width: 768px) 320px, (min-width: 640px) 45vw, 280px"
@@ -428,7 +412,7 @@ export function Index() {
                       loading={i === 0 ? "eager" : "lazy"}
                       fetchPriority={i === activeSlide ? "high" : "auto"}
                       decoding="async"
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                      className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     />
                   </div>
                   <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5" />
