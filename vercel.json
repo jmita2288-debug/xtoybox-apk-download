@@ -4,8 +4,8 @@
   "outputDirectory": "dist",
   "redirects": [
     {
-      "source": "/downloads/XTOYBOX-v1.0.13.apk",
-      "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.0.13.apk",
+      "source": "/downloads/XTOYBOX-v1.1.13.apk",
+      "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.13.apk",
       "permanent": false
     },
     {
