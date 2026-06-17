@@ -1,13 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
-import screenHome from "@/assets/screens/home.png";
-import screenLibrary from "@/assets/screens/library.png";
-import screenGame from "@/assets/screens/game.png";
-import screenFriends from "@/assets/screens/friends.png";
-import screenProfile from "@/assets/screens/profile.png";
-import screenForza1 from "@/assets/screens/gameplay-forza-1.jpeg";
-import screenForza2 from "@/assets/screens/gameplay-forza-2.jpeg";
+import screenPerfilAsset from "@/assets/screens/perfil.png.asset.json";
+import screenBibliotecaAsset from "@/assets/screens/biblioteca.png.asset.json";
+import screenConquistasAsset from "@/assets/screens/conquistas.png.asset.json";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
   Carousel,
@@ -65,16 +61,10 @@ function createFallbackApkMetadata(): ApkMetadata {
   };
 }
 
-type ScreenOrientation = "portrait" | "landscape";
-
-const screens: { src: string; alt: string; orientation: ScreenOrientation }[] = [
-  { src: screenHome, alt: "Tela inicial do XTOYBOX", orientation: "portrait" },
-  { src: screenLibrary, alt: "Biblioteca de jogos", orientation: "portrait" },
-  { src: screenForza1, alt: "Jogando Forza Horizon na nuvem", orientation: "landscape" },
-  { src: screenGame, alt: "Detalhes do jogo", orientation: "portrait" },
-  { src: screenForza2, alt: "Controles em tela durante o jogo", orientation: "landscape" },
-  { src: screenFriends, alt: "Lista de amigos", orientation: "portrait" },
-  { src: screenProfile, alt: "Perfil do usuário", orientation: "portrait" },
+const screens: { src: string; alt: string }[] = [
+  { src: screenPerfilAsset.url, alt: "Tela de Perfil do XTOYBOX" },
+  { src: screenBibliotecaAsset.url, alt: "Tela da Biblioteca de jogos" },
+  { src: screenConquistasAsset.url, alt: "Tela de Conquistas com progresso dos jogos" },
 ];
 
 type InfoSection = "credits" | "terms" | "about";
