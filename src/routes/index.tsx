@@ -86,13 +86,14 @@ type IconProps = {
 function DiscordIcon({ className }: IconProps) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="0 0 127.14 96.36"
       fill="currentColor"
       aria-hidden="true"
       focusable="false"
+      preserveAspectRatio="xMidYMid meet"
       className={className}
     >
-      <path d="M20.317 4.369A19.791 19.791 0 0 0 16.558 3a.074.074 0 0 0-.079.037c-.163.29-.347.667-.474.966a18.27 18.27 0 0 0-5.487 0 9.515 9.515 0 0 0-.481-.966A.077.077 0 0 0 9.958 3a19.736 19.736 0 0 0-3.76 1.37.069.069 0 0 0-.032.027C3.79 7.948 3.132 11.411 3.451 14.829a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.027 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.105 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.371-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.009c.12.099.245.198.372.292a.077.077 0 0 1-.006.128 12.299 12.299 0 0 1-1.873.891.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.382-3.954-.64-7.386-2.705-10.431a.061.061 0 0 0-.031-.03zM9.68 12.706c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.419 0 1.334-.955 2.419-2.157 2.419zm6.64 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.419 0 1.334-.947 2.419-2.157 2.419z" />
+      <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1A105.25 105.25 0 0 0 126.6 80.22C129.24 52.84 122.09 29.11 107.7 8.07ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53 48.84 65.69 42.45 65.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53 91.08 65.69 84.69 65.69Z" />
     </svg>
   );
 }
@@ -488,7 +489,7 @@ export function Index() {
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-4">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#5865F2]/20 bg-[#5865F2]/10 text-[#8b95ff]">
-                <DiscordIcon className="h-5 w-5" />
+                <DiscordIcon className="h-5 w-7" />
               </div>
               <div>
                 <span className="text-xs font-semibold uppercase tracking-[0.16em] text-primary/75">Suporte e comunidade</span>
@@ -504,7 +505,7 @@ export function Index() {
               rel="noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/10 px-5 py-3 text-sm font-semibold text-[#c4c9ff] transition-colors duration-200 hover:border-[#5865F2]/40 hover:bg-[#5865F2]/15"
             >
-              <DiscordIcon className="h-5 w-5" />
+              <DiscordIcon className="h-4 w-6" />
               Entrar no Discord
             </a>
           </div>
