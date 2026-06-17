@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
-import screenPerfilAsset from "@/assets/screens/perfil.png.asset.json";
-import screenBibliotecaAsset from "@/assets/screens/biblioteca.png.asset.json";
-import screenConquistasAsset from "@/assets/screens/conquistas.png.asset.json";
+import screenPerfil from "@/assets/screens/perfil.png";
+import screenBiblioteca from "@/assets/screens/biblioteca.png";
+import screenConquistas from "@/assets/screens/conquistas.png";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
   Carousel,
@@ -62,9 +62,9 @@ function createFallbackApkMetadata(): ApkMetadata {
 }
 
 const screens: { src: string; alt: string }[] = [
-  { src: screenPerfilAsset.url, alt: "Tela de Perfil do XTOYBOX" },
-  { src: screenBibliotecaAsset.url, alt: "Tela da Biblioteca de jogos" },
-  { src: screenConquistasAsset.url, alt: "Tela de Conquistas com progresso dos jogos" },
+  { src: screenPerfil, alt: "Tela de Perfil do XTOYBOX" },
+  { src: screenBiblioteca, alt: "Tela da Biblioteca de jogos" },
+  { src: screenConquistas, alt: "Tela de Conquistas com progresso dos jogos" },
 ];
 
 type InfoSection = "credits" | "terms" | "about";
