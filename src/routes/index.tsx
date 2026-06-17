@@ -45,6 +45,8 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const XTOYBOX_COMMUNITY_URL = "https://discord.gg/abh27Dwktt";
+
 function createFallbackApkMetadata(): ApkMetadata {
   return {
     appName: fallbackLatestMetadata.appName ?? "XTOYBOX",
@@ -212,17 +214,6 @@ export function Index() {
                   <span>Sobre o app</span>
                   <span className="text-xs font-normal text-muted-foreground">O que é o XTOYBOX</span>
                 </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="gap-3 py-2.5">
-                <a href="#comunidade">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-[#5865F2]/10 text-[#5865F2]">
-                    <DiscordIcon className="h-4 w-4" />
-                  </span>
-                  <span className="flex flex-col leading-tight">
-                    <span>Comunidade</span>
-                    <span className="text-xs font-normal text-muted-foreground">Entre no Discord</span>
-                  </span>
-                </a>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setInfoOpen("credits")} className="gap-3 py-2.5">
                 <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
@@ -492,29 +483,29 @@ export function Index() {
         </div>
       </section>
 
-      <section id="comunidade" className="mx-auto max-w-5xl px-6 py-12">
-        <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/65 p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <section id="comunidade" className="mx-auto max-w-5xl px-6 py-10 sm:py-12">
+        <div className="rounded-2xl border border-border/70 bg-card/70 p-6 sm:p-7" style={{ boxShadow: "var(--shadow-card)" }}>
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#5865F2]/25 bg-[#5865F2]/10 text-[#5865F2]">
-                <DiscordIcon className="h-6 w-6" />
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#5865F2]/20 bg-[#5865F2]/10 text-[#8b95ff]">
+                <DiscordIcon className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">Comunidade</span>
-                <h2 className="mt-1 text-2xl font-semibold">Entre no Discord</h2>
+                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-primary/75">Suporte e comunidade</span>
+                <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">Discord do XTOYBOX</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Acompanhe novidades, envie feedbacks e converse com outros usuários do XTOYBOX.
+                  Entre para tirar dúvidas, acompanhar avisos, reportar bugs e enviar feedbacks sobre o app.
                 </p>
               </div>
             </div>
             <a
-              href="https://discord.gg/"
+              href={XTOYBOX_COMMUNITY_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#5865F2]/30 bg-[#5865F2]/10 px-5 py-3 text-sm font-semibold text-[#b8c0ff] transition-colors duration-200 hover:border-[#5865F2]/45 hover:bg-[#5865F2]/15"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/10 px-5 py-3 text-sm font-semibold text-[#c4c9ff] transition-colors duration-200 hover:border-[#5865F2]/40 hover:bg-[#5865F2]/15"
             >
               <DiscordIcon className="h-5 w-5" />
-              Abrir Discord
+              Entrar no Discord
             </a>
           </div>
         </div>
