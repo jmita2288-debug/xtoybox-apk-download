@@ -19,6 +19,7 @@
 <p align="center">
   <img alt="Android" src="https://img.shields.io/badge/Android-APK-7ED957?style=for-the-badge&logo=android&logoColor=111" />
   <img alt="Open Source" src="https://img.shields.io/badge/Base-XStreaming-7ED957?style=for-the-badge&logo=github&logoColor=111" />
+  <img alt="Downloads reais" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Downloads%20reais&query=%24.totalDownloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-stats.json&color=7ED957&logo=github&logoColor=111" />
   <img alt="React" src="https://img.shields.io/badge/Site-React-61DAFB?style=for-the-badge&logo=react&logoColor=111" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=fff" />
   <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000?style=for-the-badge&logo=vercel&logoColor=fff" />
@@ -90,6 +91,26 @@ Principais funções:
 - usar o app em celular ou TV Box;
 - navegar com controle Bluetooth/USB;
 - receber melhorias e versões pelo site oficial.
+
+---
+
+## Downloads reais do APK
+
+<p align="center">
+  <a href="https://xtoybox.cloud">
+    <img alt="Downloads reais do XTOYBOX" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Total%20de%20downloads&query=%24.totalDownloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-stats.json&color=7ED957&logo=android&logoColor=111" />
+  </a>
+</p>
+
+O número acima é puxado do mesmo arquivo de estatísticas usado pelo site:
+
+```txt
+public/download-stats.json
+```
+
+Assim, o README não depende de número manual. Quando o contador do projeto é atualizado, o badge também passa a refletir o total real registrado.
+
+> Se o GitHub ou o serviço de badges usar cache por alguns minutos, o número pode demorar um pouco para atualizar. Sim, até contador precisa de paciência, porque a web gosta de testar caráter.
 
 ---
 
@@ -223,6 +244,8 @@ O contador de downloads usa o arquivo:
 ```txt
 public/download-stats.json
 ```
+
+Esse arquivo mantém o total geral e a divisão por versão. O site e o README usam essa mesma fonte para evitar números diferentes espalhados pelo projeto, porque aparentemente até estatística precisa de disciplina.
 
 Para funcionar em produção, a Vercel precisa ter uma variável com permissão para gravar no repositório:
 
