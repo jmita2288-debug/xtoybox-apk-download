@@ -1,6 +1,7 @@
 const REPO_OWNER = 'jmita2288-debug';
 const REPO_NAME = 'xtoybox-apk-download';
 const STATS_PATH = 'public/download-stats.json';
+const BADGE_PATH = 'public/download-badge.json';
 const BRANCH = 'main';
 
 function encodeBase64(value) {
@@ -31,6 +32,38 @@ function uniqueValues(values) {
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function formatCompactNumber(value) {
+  const number = Number(value || 0);
+
+  if (!Number.isFinite(number) || number <= 0) return '0';
+
+  const units = [
+    { value: 1_000_000_000, suffix: 'B' },
+    { value: 1_000_000, suffix: 'M' },
+    { value: 1_000, suffix: 'k' },
+  ];
+
+  const unit = units.find((item) => number >= item.value);
+  if (!unit) return String(Math.floor(number));
+
+  const compact = number / unit.value;
+  const rounded = compact >= 10 ? Math.round(compact) : Math.round(compact * 10) / 10;
+
+  return `${rounded}${unit.suffix}`;
+}
+
+function createDownloadBadge(stats) {
+  return {
+    schemaVersion: 1,
+    label: 'downloads',
+    message: formatCompactNumber(stats?.totalDownloads),
+    color: '7ED957',
+    namedLogo: 'android',
+    logoColor: '111111',
+    labelColor: '111111',
+  };
 }
 
 async function fetchJson(url, options = {}) {
@@ -77,6 +110,28 @@ function buildGitHubHeaders(token) {
   };
 }
 
+async function updateDownloadBadge(stats, headers) {
+  try {
+    const badgeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${BADGE_PATH}?ref=${BRANCH}`;
+    const updateUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${BADGE_PATH}`;
+    const file = await fetchJson(badgeUrl, { headers, cache: 'no-store' });
+    const badge = createDownloadBadge(stats);
+
+    await fetchJson(updateUrl, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        message: `Update compact download badge to ${badge.message}`,
+        content: encodeBase64(`${JSON.stringify(badge, null, 2)}\n`),
+        sha: file.sha,
+        branch: BRANCH,
+      }),
+    });
+  } catch (err) {
+    console.warn('Falha ao atualizar badge de downloads:', err?.message || err);
+  }
+}
+
 async function incrementDownloadStats(latest) {
   const token = getStatsToken();
   if (!token) {
@@ -119,6 +174,8 @@ async function incrementDownloadStats(latest) {
           branch: BRANCH,
         }),
       });
+
+      await updateDownloadBadge(nextStats, headers);
 
       return nextStats;
     } catch (err) {
