@@ -19,7 +19,7 @@
 <p align="center">
   <img alt="Android" src="https://img.shields.io/badge/Android-APK-7ED957?style=for-the-badge&logo=android&logoColor=111" />
   <img alt="Open Source" src="https://img.shields.io/badge/Base-XStreaming-7ED957?style=for-the-badge&logo=github&logoColor=111" />
-  <img alt="Downloads reais" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Downloads%20reais&query=%24.totalDownloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-stats.json&color=7ED957&logo=github&logoColor=111" />
+  <img alt="Downloads reais" src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fxtoybox.cloud%2Fapi%2Fdownload-badge" />
   <img alt="React" src="https://img.shields.io/badge/Site-React-61DAFB?style=for-the-badge&logo=react&logoColor=111" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=fff" />
   <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000?style=for-the-badge&logo=vercel&logoColor=fff" />
@@ -98,19 +98,27 @@ Principais funções:
 
 <p align="center">
   <a href="https://xtoybox.cloud">
-    <img alt="Downloads reais do XTOYBOX" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Total%20de%20downloads&query=%24.totalDownloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-stats.json&color=7ED957&logo=android&logoColor=111" />
+    <img alt="Downloads reais do XTOYBOX" src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fxtoybox.cloud%2Fapi%2Fdownload-badge" />
   </a>
 </p>
 
-O número acima é puxado do mesmo arquivo de estatísticas usado pelo site:
+O número acima vem da mesma fonte usada pelo site:
 
 ```txt
 public/download-stats.json
 ```
 
-Assim, o README não depende de número manual. Quando o contador do projeto é atualizado, o badge também passa a refletir o total real registrado.
+A rota abaixo lê esse total real e devolve o valor já abreviado para o README:
 
-> Se o GitHub ou o serviço de badges usar cache por alguns minutos, o número pode demorar um pouco para atualizar. Sim, até contador precisa de paciência, porque a web gosta de testar caráter.
+```txt
+/api/download-badge
+```
+
+Exemplos de formatação: `8,7k`, `10k`, `100k`, `1M`.
+
+Assim, o README não depende de número manual. Quando o contador do projeto é atualizado, o badge continua usando o total real registrado.
+
+> O badge pode levar alguns minutos para atualizar por causa do cache do GitHub/Shields. A internet mede tudo em tempo real, menos quando você realmente precisa.
 
 ---
 
@@ -195,6 +203,7 @@ Também existe configuração para trabalhar com metadados do APK, contador de d
 .
 ├── api/
 │   ├── apk-metadata.js       # API que monta dados da versão atual
+│   ├── download-badge.js     # Badge abreviado de downloads reais
 │   └── download.js           # Rota de download e contador
 │
 ├── public/
