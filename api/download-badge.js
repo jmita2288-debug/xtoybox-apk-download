@@ -29,7 +29,7 @@ function formatCompactNumber(value) {
   const compact = number / unit.value;
   const rounded = compact >= 10 ? Math.round(compact) : Math.round(compact * 10) / 10;
 
-  return `${String(rounded).replace('.', ',')}${unit.suffix}`;
+  return `${rounded}${unit.suffix}`;
 }
 
 async function fetchJson(url, options = {}) {
