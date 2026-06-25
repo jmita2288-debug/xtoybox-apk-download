@@ -94,7 +94,7 @@ Principais funções:
 
 ---
 
-## Downloads reais do APK
+## Downloads do APK
 
 <p align="center">
   <a href="https://xtoybox.cloud">
@@ -102,27 +102,17 @@ Principais funções:
   </a>
 </p>
 
-O número acima vem da mesma fonte usada pelo site:
 
 ```txt
 public/download-stats.json
 ```
 
-Para o README, o total é exibido por este arquivo de badge:
+
 
 ```txt
 public/download-badge.json
 ```
-
-Ele usa o total real do contador e mostra o valor em formato abreviado.
-
-Exemplos de formatação: `8.7k`, `10k`, `100k`, `1M`.
-
-Assim, o README não depende de número manual. Quando o contador do projeto é atualizado pela rota de download, o badge também é atualizado com o total real registrado.
-
-> O badge pode levar alguns minutos para atualizar por causa do cache do GitHub/Shields. A internet mede tudo em tempo real, menos quando você realmente precisa.
-
----
+ 
 
 ## Sobre o site
 
