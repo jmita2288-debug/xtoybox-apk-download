@@ -2,6 +2,7 @@
   "installCommand": "npm install",
   "buildCommand": "npx vite build --config vite.config.vercel.ts",
   "outputDirectory": "dist",
+  "ignoreCommand": "node scripts/ignore-vercel-build.js",
   "redirects": [
     {
       "source": "/downloads/XTOYBOX-v1.1.14.apk",
