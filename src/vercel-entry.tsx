@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Index } from "./routes/index";
 import { ReportarBugsPage } from "./routes/reportar-bugs";
 import "./styles.css";
@@ -23,5 +24,6 @@ function App() {
 createRoot(rootElement).render(
   <React.StrictMode>
     <App />
+    <SpeedInsights />
   </React.StrictMode>,
 );
