@@ -187,9 +187,11 @@ export default async function handler(req, res) {
     ]);
 
     const apkSizeBytes = releaseAsset?.apkSizeBytes ?? null;
-    const downloadsTotal = typeof stats?.totalDownloads === 'number'
-      ? stats.totalDownloads
-      : releaseAsset?.assetDownloadCount ?? null;
+    const downloadsTotal = typeof releaseAsset?.assetDownloadCount === 'number'
+      ? releaseAsset.assetDownloadCount
+      : typeof stats?.totalDownloads === 'number'
+        ? stats.totalDownloads
+        : null;
     const lastUpdated = latest.publishedAt || stats?.updatedAt || releaseAsset?.publishedAt || null;
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
