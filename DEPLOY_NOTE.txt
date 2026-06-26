@@ -1,1 +1,3 @@
 Trigger deploy for current site version.
+
+Clean deployment trigger after Vercel ignored-build rule update.
