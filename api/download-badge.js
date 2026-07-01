@@ -1,18 +1,21 @@
-const REPO_OWNER = 'jmita2288-debug';
-const REPO_NAME = 'xtoybox-apk-download';
-const STATS_PATH = 'public/download-stats.json';
-const BRANCH = 'main';
+function getHeader(req, name) {
+  const value = req.headers[name];
+  return Array.isArray(value) ? value[0] : value;
+}
 
-function getStatsToken() {
-  return process.env.GITHUB_STATS_TOKEN || process.env.SITE_REPO_TOKEN || process.env.GH_TOKEN || '';
+function getRequestOrigin(req) {
+  const host = getHeader(req, 'x-forwarded-host') || getHeader(req, 'host');
+  const proto = getHeader(req, 'x-forwarded-proto') || 'https';
+
+  if (host) return `${proto}://${host}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return process.env.SITE_URL || 'https://xtoybox.cloud';
 }
 
 function formatCompactNumber(value) {
   const number = Number(value || 0);
 
-  if (!Number.isFinite(number) || number <= 0) {
-    return '0';
-  }
+  if (!Number.isFinite(number) || number <= 0) return '0';
 
   const units = [
     { value: 1_000_000_000, suffix: 'B' },
@@ -21,10 +24,7 @@ function formatCompactNumber(value) {
   ];
 
   const unit = units.find((item) => number >= item.value);
-
-  if (!unit) {
-    return String(Math.floor(number));
-  }
+  if (!unit) return String(Math.floor(number));
 
   const compact = number / unit.value;
   const rounded = compact >= 10 ? Math.round(compact) : Math.round(compact * 10) / 10;
@@ -43,40 +43,11 @@ async function fetchJson(url, options = {}) {
   return response.json();
 }
 
-async function fetchLiveDownloadStats() {
-  const token = getStatsToken();
-  const headers = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'xtoybox-download-badge',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
-
-  const file = await fetchJson(
-    `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${STATS_PATH}?ref=${BRANCH}&t=${Date.now()}`,
-    { headers, cache: 'no-store' },
-  );
-
-  const content = Buffer.from(file.content || '', 'base64').toString('utf8');
-  return JSON.parse(content || '{}');
-}
-
-async function fetchRawDownloadStats() {
-  return fetchJson(
-    `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${STATS_PATH}?t=${Date.now()}`,
-    { cache: 'no-store' },
-  );
-}
-
-async function fetchDownloadStats() {
-  return fetchLiveDownloadStats().catch(() => fetchRawDownloadStats());
-}
-
 export default async function handler(req, res) {
   try {
-    const stats = await fetchDownloadStats();
-    const totalDownloads = Number(stats?.totalDownloads || 0);
-    const message = formatCompactNumber(totalDownloads);
+    const origin = getRequestOrigin(req);
+    const metadata = await fetchJson(`${origin}/api/apk-metadata?t=${Date.now()}`, { cache: 'no-store' });
+    const message = formatCompactNumber(metadata?.downloadsTotal);
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
 
@@ -97,7 +68,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       schemaVersion: 1,
       label: 'downloads',
-      message: 'indisponível',
+      message: 'indisponivel',
       color: '9CA3AF',
       labelColor: '111111',
     });
