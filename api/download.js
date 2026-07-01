@@ -205,8 +205,18 @@ export default async function handler(req, res) {
       throw new Error('apkUrl ausente no latest.json');
     }
 
+    let counted = false;
+
+    if (req.method === 'GET') {
+      const stats = await incrementDownloadStats(latest).catch((err) => {
+        console.warn('Falha ao registrar download:', err?.message || err);
+        return null;
+      });
+      counted = Boolean(stats);
+    }
+
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-    res.setHeader('X-Download-Counted', 'release-asset');
+    res.setHeader('X-Download-Counted', counted ? '1' : '0');
     return res.redirect(302, apkUrl);
   } catch (err) {
     console.error('Falha no download:', err?.message || err);
