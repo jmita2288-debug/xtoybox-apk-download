@@ -1,3 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const REPO_OWNER = 'jmita2288-debug';
 const REPO_NAME = 'xtoybox-apk-download';
 const STATS_PATH = 'public/download-stats.json';
@@ -71,10 +75,88 @@ async function fetchJson(url, options = {}) {
     throw new Error(`Request failed: ${response.status}${text ? ` - ${text.slice(0, 160)}` : ''}`);
   }
 
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('json') && !contentType.includes('text/plain')) {
+    const text = await response.text().catch(() => '');
+    const preview = text.slice(0, 80);
+    throw new Error(`Resposta nao e JSON (content-type: ${contentType}): ${preview}`);
+  }
+
   return response.json();
 }
 
+// Lê latest.json do sistema de arquivos local do runtime da Vercel.
+// Isso é muito mais confiável do que um self-fetch HTTP, pois evita o
+// roteamento da Vercel CDN (incluindo o rewrite /(.*) -> /index.html)
+// e não depende de propagação de cache ou domínio.
+function readLatestJsonFromFilesystem() {
+  try {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    // Em Vercel Functions, o working directory é /var/task
+    // e os arquivos do outputDirectory são copiados para lá.
+    // O caminho relativo de api/ para dist/latest.json é ../latest.json
+    const candidates = [
+      resolve(__dirname, '../latest.json'),
+      resolve(__dirname, '../dist/latest.json'),
+      resolve(process.cwd(), 'latest.json'),
+      resolve(process.cwd(), 'dist/latest.json'),
+    ];
+
+    for (const path of candidates) {
+      try {
+        const content = readFileSync(path, 'utf8');
+        const data = JSON.parse(content);
+        if (data?.latestVersionName && data?.apkUrl) return data;
+      } catch {
+        // Tenta o próximo candidato
+      }
+    }
+  } catch {
+    // Filesystem não disponível (edge runtime, etc.)
+  }
+  return null;
+}
+
 async function fetchLatestMetadata(req) {
+  // 1. Tenta ler do filesystem local (Vercel Functions têm acesso ao outputDir)
+  const fromFs = readLatestJsonFromFilesystem();
+  if (fromFs) return fromFs;
+
+  // 2. Tenta buscar via GitHub Contents API (garante a versão mais atualizada do repo)
+  const token = getStatsToken();
+  if (token) {
+    try {
+      const ghHeaders = {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'User-Agent': 'xtoybox-apk-metadata',
+        'X-GitHub-Api-Version': '2022-11-28',
+      };
+      const file = await fetchJson(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/public/latest.json?ref=${BRANCH}&t=${Date.now()}`,
+        { headers: ghHeaders, cache: 'no-store' },
+      );
+      const content = Buffer.from(file.content || '', 'base64').toString('utf8');
+      const data = JSON.parse(content || '{}');
+      if (data?.latestVersionName && data?.apkUrl) return data;
+    } catch {
+      // Fallback para raw.githubusercontent.com
+    }
+  }
+
+  // 3. Tenta via raw.githubusercontent.com (URL pública, sem autenticação necessária)
+  try {
+    const raw = await fetchJson(
+      `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/public/latest.json?t=${Date.now()}`,
+      { cache: 'no-store' },
+    );
+    if (raw?.latestVersionName && raw?.apkUrl) return raw;
+  } catch {
+    // Fallback para self-fetch
+  }
+
+  // 4. Fallback: self-fetch via HTTP (menos confiável, mantido para compatibilidade)
   const origin = getRequestOrigin(req);
   const candidates = uniqueValues([
     `${origin}/latest.json?t=${Date.now()}`,
@@ -116,6 +198,17 @@ async function fetchLiveDownloadStats() {
 }
 
 async function fetchDeployedDownloadStats(req) {
+  // Primeiro tenta via raw.githubusercontent.com (mais confiável que self-fetch)
+  try {
+    const raw = await fetchJson(
+      `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${STATS_PATH}?t=${Date.now()}`,
+      { cache: 'no-store' },
+    );
+    if (typeof raw?.totalDownloads === 'number') return raw;
+  } catch {
+    // Fallback para self-fetch
+  }
+
   const origin = getRequestOrigin(req);
   const candidates = uniqueValues([
     `${origin}/download-stats.json?t=${Date.now()}`,
@@ -124,8 +217,17 @@ async function fetchDeployedDownloadStats(req) {
   ]);
 
   for (const url of candidates) {
-    const response = await fetch(url, { cache: 'no-store' }).catch(() => null);
-    if (response?.ok) return response.json();
+    try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) continue;
+      const contentType = response.headers.get('content-type') || '';
+      // Rejeita respostas HTML (causadas pelo rewrite /(.*) -> /index.html)
+      if (contentType.includes('text/html')) continue;
+      const data = await response.json();
+      if (typeof data?.totalDownloads === 'number') return data;
+    } catch {
+      // Ignora e tenta o proximo
+    }
   }
 
   return null;
@@ -136,6 +238,7 @@ async function fetchDownloadStats(req) {
 }
 
 async function fetchGitHubReleaseAsset(latest) {
+  const token = getStatsToken();
   const version = String(latest.latestVersionName || '').replace(/^v/i, '').trim();
   const apkFileName = getApkFileName(latest.apkUrl);
   const releaseTags = uniqueValues([
@@ -144,17 +247,21 @@ async function fetchGitHubReleaseAsset(latest) {
     version ? `xtoybox-v${version}-latest` : '',
   ]);
 
+  // Inclui token nas chamadas para evitar rate limit da GitHub API
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'xtoybox-apk-metadata',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+
   for (const tag of releaseTags) {
     try {
       const release = await fetchJson(
         `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/tags/${tag}?t=${Date.now()}`,
         {
           cache: 'no-store',
-          headers: {
-            Accept: 'application/vnd.github+json',
-            'User-Agent': 'xtoybox-apk-metadata',
-            'X-GitHub-Api-Version': '2022-11-28',
-          },
+          headers,
         },
       );
 
