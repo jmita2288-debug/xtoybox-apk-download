@@ -1,3 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const REPO_OWNER = 'jmita2288-debug';
 const REPO_NAME = 'xtoybox-apk-download';
 const STATS_PATH = 'public/download-stats.json';
@@ -74,10 +78,85 @@ async function fetchJson(url, options = {}) {
     throw new Error(`Request failed: ${response.status}${text ? ` - ${text.slice(0, 160)}` : ''}`);
   }
 
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('json') && !contentType.includes('text/plain')) {
+    const text = await response.text().catch(() => '');
+    const preview = text.slice(0, 80);
+    throw new Error(`Resposta nao e JSON (content-type: ${contentType}): ${preview}`);
+  }
+
   return response.json();
 }
 
+// Lê latest.json do sistema de arquivos local do runtime da Vercel.
+// Isso é muito mais confiável do que um self-fetch HTTP, pois evita o
+// roteamento da Vercel CDN (incluindo o rewrite /(.*) -> /index.html)
+// e não depende de propagação de cache ou domínio.
+function readLatestJsonFromFilesystem() {
+  try {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const candidates = [
+      resolve(__dirname, '../latest.json'),
+      resolve(__dirname, '../dist/latest.json'),
+      resolve(process.cwd(), 'latest.json'),
+      resolve(process.cwd(), 'dist/latest.json'),
+    ];
+
+    for (const path of candidates) {
+      try {
+        const content = readFileSync(path, 'utf8');
+        const data = JSON.parse(content);
+        if (data?.apkUrl) return data;
+      } catch {
+        // Tenta o próximo candidato
+      }
+    }
+  } catch {
+    // Filesystem não disponível (edge runtime, etc.)
+  }
+  return null;
+}
+
 async function fetchLatestMetadata(req) {
+  // 1. Tenta ler do filesystem local
+  const fromFs = readLatestJsonFromFilesystem();
+  if (fromFs) return fromFs;
+
+  // 2. Tenta via GitHub Contents API (com token para evitar rate limit)
+  const token = getStatsToken();
+  if (token) {
+    try {
+      const ghHeaders = {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'User-Agent': 'xtoybox-download-counter',
+        'X-GitHub-Api-Version': '2022-11-28',
+      };
+      const file = await fetchJson(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/public/latest.json?ref=${BRANCH}&t=${Date.now()}`,
+        { headers: ghHeaders, cache: 'no-store' },
+      );
+      const content = Buffer.from(file.content || '', 'base64').toString('utf8');
+      const data = JSON.parse(content || '{}');
+      if (data?.apkUrl) return data;
+    } catch {
+      // Fallback
+    }
+  }
+
+  // 3. Tenta via raw.githubusercontent.com
+  try {
+    const raw = await fetchJson(
+      `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/public/latest.json?t=${Date.now()}`,
+      { cache: 'no-store' },
+    );
+    if (raw?.apkUrl) return raw;
+  } catch {
+    // Fallback para self-fetch
+  }
+
+  // 4. Fallback: self-fetch via HTTP
   const origin = getRequestOrigin(req);
   const candidates = uniqueValues([
     `${origin}/latest.json?t=${Date.now()}`,
