@@ -237,15 +237,13 @@ async function fetchDownloadStats(req) {
   return fetchLiveDownloadStats().catch(() => fetchDeployedDownloadStats(req));
 }
 
+// Repo alternativo onde o frontend busca os releases do APK com sucesso
+const RELEASE_ASSET_REPO_FALLBACK = 'jmita2288-debug/XTOYBOX';
+
 async function fetchGitHubReleaseAsset(latest) {
   const token = getStatsToken();
   const version = String(latest.latestVersionName || '').replace(/^v/i, '').trim();
   const apkFileName = getApkFileName(latest.apkUrl);
-  const releaseTags = uniqueValues([
-    getReleaseTagFromUrl(latest.apkUrl),
-    DEFAULT_RELEASE_TAG,
-    version ? `xtoybox-v${version}-latest` : '',
-  ]);
 
   // Inclui token nas chamadas para evitar rate limit da GitHub API
   const headers = {
@@ -255,30 +253,49 @@ async function fetchGitHubReleaseAsset(latest) {
     'X-GitHub-Api-Version': '2022-11-28',
   };
 
-  for (const tag of releaseTags) {
+  // Lista de repos+tags a tentar, em ordem de prioridade.
+  // O repo principal (xtoybox-apk-download) é o mesmo para o qual o vercel.json redireciona.
+  // O repo alternativo (XTOYBOX) é o que o frontend usa e onde o APK pode estar publicado.
+  const searchTargets = [
+    { repo: `${REPO_OWNER}/${REPO_NAME}`, tag: getReleaseTagFromUrl(latest.apkUrl) },
+    { repo: `${REPO_OWNER}/${REPO_NAME}`, tag: DEFAULT_RELEASE_TAG },
+    { repo: `${REPO_OWNER}/${REPO_NAME}`, tag: version ? `xtoybox-v${version}-latest` : null },
+    { repo: RELEASE_ASSET_REPO_FALLBACK,  tag: version ? `xtoybox-v${version}-latest` : null },
+    { repo: RELEASE_ASSET_REPO_FALLBACK,  tag: DEFAULT_RELEASE_TAG },
+  ].filter((t) => t.tag); // remove os que ficaram com tag null/undefined
+
+  // Deduplicar repo+tag para não repetir chamadas iguais
+  const seen = new Set();
+  const targets = searchTargets.filter(({ repo, tag }) => {
+    const key = `${repo}::${tag}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  for (const { repo, tag } of targets) {
     try {
       const release = await fetchJson(
-        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/tags/${tag}?t=${Date.now()}`,
-        {
-          cache: 'no-store',
-          headers,
-        },
+        `https://api.github.com/repos/${repo}/releases/tags/${tag}?t=${Date.now()}`,
+        { cache: 'no-store', headers },
       );
 
       const apkAssets = Array.isArray(release.assets)
         ? release.assets.filter((asset) => String(asset.name || '').toLowerCase().endsWith('.apk'))
         : [];
+
+      if (apkAssets.length === 0) continue;
+
+      // Prefere o asset com o nome exato; cai para qualquer .apk do release
       const matchingAsset = apkAssets.find((asset) => asset.name === apkFileName) || apkAssets[0];
 
-      if (matchingAsset) {
-        return {
-          apkSizeBytes: Number(matchingAsset.size || 0) || null,
-          assetDownloadCount: typeof matchingAsset.download_count === 'number' ? matchingAsset.download_count : null,
-          publishedAt: release.published_at || null,
-        };
-      }
-    } catch (err) {
-      // Tenta a proxima tag candidata.
+      return {
+        apkSizeBytes: Number(matchingAsset.size || 0) || null,
+        assetDownloadCount: typeof matchingAsset.download_count === 'number' ? matchingAsset.download_count : null,
+        publishedAt: release.published_at || null,
+      };
+    } catch {
+      // Tenta o próximo alvo (repo/tag diferentes)
     }
   }
 
