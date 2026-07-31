@@ -191,7 +191,7 @@ function buildGitHubHeaders(token) {
 
 async function updateDownloadBadge(stats, headers) {
   try {
-    const badgeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${BADGE_PATH}?ref=${BRANCH}`;
+    const badgeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${BADGE_PATH}?ref=${BRANCH}&t=${Date.now()}`;
     const updateUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${BADGE_PATH}`;
     const file = await fetchJson(badgeUrl, { headers, cache: 'no-store' });
     const badge = createDownloadBadge(stats);
@@ -219,14 +219,16 @@ async function incrementDownloadStats(latest) {
   }
 
   const version = String(latest.latestVersionName || 'unknown').trim() || 'unknown';
-  const fileUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${STATS_PATH}?ref=${BRANCH}`;
   const updateUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${STATS_PATH}`;
   const headers = buildGitHubHeaders(token);
   let lastError = null;
 
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      const file = await fetchJson(fileUrl, { headers, cache: 'no-store' });
+      // Lê o SHA fresco a cada tentativa — essencial para evitar 409 Conflict
+      // quando o PUT anterior falhou ou o arquivo foi atualizado por outra instância
+      const freshFileUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${STATS_PATH}?ref=${BRANCH}&t=${Date.now()}`;
+      const file = await fetchJson(freshFileUrl, { headers, cache: 'no-store' });
       const currentContent = Buffer.from(file.content || '', 'base64').toString('utf8');
       const currentStats = JSON.parse(currentContent || '{}');
       const currentVersions = currentStats.versions && typeof currentStats.versions === 'object'
@@ -288,7 +290,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       const stats = await incrementDownloadStats(latest).catch((err) => {
-        console.warn('Falha ao registrar download:', err?.message || err);
+        console.error('[download] Falha ao registrar download:', err?.message || err);
         return null;
       });
       counted = Boolean(stats);
