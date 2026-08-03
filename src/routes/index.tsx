@@ -510,7 +510,7 @@ export function Index() {
       </section>
 
       <section
-        className="mx-auto max-w-3xl px-6 py-12"
+        className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16"
         data-apk-version={apkMetadata.versionName}
         data-apk-version-code={apkMetadata.versionCode}
         data-apk-downloads={apkMetadata.downloadsTotal ?? ""}
@@ -518,21 +518,21 @@ export function Index() {
         data-apk-updated-at={apkMetadata.lastUpdated ?? ""}
         data-apk-metadata-source={apkMetadata.source}
       >
-        <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/80 p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-          <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/8 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5 sm:p-7" style={{ boxShadow: "var(--shadow-card)" }}>
+          <div aria-hidden="true" className="pointer-events-none absolute -top-28 -right-28 h-64 w-64 rounded-full bg-primary/[0.05] blur-3xl" />
           <div className="relative flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <img src={logo} alt="XTOYBOX" className="h-14 w-14 rounded-xl object-cover ring-1 ring-border/70" />
+              <img src={logo} alt="XTOYBOX" className="h-12 w-12 rounded-xl object-cover ring-1 ring-border/70 sm:h-14 sm:w-14" />
               <div>
-                <div className="text-base font-semibold">XTOYBOX APK</div>
-                <div className="text-sm text-muted-foreground">Versão v{apkMetadata.versionName}</div>
+                <div className="text-[15px] font-semibold sm:text-base">XTOYBOX APK</div>
+                <div className="mt-0.5 text-sm text-muted-foreground">Versão v{apkMetadata.versionName}</div>
               </div>
             </div>
-            <span className="hidden rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary sm:inline-block">
+            <span className="hidden rounded-full border border-border/70 bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground sm:inline-block">
               Android
             </span>
           </div>
-          <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="relative mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
             {[
               { label: "Versão", value: `v${apkMetadata.versionName}`, Icon: Package },
               {
@@ -549,36 +549,36 @@ export function Index() {
               },
               { label: "Tamanho", value: apkMetadata.apkSizeFormatted ?? "Indisponível", Icon: HardDrive },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-border/70 bg-background/60 p-3 transition-colors duration-200 hover:border-border hover:bg-background/80">
+              <div key={stat.label} className="rounded-lg border border-border/60 bg-background/50 p-3 transition-colors duration-200 hover:border-border">
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <stat.Icon className="h-4 w-4 text-primary/80" />
-                  <span className="text-[11px] uppercase tracking-wide">{stat.label}</span>
+                  <stat.Icon className="h-3.5 w-3.5 text-primary/80" />
+                  <span className="text-[11px] uppercase tracking-[0.08em]">{stat.label}</span>
                 </div>
-                <div className="mt-1.5 truncate text-sm font-medium text-foreground">{stat.value}</div>
+                <div className="mt-1.5 truncate text-sm font-semibold text-foreground">{stat.value}</div>
               </div>
             ))}
           </div>
           <a
             href="/api/download"
-            className="group relative mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.01] hover:brightness-105 active:scale-[0.99] sm:w-auto"
+            className="group relative mt-5 inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-[15px] font-semibold text-primary-foreground transition-[filter,transform] duration-200 hover:brightness-[1.06] active:scale-[0.985] sm:w-auto"
             style={{ boxShadow: "var(--shadow-glow)" }}
           >
-            <Download className="h-5 w-5 transition-transform duration-200 group-hover:translate-y-0.5" />
+            <Download className="h-[18px] w-[18px] transition-transform duration-200 group-hover:translate-y-0.5" />
             Baixar APK
           </a>
-          <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-primary/70" />
+          <p className="relative mt-4 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
+            <ShieldCheck className="mt-px h-3.5 w-3.5 shrink-0 text-primary/70" />
             Depois de baixar, talvez seja necessário permitir a instalação de fontes desconhecidas no Android.
           </p>
         </div>
       </section>
 
-      <footer className="relative mt-10 border-t border-border/60">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        <div className="mx-auto max-w-5xl px-6 py-10 text-center">
+      <footer className="relative mt-6 border-t border-border/50">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
+        <div className="mx-auto max-w-5xl px-5 py-10 text-center sm:px-6">
           <div className="flex items-center justify-center gap-2">
-            <img src={logo} alt="" className="h-6 w-6 rounded-md object-cover opacity-80" />
-            <span className="text-sm font-semibold tracking-wide">XTOYBOX</span>
+            <img src={logo} alt="" className="h-5 w-5 rounded-md object-cover opacity-70" />
+            <span className="text-sm font-semibold">XTOYBOX</span>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
             App Android baseado em open source, com desenvolvimento independente.
