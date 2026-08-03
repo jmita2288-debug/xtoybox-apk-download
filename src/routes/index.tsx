@@ -327,50 +327,46 @@ export function Index() {
           <img
             src={logo}
             alt=""
-            className="h-[420px] w-[420px] max-w-none select-none opacity-[0.035] blur-2xl sm:h-[560px] sm:w-[560px]"
+            className="h-[380px] w-[380px] max-w-none select-none opacity-[0.022] blur-3xl sm:h-[480px] sm:w-[480px]"
           />
         </div>
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background" />
-        <div className="mx-auto max-w-3xl px-6 pt-16 pb-16 text-center sm:pt-20 sm:pb-20">
+        <div className="mx-auto max-w-3xl px-5 pt-14 pb-14 text-center sm:px-6 sm:pt-20 sm:pb-18">
           <div className="relative animate-fade-up">
-            <div className="relative mx-auto h-20 w-20">
-              <span aria-hidden="true" className="absolute inset-0 -z-10 rounded-2xl bg-primary/20 blur-2xl" />
-              <img
-                src={logo}
-                alt="Logo XTOYBOX"
-                className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border/70"
-                style={{ boxShadow: "var(--shadow-glow)" }}
-              />
-            </div>
+            <img
+              src={logo}
+              alt="Logo XTOYBOX"
+              className="mx-auto h-16 w-16 rounded-2xl object-cover ring-1 ring-border/70 sm:h-[72px] sm:w-[72px]"
+              style={{ boxShadow: "var(--shadow-card)" }}
+            />
             <div className="mt-5 flex justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-50" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-                </span>
-                Disponível para Android
+              <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/50 px-3 py-1 text-xs font-medium text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                Android · TV Box
               </span>
             </div>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">XTOYBOX</h1>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <h1 className="mt-4 text-[2rem] font-semibold sm:text-[2.75rem]">XTOYBOX</h1>
+            <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
               App Android para jogar na nuvem, com foco em celular e TV Box.
             </p>
 
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="mt-8 flex flex-col items-center gap-4">
               <a
                 href="/api/download"
-                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.01] active:scale-[0.99]"
+                className="group inline-flex w-full max-w-xs items-center justify-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-[15px] font-semibold text-primary-foreground transition-[filter,transform,box-shadow] duration-200 hover:brightness-[1.06] active:scale-[0.985] sm:w-auto"
                 style={{ boxShadow: "var(--shadow-glow)" }}
               >
-                <Download className="h-4 w-4 transition-transform duration-200 group-hover:translate-y-0.5" />
+                <Download className="h-[18px] w-[18px] transition-transform duration-200 group-hover:translate-y-0.5" />
                 Baixar APK
               </a>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span className="rounded-full border border-border/70 bg-card/45 px-3 py-1">
-                  v{apkMetadata.versionName}
-                </span>
-                <span className="rounded-full border border-border/70 bg-card/45 px-3 py-1">
-                  {apkMetadata.apkSizeFormatted ?? "Tamanho indisponível"}
+              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                <span>v{apkMetadata.versionName}</span>
+                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-border" />
+                <span>{apkMetadata.apkSizeFormatted ?? "Tamanho indisponível"}</span>
+                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-border" />
+                <span>
+                  {apkMetadata.downloadsTotal != null
+                    ? `${apkMetadata.downloadsTotal.toLocaleString("pt-BR")} downloads`
+                    : "APK gratuito"}
                 </span>
               </div>
             </div>
@@ -378,13 +374,10 @@ export function Index() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 py-14">
-        <div className="mb-7 flex items-end justify-between gap-4">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">Galeria</span>
-            <h2 className="mt-1 text-2xl font-semibold sm:text-3xl">Telas do app</h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">Uma prévia do uso no Android.</p>
-          </div>
+      <section className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold sm:text-2xl">Telas do app</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">Uma prévia do uso no Android.</p>
         </div>
         <Carousel
           opts={{ loop: true, align: "center", duration: 30, dragFree: false }}
