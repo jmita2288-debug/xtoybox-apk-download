@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-xtoybox.png";
 import screenPerfil from "@/assets/screens/perfil.png";
@@ -232,7 +232,7 @@ function IndexPage() {
                 </span>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="group gap-3 py-2.5">
-                <Link to="/reportar-bugs">
+                <a href="/reportar-bugs">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                     <Bug className="h-4 w-4" />
                   </span>
@@ -240,7 +240,7 @@ function IndexPage() {
                     <span>Reportar bugs</span>
                     <span className="text-xs font-normal text-muted-foreground">Encontrou um problema?</span>
                   </span>
-                </Link>
+                </a>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setInfoOpen("terms")} className="group gap-3 py-2.5">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
@@ -598,9 +598,9 @@ function IndexPage() {
             <button type="button" onClick={() => setInfoOpen("credits")} className="transition-colors duration-200 hover:text-foreground">
               Créditos
             </button>
-            <Link to="/reportar-bugs" className="transition-colors duration-200 hover:text-foreground">
+            <a href="/reportar-bugs" className="transition-colors duration-200 hover:text-foreground">
               Reportar bugs
-            </Link>
+            </a>
             <button type="button" onClick={() => setInfoOpen("terms")} className="transition-colors duration-200 hover:text-foreground">
               Termos de uso
             </button>
