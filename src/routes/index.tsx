@@ -213,8 +213,8 @@ function IndexPage() {
               <div className="px-3 pt-2 pb-2">
                 <p className="eyebrow text-muted-foreground/70">Navegação</p>
               </div>
-              <DropdownMenuItem onSelect={() => setInfoOpen("about")} className="gap-3 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+              <DropdownMenuItem onSelect={() => setInfoOpen("about")} className="group gap-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                   <Info className="h-4 w-4" />
                 </span>
                 <span className="flex flex-col leading-tight">
@@ -222,8 +222,8 @@ function IndexPage() {
                   <span className="text-xs font-normal text-muted-foreground">O que é o XTOYBOX</span>
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("credits")} className="gap-3 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+              <DropdownMenuItem onSelect={() => setInfoOpen("credits")} className="group gap-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                   <Heart className="h-4 w-4" />
                 </span>
                 <span className="flex flex-col leading-tight">
@@ -231,9 +231,9 @@ function IndexPage() {
                   <span className="text-xs font-normal text-muted-foreground">Quem torna isso possível</span>
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="gap-3 py-2.5">
+              <DropdownMenuItem asChild className="group gap-3 py-2.5">
                 <Link to="/reportar-bugs">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                     <Bug className="h-4 w-4" />
                   </span>
                   <span className="flex flex-col leading-tight">
@@ -242,8 +242,8 @@ function IndexPage() {
                   </span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("terms")} className="gap-3 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+              <DropdownMenuItem onSelect={() => setInfoOpen("terms")} className="group gap-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                   <FileText className="h-4 w-4" />
                 </span>
                 <span className="flex flex-col leading-tight">
