@@ -182,26 +182,20 @@ function IndexPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border/50 bg-background/85 backdrop-blur-xl">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
         />
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <img
-                src={logo}
-                alt="XTOYBOX"
-                className="h-9 w-9 rounded-lg object-cover ring-1 ring-border/70"
-              />
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 rounded-lg bg-primary/15 blur-md"
-              />
-            </div>
-            <span className="text-sm font-semibold tracking-wide sm:text-base">XTOYBOX</span>
-          </div>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-6">
+          <a href="/" className="group flex items-center gap-2.5 rounded-lg">
+            <img
+              src={logo}
+              alt="XTOYBOX"
+              className="h-8 w-8 rounded-lg object-cover ring-1 ring-border/70 transition-transform duration-200 group-hover:scale-[1.04]"
+            />
+            <span className="text-[15px] font-semibold tracking-[-0.01em]">XTOYBOX</span>
+          </a>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -209,17 +203,15 @@ function IndexPage() {
                 ref={menuTriggerRef}
                 type="button"
                 aria-label="Abrir menu"
-                className="inline-flex items-center gap-2 rounded-lg border border-border/70 bg-card/45 px-3 py-1.5 text-sm text-muted-foreground transition-[color,background-color,border-color] duration-200 hover:border-border hover:bg-card hover:text-foreground"
+                className="btn-quiet"
               >
                 <MenuIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">Menu</span>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64">
-              <div className="px-3 pt-2 pb-1.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-                  Menu
-                </p>
+            <DropdownMenuContent align="end" className="w-[17rem] animate-fade-up">
+              <div className="px-3 pt-2 pb-2">
+                <p className="eyebrow text-muted-foreground/70">Navegação</p>
               </div>
               <DropdownMenuItem onSelect={() => setInfoOpen("about")} className="gap-3 py-2.5">
                 <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
