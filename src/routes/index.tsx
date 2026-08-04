@@ -584,14 +584,28 @@ function IndexPage() {
         </div>
       </section>
 
-      <footer className="relative mt-6 border-t border-border/50">
+      <footer className="relative mt-8 border-t border-border/40">
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
-        <div className="mx-auto max-w-5xl px-5 py-10 text-center sm:px-6">
-          <div className="flex items-center justify-center gap-2">
-            <img src={logo} alt="" className="h-5 w-5 rounded-md object-cover opacity-70" />
-            <span className="text-sm font-semibold">XTOYBOX</span>
+        <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 px-5 py-11 text-center sm:px-6">
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="" className="h-5 w-5 rounded-md object-cover opacity-75" />
+            <span className="text-sm font-semibold tracking-[-0.01em]">XTOYBOX</span>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[13px] text-muted-foreground">
+            <button type="button" onClick={() => setInfoOpen("about")} className="transition-colors duration-200 hover:text-foreground">
+              Sobre o app
+            </button>
+            <button type="button" onClick={() => setInfoOpen("credits")} className="transition-colors duration-200 hover:text-foreground">
+              Créditos
+            </button>
+            <Link to="/reportar-bugs" className="transition-colors duration-200 hover:text-foreground">
+              Reportar bugs
+            </Link>
+            <button type="button" onClick={() => setInfoOpen("terms")} className="transition-colors duration-200 hover:text-foreground">
+              Termos de uso
+            </button>
+          </nav>
+          <p className="max-w-md text-xs leading-relaxed text-muted-foreground/85">
             App Android baseado em open source, com desenvolvimento independente.
           </p>
         </div>
