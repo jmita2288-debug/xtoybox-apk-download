@@ -410,12 +410,11 @@ function IndexPage() {
                 className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
               >
                 <div
-                  className={`group relative mx-auto w-full max-w-[260px] overflow-hidden rounded-xl border bg-card transition-all duration-500 ease-out sm:max-w-none ${
+                  className={`surface group relative mx-auto w-full max-w-[260px] overflow-hidden transition-all duration-500 ease-out sm:max-w-none ${
                     activeSlide === i
-                      ? "border-border opacity-100"
-                      : "border-border/50 sm:scale-[0.96] sm:opacity-60"
+                      ? "opacity-100 ring-1 ring-primary/15"
+                      : "sm:scale-[0.96] sm:opacity-55"
                   }`}
-                  style={{ boxShadow: "var(--shadow-card)" }}
                 >
                   <div className="flex aspect-[9/16] w-full items-center justify-center overflow-hidden bg-background/50">
                     <img
@@ -433,28 +432,25 @@ function IndexPage() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex -left-4 h-10 w-10 rounded-full border-border/70 bg-card/90 text-muted-foreground backdrop-blur transition-colors hover:bg-card hover:text-foreground" />
-          <CarouselNext className="hidden sm:flex -right-4 h-10 w-10 rounded-full border-border/70 bg-card/90 text-muted-foreground backdrop-blur transition-colors hover:bg-card hover:text-foreground" />
+          <CarouselPrevious className="hidden sm:flex -left-5 h-11 w-11 rounded-full border-border/60 bg-card/90 text-muted-foreground backdrop-blur transition-colors duration-200 hover:border-border hover:bg-card hover:text-foreground" />
+          <CarouselNext className="hidden sm:flex -right-5 h-11 w-11 rounded-full border-border/60 bg-card/90 text-muted-foreground backdrop-blur transition-colors duration-200 hover:border-border hover:bg-card hover:text-foreground" />
         </Carousel>
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-7 flex justify-center gap-2">
           {screens.map((s, i) => (
             <button
               key={s.alt}
               type="button"
               aria-label={`Ir para slide ${i + 1}`}
               onClick={() => carouselApi?.scrollTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === i ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/40"}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === i ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/50"}`}
             />
           ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Recursos</h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">O que o app faz hoje.</p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
+        <SectionHeading eyebrow="Recursos" title="O que o app faz hoje" />
+        <div className="grid gap-3.5 sm:grid-cols-2">
           {[
             { title: "Base open source", text: "Construído sobre uma base aberta, com modificações próprias.", Icon: Package },
             { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis direto pelo Android.", Icon: Cloud },
@@ -463,14 +459,14 @@ function IndexPage() {
           ].map(({ title, text, Icon }) => (
             <div
               key={title}
-              className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/55 p-5 transition-colors duration-200 hover:border-border hover:bg-card"
+              className="surface surface-interactive group relative overflow-hidden p-5"
             >
               <div className="relative flex items-start gap-3.5">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/60 text-primary/90 transition-colors duration-200 group-hover:border-primary/25">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background/60 text-primary/90 transition-colors duration-200 group-hover:border-primary/30 group-hover:text-primary">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-semibold">{title}</h3>
+                  <h3 className="text-[15px] font-semibold tracking-[-0.01em]">{title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{text}</p>
                 </div>
               </div>
