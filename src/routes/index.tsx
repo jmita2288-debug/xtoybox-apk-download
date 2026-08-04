@@ -89,6 +89,30 @@ function DiscordIcon({ className }: IconProps) {
 }
 
 export function Index() {
+  return <IndexPage />;
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}) {
+  return (
+    <div className="mb-7 max-w-xl">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 className="mt-2 text-[1.375rem] font-semibold sm:text-[1.625rem]">{title}</h2>
+      {description && (
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+      )}
+    </div>
+  );
+}
+
+function IndexPage() {
   const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
   const [apkMetadata, setApkMetadata] = useState<ApkMetadata>(() => createFallbackApkMetadata());
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
@@ -158,26 +182,20 @@ export function Index() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border/50 bg-background/85 backdrop-blur-xl">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
         />
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <img
-                src={logo}
-                alt="XTOYBOX"
-                className="h-9 w-9 rounded-lg object-cover ring-1 ring-border/70"
-              />
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 rounded-lg bg-primary/15 blur-md"
-              />
-            </div>
-            <span className="text-sm font-semibold tracking-wide sm:text-base">XTOYBOX</span>
-          </div>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-6">
+          <a href="/" className="group flex items-center gap-2.5 rounded-lg">
+            <img
+              src={logo}
+              alt="XTOYBOX"
+              className="h-8 w-8 rounded-lg object-cover ring-1 ring-border/70 transition-transform duration-200 group-hover:scale-[1.04]"
+            />
+            <span className="text-[15px] font-semibold tracking-[-0.01em]">XTOYBOX</span>
+          </a>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -185,20 +203,18 @@ export function Index() {
                 ref={menuTriggerRef}
                 type="button"
                 aria-label="Abrir menu"
-                className="inline-flex items-center gap-2 rounded-lg border border-border/70 bg-card/45 px-3 py-1.5 text-sm text-muted-foreground transition-[color,background-color,border-color] duration-200 hover:border-border hover:bg-card hover:text-foreground"
+                className="btn-quiet"
               >
                 <MenuIcon className="h-4 w-4" />
                 <span className="hidden sm:inline">Menu</span>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64">
-              <div className="px-3 pt-2 pb-1.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-                  Menu
-                </p>
+            <DropdownMenuContent align="end" className="w-[17rem] animate-fade-up">
+              <div className="px-3 pt-2 pb-2">
+                <p className="eyebrow text-muted-foreground/70">Navegação</p>
               </div>
-              <DropdownMenuItem onSelect={() => setInfoOpen("about")} className="gap-3 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+              <DropdownMenuItem onSelect={() => setInfoOpen("about")} className="group gap-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                   <Info className="h-4 w-4" />
                 </span>
                 <span className="flex flex-col leading-tight">
@@ -206,8 +222,8 @@ export function Index() {
                   <span className="text-xs font-normal text-muted-foreground">O que é o XTOYBOX</span>
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("credits")} className="gap-3 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+              <DropdownMenuItem onSelect={() => setInfoOpen("credits")} className="group gap-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                   <Heart className="h-4 w-4" />
                 </span>
                 <span className="flex flex-col leading-tight">
@@ -215,9 +231,9 @@ export function Index() {
                   <span className="text-xs font-normal text-muted-foreground">Quem torna isso possível</span>
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="gap-3 py-2.5">
+              <DropdownMenuItem asChild className="group gap-3 py-2.5">
                 <Link to="/reportar-bugs">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                     <Bug className="h-4 w-4" />
                   </span>
                   <span className="flex flex-col leading-tight">
@@ -226,8 +242,8 @@ export function Index() {
                   </span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setInfoOpen("terms")} className="gap-3 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+              <DropdownMenuItem onSelect={() => setInfoOpen("terms")} className="group gap-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-background/50 text-muted-foreground transition-colors duration-200 group-hover:border-primary/25 group-hover:text-primary">
                   <FileText className="h-4 w-4" />
                 </span>
                 <span className="flex flex-col leading-tight">
@@ -244,18 +260,18 @@ export function Index() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/75 px-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4 backdrop-blur-[2px]"
           onClick={() => setInfoOpen(null)}
         >
           <div
             ref={dialogRef}
             tabIndex={-1}
-            className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-xl"
+            className="surface-raised animate-fade-up w-full max-w-lg p-6 outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-[1.0625rem] font-semibold tracking-[-0.01em]">
                   {infoOpen === "about" && "Sobre o app"}
                   {infoOpen === "credits" && "Créditos"}
                   {infoOpen === "terms" && "Termos de uso"}
@@ -270,14 +286,14 @@ export function Index() {
                 type="button"
                 onClick={() => setInfoOpen(null)}
                 aria-label="Fechar"
-                className="rounded-md p-1 text-muted-foreground transition hover:text-foreground"
+                className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-muted/60 hover:text-foreground"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5">
                   <path d="M6 6l12 12M18 6L6 18" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
-            <div className="mt-5 max-h-[65vh] overflow-y-auto rounded-lg border border-border/70 bg-background/40 p-4 text-sm leading-relaxed text-muted-foreground">
+            <div className="surface-inset mt-5 max-h-[62vh] overflow-y-auto p-4 text-sm leading-relaxed text-muted-foreground">
               {infoOpen === "about" && (
                 <div className="space-y-3">
                   <p>
@@ -293,9 +309,9 @@ export function Index() {
                     Microsoft ou marcas relacionadas.
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 text-xs">
-                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">Android</span>
-                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">TV Box</span>
-                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">Open source</span>
+                    <span className="chip">Android</span>
+                    <span className="chip">TV Box</span>
+                    <span className="chip">Open source</span>
                   </div>
                 </div>
               )}
@@ -330,35 +346,36 @@ export function Index() {
             className="h-[380px] w-[380px] max-w-none select-none opacity-[0.022] blur-3xl sm:h-[480px] sm:w-[480px]"
           />
         </div>
-        <div className="mx-auto max-w-3xl px-5 pt-14 pb-14 text-center sm:px-6 sm:pt-20 sm:pb-18">
+        <div className="mx-auto max-w-3xl px-5 pt-16 pb-16 text-center sm:px-6 sm:pt-24 sm:pb-20">
           <div className="relative animate-fade-up">
             <img
               src={logo}
               alt="Logo XTOYBOX"
-              className="mx-auto h-16 w-16 rounded-2xl object-cover ring-1 ring-border/70 sm:h-[72px] sm:w-[72px]"
-              style={{ boxShadow: "var(--shadow-card)" }}
+              className="mx-auto h-[68px] w-[68px] rounded-2xl object-cover ring-1 ring-border/70 sm:h-[76px] sm:w-[76px]"
+              style={{ boxShadow: "var(--shadow-md)" }}
             />
             <div className="mt-5 flex justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/50 px-3 py-1 text-xs font-medium text-muted-foreground">
+              <span className="chip">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 Android · TV Box
               </span>
             </div>
-            <h1 className="mt-4 text-[2rem] font-semibold sm:text-[2.75rem]">XTOYBOX</h1>
-            <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+            <h1 className="mt-4 text-[2.125rem] font-semibold tracking-[-0.03em] sm:text-[2.875rem]">
+              XTOYBOX
+            </h1>
+            <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-muted-foreground sm:text-[17px]">
               App Android para jogar na nuvem, com foco em celular e TV Box.
             </p>
 
-            <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="mt-9 flex flex-col items-center gap-4">
               <a
                 href="/api/download"
-                className="group inline-flex w-full max-w-xs items-center justify-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-[15px] font-semibold text-primary-foreground transition-[filter,transform,box-shadow] duration-200 hover:brightness-[1.06] active:scale-[0.985] sm:w-auto"
-                style={{ boxShadow: "var(--shadow-glow)" }}
+                className="btn-primary group w-full max-w-xs sm:w-auto"
               >
                 <Download className="h-[18px] w-[18px] transition-transform duration-200 group-hover:translate-y-0.5" />
                 Baixar APK
               </a>
-              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[13px] text-muted-foreground">
                 <span>v{apkMetadata.versionName}</span>
                 <span aria-hidden="true" className="h-1 w-1 rounded-full bg-border" />
                 <span>{apkMetadata.apkSizeFormatted ?? "Tamanho indisponível"}</span>
@@ -375,10 +392,11 @@ export function Index() {
       </section>
 
       <section className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Telas do app</h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">Uma prévia do uso no Android.</p>
-        </div>
+        <SectionHeading
+          eyebrow="Interface"
+          title="Telas do app"
+          description="Uma prévia do uso no Android."
+        />
         <Carousel
           opts={{ loop: true, align: "center", duration: 30, dragFree: false }}
           plugins={[autoplayRef.current]}
@@ -392,12 +410,11 @@ export function Index() {
                 className="pl-4 basis-full sm:basis-1/2 md:basis-1/3"
               >
                 <div
-                  className={`group relative mx-auto w-full max-w-[260px] overflow-hidden rounded-xl border bg-card transition-all duration-500 ease-out sm:max-w-none ${
+                  className={`surface group relative mx-auto w-full max-w-[260px] overflow-hidden transition-all duration-500 ease-out sm:max-w-none ${
                     activeSlide === i
-                      ? "border-border opacity-100"
-                      : "border-border/50 sm:scale-[0.96] sm:opacity-60"
+                      ? "opacity-100 ring-1 ring-primary/15"
+                      : "sm:scale-[0.96] sm:opacity-55"
                   }`}
-                  style={{ boxShadow: "var(--shadow-card)" }}
                 >
                   <div className="flex aspect-[9/16] w-full items-center justify-center overflow-hidden bg-background/50">
                     <img
@@ -415,28 +432,25 @@ export function Index() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex -left-4 h-10 w-10 rounded-full border-border/70 bg-card/90 text-muted-foreground backdrop-blur transition-colors hover:bg-card hover:text-foreground" />
-          <CarouselNext className="hidden sm:flex -right-4 h-10 w-10 rounded-full border-border/70 bg-card/90 text-muted-foreground backdrop-blur transition-colors hover:bg-card hover:text-foreground" />
+          <CarouselPrevious className="hidden sm:flex -left-5 h-11 w-11 rounded-full border-border/60 bg-card/90 text-muted-foreground backdrop-blur transition-colors duration-200 hover:border-border hover:bg-card hover:text-foreground" />
+          <CarouselNext className="hidden sm:flex -right-5 h-11 w-11 rounded-full border-border/60 bg-card/90 text-muted-foreground backdrop-blur transition-colors duration-200 hover:border-border hover:bg-card hover:text-foreground" />
         </Carousel>
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-7 flex justify-center gap-2">
           {screens.map((s, i) => (
             <button
               key={s.alt}
               type="button"
               aria-label={`Ir para slide ${i + 1}`}
               onClick={() => carouselApi?.scrollTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === i ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/40"}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === i ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/50"}`}
             />
           ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Recursos</h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">O que o app faz hoje.</p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
+        <SectionHeading eyebrow="Recursos" title="O que o app faz hoje" />
+        <div className="grid gap-3.5 sm:grid-cols-2">
           {[
             { title: "Base open source", text: "Construído sobre uma base aberta, com modificações próprias.", Icon: Package },
             { title: "Jogos na nuvem", text: "Acesso aos jogos compatíveis direto pelo Android.", Icon: Cloud },
@@ -445,14 +459,14 @@ export function Index() {
           ].map(({ title, text, Icon }) => (
             <div
               key={title}
-              className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/55 p-5 transition-colors duration-200 hover:border-border hover:bg-card"
+              className="surface surface-interactive group relative overflow-hidden p-5"
             >
               <div className="relative flex items-start gap-3.5">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/60 text-primary/90 transition-colors duration-200 group-hover:border-primary/25">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background/60 text-primary/90 transition-colors duration-200 group-hover:border-primary/30 group-hover:text-primary">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-semibold">{title}</h3>
+                  <h3 className="text-[15px] font-semibold tracking-[-0.01em]">{title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{text}</p>
                 </div>
               </div>
@@ -462,14 +476,14 @@ export function Index() {
       </section>
 
       <section id="comunidade" className="mx-auto max-w-5xl px-5 py-4 sm:px-6 sm:py-6">
-        <div className="rounded-xl border border-border/70 bg-card/55 p-5 sm:p-6" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="surface p-5 sm:p-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#5865F2]/20 bg-[#5865F2]/10 text-[#8b95ff]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/12 text-[#9aa3ff]">
                 <DiscordIcon className="h-4 w-6" />
               </div>
               <div>
-                <h2 className="text-[15px] font-semibold sm:text-base">Comunidade no Discord</h2>
+                <h2 className="text-[15px] font-semibold tracking-[-0.01em] sm:text-base">Comunidade no Discord</h2>
                 <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
                   Dúvidas, avisos de novas versões e reporte de bugs.
                 </p>
@@ -479,7 +493,7 @@ export function Index() {
               href={XTOYBOX_COMMUNITY_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/10 px-4 py-2.5 text-sm font-medium text-[#c4c9ff] transition-colors duration-200 hover:border-[#5865F2]/40 hover:bg-[#5865F2]/15"
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/10 px-4 text-sm font-medium text-[#c8ccff] transition-colors duration-200 hover:border-[#5865F2]/45 hover:bg-[#5865F2]/18"
             >
               <DiscordIcon className="h-4 w-5" />
               Entrar no Discord
@@ -489,21 +503,21 @@ export function Index() {
       </section>
 
       <section className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Perguntas frequentes</h2>
-        </div>
-        <div className="divide-y divide-border/50 overflow-hidden rounded-xl border border-border/70 bg-card/45">
+        <SectionHeading eyebrow="Ajuda" title="Perguntas frequentes" />
+        <div className="surface divide-y divide-border/40 overflow-hidden">
           {[
             { q: "Como instalar o APK?", a: "Baixe o arquivo pelo botão acima, abra-o no Android e siga as instruções de instalação." },
             { q: "Funciona em quais dispositivos?", a: "Android em celulares e TV Box. Não há versão para iOS, PC ou consoles." },
             { q: "Por que pede permissão de fontes desconhecidas?", a: "O Android exige essa permissão para instalar APKs fora da Play Store. Pode ser desativada depois." },
           ].map((item) => (
             <details key={item.q} className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors hover:bg-card">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-card/70">
                 <span>{item.q}</span>
                 <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180 group-open:text-primary" />
               </summary>
-              <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">{item.a}</div>
+              <div className="animate-fade-up px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
+                {item.a}
+              </div>
             </details>
           ))}
         </div>
@@ -518,21 +532,19 @@ export function Index() {
         data-apk-updated-at={apkMetadata.lastUpdated ?? ""}
         data-apk-metadata-source={apkMetadata.source}
       >
-        <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5 sm:p-7" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="surface-raised relative overflow-hidden p-5 sm:p-7">
           <div aria-hidden="true" className="pointer-events-none absolute -top-28 -right-28 h-64 w-64 rounded-full bg-primary/[0.05] blur-3xl" />
           <div className="relative flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img src={logo} alt="XTOYBOX" className="h-12 w-12 rounded-xl object-cover ring-1 ring-border/70 sm:h-14 sm:w-14" />
               <div>
-                <div className="text-[15px] font-semibold sm:text-base">XTOYBOX APK</div>
+                <div className="text-[15px] font-semibold tracking-[-0.01em] sm:text-base">XTOYBOX APK</div>
                 <div className="mt-0.5 text-sm text-muted-foreground">Versão v{apkMetadata.versionName}</div>
               </div>
             </div>
-            <span className="hidden rounded-full border border-border/70 bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground sm:inline-block">
-              Android
-            </span>
+            <span className="chip hidden sm:inline-flex">Android</span>
           </div>
-          <div className="relative mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+          <div className="relative mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
             {[
               { label: "Versão", value: `v${apkMetadata.versionName}`, Icon: Package },
               {
@@ -549,19 +561,18 @@ export function Index() {
               },
               { label: "Tamanho", value: apkMetadata.apkSizeFormatted ?? "Indisponível", Icon: HardDrive },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-border/60 bg-background/50 p-3 transition-colors duration-200 hover:border-border">
+              <div key={stat.label} className="surface-inset p-3 transition-colors duration-200 hover:border-border">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <stat.Icon className="h-3.5 w-3.5 text-primary/80" />
-                  <span className="text-[11px] uppercase tracking-[0.08em]">{stat.label}</span>
+                  <span className="text-[11px] font-medium uppercase tracking-[0.1em]">{stat.label}</span>
                 </div>
-                <div className="mt-1.5 truncate text-sm font-semibold text-foreground">{stat.value}</div>
+                <div className="mt-1.5 truncate text-[15px] font-semibold text-foreground">{stat.value}</div>
               </div>
             ))}
           </div>
           <a
             href="/api/download"
-            className="group relative mt-5 inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-[15px] font-semibold text-primary-foreground transition-[filter,transform] duration-200 hover:brightness-[1.06] active:scale-[0.985] sm:w-auto"
-            style={{ boxShadow: "var(--shadow-glow)" }}
+            className="btn-primary group relative mt-6 w-full sm:w-auto"
           >
             <Download className="h-[18px] w-[18px] transition-transform duration-200 group-hover:translate-y-0.5" />
             Baixar APK
@@ -573,14 +584,28 @@ export function Index() {
         </div>
       </section>
 
-      <footer className="relative mt-6 border-t border-border/50">
+      <footer className="relative mt-8 border-t border-border/40">
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
-        <div className="mx-auto max-w-5xl px-5 py-10 text-center sm:px-6">
-          <div className="flex items-center justify-center gap-2">
-            <img src={logo} alt="" className="h-5 w-5 rounded-md object-cover opacity-70" />
-            <span className="text-sm font-semibold">XTOYBOX</span>
+        <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 px-5 py-11 text-center sm:px-6">
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="" className="h-5 w-5 rounded-md object-cover opacity-75" />
+            <span className="text-sm font-semibold tracking-[-0.01em]">XTOYBOX</span>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[13px] text-muted-foreground">
+            <button type="button" onClick={() => setInfoOpen("about")} className="transition-colors duration-200 hover:text-foreground">
+              Sobre o app
+            </button>
+            <button type="button" onClick={() => setInfoOpen("credits")} className="transition-colors duration-200 hover:text-foreground">
+              Créditos
+            </button>
+            <Link to="/reportar-bugs" className="transition-colors duration-200 hover:text-foreground">
+              Reportar bugs
+            </Link>
+            <button type="button" onClick={() => setInfoOpen("terms")} className="transition-colors duration-200 hover:text-foreground">
+              Termos de uso
+            </button>
+          </nav>
+          <p className="max-w-md text-xs leading-relaxed text-muted-foreground/85">
             App Android baseado em open source, com desenvolvimento independente.
           </p>
         </div>
