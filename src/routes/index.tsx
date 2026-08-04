@@ -346,35 +346,36 @@ function IndexPage() {
             className="h-[380px] w-[380px] max-w-none select-none opacity-[0.022] blur-3xl sm:h-[480px] sm:w-[480px]"
           />
         </div>
-        <div className="mx-auto max-w-3xl px-5 pt-14 pb-14 text-center sm:px-6 sm:pt-20 sm:pb-18">
+        <div className="mx-auto max-w-3xl px-5 pt-16 pb-16 text-center sm:px-6 sm:pt-24 sm:pb-20">
           <div className="relative animate-fade-up">
             <img
               src={logo}
               alt="Logo XTOYBOX"
-              className="mx-auto h-16 w-16 rounded-2xl object-cover ring-1 ring-border/70 sm:h-[72px] sm:w-[72px]"
-              style={{ boxShadow: "var(--shadow-card)" }}
+              className="mx-auto h-[68px] w-[68px] rounded-2xl object-cover ring-1 ring-border/70 sm:h-[76px] sm:w-[76px]"
+              style={{ boxShadow: "var(--shadow-md)" }}
             />
             <div className="mt-5 flex justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/50 px-3 py-1 text-xs font-medium text-muted-foreground">
+              <span className="chip">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 Android · TV Box
               </span>
             </div>
-            <h1 className="mt-4 text-[2rem] font-semibold sm:text-[2.75rem]">XTOYBOX</h1>
-            <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+            <h1 className="mt-4 text-[2.125rem] font-semibold tracking-[-0.03em] sm:text-[2.875rem]">
+              XTOYBOX
+            </h1>
+            <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-muted-foreground sm:text-[17px]">
               App Android para jogar na nuvem, com foco em celular e TV Box.
             </p>
 
-            <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="mt-9 flex flex-col items-center gap-4">
               <a
                 href="/api/download"
-                className="group inline-flex w-full max-w-xs items-center justify-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-[15px] font-semibold text-primary-foreground transition-[filter,transform,box-shadow] duration-200 hover:brightness-[1.06] active:scale-[0.985] sm:w-auto"
-                style={{ boxShadow: "var(--shadow-glow)" }}
+                className="btn-primary group w-full max-w-xs sm:w-auto"
               >
                 <Download className="h-[18px] w-[18px] transition-transform duration-200 group-hover:translate-y-0.5" />
                 Baixar APK
               </a>
-              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[13px] text-muted-foreground">
                 <span>v{apkMetadata.versionName}</span>
                 <span aria-hidden="true" className="h-1 w-1 rounded-full bg-border" />
                 <span>{apkMetadata.apkSizeFormatted ?? "Tamanho indisponível"}</span>
@@ -391,10 +392,11 @@ function IndexPage() {
       </section>
 
       <section className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Telas do app</h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">Uma prévia do uso no Android.</p>
-        </div>
+        <SectionHeading
+          eyebrow="Interface"
+          title="Telas do app"
+          description="Uma prévia do uso no Android."
+        />
         <Carousel
           opts={{ loop: true, align: "center", duration: 30, dragFree: false }}
           plugins={[autoplayRef.current]}
