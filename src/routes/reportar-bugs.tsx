@@ -78,32 +78,33 @@ export function ReportarBugsPage() {
   };
 
   const inputClass =
-    "w-full rounded-lg border border-border/70 bg-background/40 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 transition focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20";
+    "field";
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border/60 bg-card/30">
-        <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-4">
-          <a href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground">
+      <header className="sticky top-0 z-40 border-b border-border/50 bg-background/85 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-5 py-3 sm:px-6">
+          <a href="/" className="btn-quiet">
             <ArrowLeft className="h-4 w-4" />
             Voltar
           </a>
-          <div className="inline-flex items-center gap-2 text-sm font-medium">
+          <div className="inline-flex items-center gap-2 text-[15px] font-semibold tracking-[-0.01em]">
             <Bug className="h-4 w-4 text-primary" />
             Reportar bugs
           </div>
         </div>
       </header>
 
-      <section className="mx-auto max-w-2xl px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight">Reportar um bug</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+      <section className="mx-auto max-w-2xl px-5 py-12 sm:px-6 sm:py-16">
+        <div className="mb-8 animate-fade-up">
+          <p className="eyebrow">Suporte</p>
+          <h1 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em]">Reportar um bug</h1>
+          <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
             Preencha os campos abaixo com o máximo de detalhes possível. Isso ajuda a identificar e corrigir o problema mais rápido.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-border/70 bg-card/40 p-6 shadow-sm">
+        <form onSubmit={handleSubmit} className="surface-raised space-y-5 p-6">
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="space-y-1.5">
               <label htmlFor="name" className="text-sm font-medium">Nome ou apelido</label>
@@ -135,7 +136,7 @@ export function ReportarBugsPage() {
 
           <div className="space-y-1.5">
             <label htmlFor="attachment" className="text-sm font-medium">Anexar imagem ou vídeo (opcional)</label>
-            <label htmlFor="attachment" className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border/70 bg-background/30 px-3 py-3 text-sm text-muted-foreground transition hover:border-primary/40 hover:text-foreground">
+            <label htmlFor="attachment" className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border/70 bg-background/30 px-3 py-3 text-sm text-muted-foreground transition-colors duration-200 hover:border-primary/40 hover:text-foreground">
               <Paperclip className="h-4 w-4" />
               <span className="truncate">{form.file ? form.file.name : "Selecionar arquivo"}</span>
             </label>
@@ -143,13 +144,13 @@ export function ReportarBugsPage() {
           </div>
 
           {message && (
-            <div className={`rounded-lg border px-3 py-2 text-sm ${message.type === "success" ? "border-primary/30 bg-primary/10 text-foreground" : "border-destructive/40 bg-destructive/10 text-destructive"}`}>
+            <div role="status" className={`animate-fade-up rounded-lg border px-3 py-2.5 text-sm ${message.type === "success" ? "border-primary/30 bg-primary/10 text-foreground" : "border-destructive/40 bg-destructive/10 text-destructive"}`}>
               {message.text}
             </div>
           )}
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <button type="submit" disabled={submitting} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+            <button type="submit" disabled={submitting} className="btn-primary disabled:pointer-events-none disabled:opacity-60">
               <Send className="h-4 w-4" />
               {submitting ? "Enviando..." : "Enviar relatório"}
             </button>
