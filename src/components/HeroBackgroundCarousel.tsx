@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import screenBiblioteca from "@/assets/screens/biblioteca.png";
+import screenPerfil from "@/assets/screens/perfil.png";
+import gameplayForza from "@/assets/screens/gameplay-forza-2.jpeg";
 
 const slides = [
-  { src: "/hero-carousel/cyberpunk-streaming.webp", className: "hero-background-slide--cyberpunk" },
-  { src: "/hero-carousel/library-cloud.webp", className: "hero-background-slide--library" },
-  { src: "/hero-carousel/touch-to-tv.webp", className: "hero-background-slide--touch" },
+  { src: gameplayForza, className: "hero-background-slide--gameplay" },
+  { src: screenBiblioteca, className: "hero-background-slide--library" },
+  { src: screenPerfil, className: "hero-background-slide--profile" },
 ] as const;
 
 export function HeroBackgroundCarousel() {
@@ -15,14 +18,19 @@ export function HeroBackgroundCarousel() {
   useEffect(() => {
     const element = document.querySelector<HTMLElement>(".hero-section");
     if (!element) return;
+
     element.classList.add("hero-section--carousel");
     setHero(element);
-    return () => element.classList.remove("hero-section--carousel");
+
+    return () => {
+      element.classList.remove("hero-section--carousel");
+    };
   }, []);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReducedMotion(query.matches);
+
     update();
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
@@ -30,9 +38,11 @@ export function HeroBackgroundCarousel() {
 
   useEffect(() => {
     if (reducedMotion) return;
+
     const timer = window.setInterval(() => {
       setActive((current) => (current + 1) % slides.length);
     }, 6200);
+
     return () => window.clearInterval(timer);
   }, [reducedMotion]);
 
@@ -49,7 +59,12 @@ export function HeroBackgroundCarousel() {
             className="hero-background-slide__fill"
             style={{ backgroundImage: `url(${slide.src})` }}
           />
-          <img src={slide.src} alt="" decoding="async" fetchPriority={index === 0 ? "high" : "auto"} />
+          <img
+            src={slide.src}
+            alt=""
+            decoding="async"
+            fetchPriority={index === 0 ? "high" : "auto"}
+          />
         </div>
       ))}
       <div className="hero-background-carousel__shade" />
