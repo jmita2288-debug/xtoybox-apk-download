@@ -185,6 +185,179 @@
   }
 }
 
+/* ---------------------------------------------------------------
+ * Sistema visual XTOYBOX
+ * Camadas de superfície, elevação, ritmo tipográfico e componentes
+ * reutilizáveis. Use estas utilities em vez de repetir valores.
+ * --------------------------------------------------------------- */
+@layer base {
+  :root {
+    /* camadas */
+    --surface-1: color-mix(in oklab, var(--card) 55%, transparent);
+    --surface-2: color-mix(in oklab, var(--card) 82%, transparent);
+    --surface-inset: color-mix(in oklab, var(--background) 55%, transparent);
+    --hairline: color-mix(in oklab, var(--border) 70%, transparent);
+
+    /* elevação */
+    --shadow-xs: 0 1px 2px -1px color-mix(in oklab, black 45%, transparent);
+    --shadow-sm: 0 1px 0 0 color-mix(in oklab, white 2.5%, transparent) inset,
+      0 8px 18px -16px color-mix(in oklab, black 65%, transparent);
+    --shadow-md: 0 1px 0 0 color-mix(in oklab, white 3%, transparent) inset,
+      0 18px 40px -30px color-mix(in oklab, black 78%, transparent);
+    --shadow-lg: 0 1px 0 0 color-mix(in oklab, white 3.5%, transparent) inset,
+      0 30px 70px -40px color-mix(in oklab, black 85%, transparent);
+
+    /* movimento */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-fast: 140ms;
+    --dur-base: 200ms;
+  }
+
+  /* foco visível consistente em toda a interface */
+  :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--primary) 75%, transparent);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 28%, transparent);
+    color: var(--foreground);
+  }
+}
+
+/* superfície base de card */
+@utility surface {
+  border: 1px solid var(--hairline);
+  background-color: var(--surface-1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* superfície elevada (blocos de destaque) */
+@utility surface-raised {
+  border: 1px solid var(--hairline);
+  background-color: var(--surface-2);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* superfície interna (dentro de um card) */
+@utility surface-inset {
+  border: 1px solid color-mix(in oklab, var(--border) 55%, transparent);
+  background-color: var(--surface-inset);
+  border-radius: var(--radius-lg);
+}
+
+/* interação discreta em cards clicáveis/hover */
+@utility surface-interactive {
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+  &:hover {
+    border-color: var(--border);
+    background-color: color-mix(in oklab, var(--card) 95%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+/* rótulo de seção */
+@utility eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--primary) 78%, var(--muted-foreground));
+}
+
+/* botão primário */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 2.875rem;
+  padding: 0 1.75rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-glow);
+  transition:
+    filter var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+  &:hover {
+    filter: brightness(1.07);
+    box-shadow: 0 12px 28px -16px color-mix(in oklab, var(--primary) 40%, transparent);
+  }
+  &:active {
+    transform: scale(0.985);
+  }
+}
+
+/* botão secundário / neutro */
+@utility btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.375rem;
+  padding: 0 0.875rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background-color: var(--surface-1);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+  &:hover {
+    color: var(--foreground);
+    border-color: var(--border);
+    background-color: var(--surface-2);
+  }
+}
+
+/* campo de formulário */
+@utility field {
+  width: 100%;
+  min-height: 2.625rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background-color: var(--surface-inset);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+  &::placeholder {
+    color: color-mix(in oklab, var(--muted-foreground) 75%, transparent);
+  }
+  &:hover {
+    border-color: var(--border);
+  }
+}
+
+/* chip / tag */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  border: 1px solid var(--hairline);
+  background-color: var(--surface-inset);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -195,7 +368,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-up {
+  .animate-fade-up,
+  *[class*="animate-"] {
     animation: none;
+  }
+  * {
+    transition-duration: 1ms !important;
   }
 }
