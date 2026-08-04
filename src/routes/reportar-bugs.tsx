@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, Bug, Send, Paperclip } from "lucide-react";
+import { ArrowLeft, Bug, CheckCircle2, Paperclip, Send } from "lucide-react";
+import logo from "@/assets/logo-xtoybox.png";
 
 export const Route = createFileRoute("/reportar-bugs")({
   head: () => ({
@@ -47,10 +48,10 @@ export function ReportarBugsPage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
-    setForm((prev) => ({ ...prev, [key]: value }));
+    setForm((previous) => ({ ...previous, [key]: value }));
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setMessage(null);
     setSubmitting(true);
 
@@ -63,64 +64,135 @@ export function ReportarBugsPage() {
       data.append("description", form.description);
       if (form.file) data.append("attachment", form.file);
 
-      const res = await fetch("/api/report-bug", { method: "POST", body: data });
-      if (res.ok) {
+      const response = await fetch("/api/report-bug", { method: "POST", body: data });
+      if (response.ok) {
         setMessage({ type: "success", text: "Relatório enviado com sucesso. Obrigado!" });
         setForm(initialState);
       } else {
-        setMessage({ type: "error", text: "Não foi possível enviar agora. Tente novamente mais tarde." });
+        setMessage({
+          type: "error",
+          text: "Não foi possível enviar agora. Tente novamente mais tarde.",
+        });
       }
     } catch {
-      setMessage({ type: "error", text: "Não foi possível enviar agora. Tente novamente mais tarde." });
+      setMessage({
+        type: "error",
+        text: "Não foi possível enviar agora. Tente novamente mais tarde.",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
-  const inputClass =
-    "field";
-
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 border-b border-border/50 bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-5 py-3 sm:px-6">
-          <a href="/" className="btn-quiet">
-            <ArrowLeft className="h-4 w-4" />
-            Voltar
+    <main className="support-page">
+      <header className="site-header">
+        <div className="site-container site-header__inner">
+          <a href="/" className="brand-lockup" aria-label="Voltar para a página inicial">
+            <span className="brand-lockup__mark">
+              <img src={logo} alt="" />
+            </span>
+            <span className="brand-lockup__copy">
+              <strong>XTOYBOX</strong>
+              <small>Central de suporte</small>
+            </span>
           </a>
-          <div className="inline-flex items-center gap-2 text-[15px] font-semibold tracking-[-0.01em]">
-            <Bug className="h-4 w-4 text-primary" />
-            Reportar bugs
-          </div>
+          <a href="/" className="support-back">
+            <ArrowLeft /> Voltar ao site
+          </a>
         </div>
       </header>
 
-      <section className="mx-auto max-w-2xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-8 animate-fade-up">
-          <p className="eyebrow">Suporte</p>
-          <h1 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em]">Reportar um bug</h1>
-          <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Preencha os campos abaixo com o máximo de detalhes possível. Isso ajuda a identificar e corrigir o problema mais rápido.
+      <section className="site-container support-layout">
+        <aside className="support-intro">
+          <span className="support-label">SUPORTE / 01</span>
+          <div className="support-intro__icon">
+            <Bug />
+          </div>
+          <h1>
+            Ajude a gente
+            <br />a melhorar.
+          </h1>
+          <p>
+            Um bom relatório encurta o caminho entre encontrar um problema e entregar a correção.
           </p>
-        </div>
+          <ol className="support-guide">
+            <li>
+              <span>01</span>
+              <div>
+                <strong>Descreva o momento</strong>
+                <small>Conte em qual tela o problema apareceu.</small>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>Explique como repetir</strong>
+                <small>Liste os passos que levaram ao erro.</small>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>Envie uma referência</strong>
+                <small>Imagem ou vídeo ajudam quando disponíveis.</small>
+              </div>
+            </li>
+          </ol>
+        </aside>
 
-        <form onSubmit={handleSubmit} className="surface-raised space-y-5 p-6">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <label htmlFor="name" className="text-sm font-medium">Nome ou apelido</label>
-              <input id="name" type="text" value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Como podemos te chamar" className={inputClass} required />
+        <form onSubmit={handleSubmit} className="support-form">
+          <div className="support-form__heading">
+            <span>RELATÓRIO DE BUG</span>
+            <h2>Conte o que aconteceu.</h2>
+            <p>Preencha os campos com o máximo de detalhes possível.</p>
+          </div>
+
+          <div className="support-form__grid">
+            <div className="form-field">
+              <label htmlFor="name">Nome ou apelido</label>
+              <input
+                id="name"
+                type="text"
+                value={form.name}
+                onChange={(event) => update("name", event.target.value)}
+                placeholder="Como podemos te chamar"
+                className="field"
+                required
+              />
             </div>
-            <div className="space-y-1.5">
-              <label htmlFor="appVersion" className="text-sm font-medium">Versão do app</label>
-              <input id="appVersion" type="text" value={form.appVersion} onChange={(e) => update("appVersion", e.target.value)} placeholder="Ex.: 1.0.8" className={inputClass} required />
+            <div className="form-field">
+              <label htmlFor="appVersion">Versão do app</label>
+              <input
+                id="appVersion"
+                type="text"
+                value={form.appVersion}
+                onChange={(event) => update("appVersion", event.target.value)}
+                placeholder="Ex.: 1.1.14"
+                className="field"
+                required
+              />
             </div>
-            <div className="space-y-1.5">
-              <label htmlFor="deviceModel" className="text-sm font-medium">Modelo do aparelho</label>
-              <input id="deviceModel" type="text" value={form.deviceModel} onChange={(e) => update("deviceModel", e.target.value)} placeholder="Ex.: TV Box, Samsung, Xiaomi" className={inputClass} required />
+            <div className="form-field">
+              <label htmlFor="deviceModel">Modelo do aparelho</label>
+              <input
+                id="deviceModel"
+                type="text"
+                value={form.deviceModel}
+                onChange={(event) => update("deviceModel", event.target.value)}
+                placeholder="Ex.: Samsung, Xiaomi, TV Box"
+                className="field"
+                required
+              />
             </div>
-            <div className="space-y-1.5">
-              <label htmlFor="deviceType" className="text-sm font-medium">Tipo de aparelho</label>
-              <select id="deviceType" value={form.deviceType} onChange={(e) => update("deviceType", e.target.value as DeviceType)} className={inputClass}>
+            <div className="form-field">
+              <label htmlFor="deviceType">Tipo de aparelho</label>
+              <select
+                id="deviceType"
+                value={form.deviceType}
+                onChange={(event) => update("deviceType", event.target.value as DeviceType)}
+                className="field"
+              >
                 <option value="Celular">Celular</option>
                 <option value="TV Box">TV Box</option>
                 <option value="Smart TV">Smart TV</option>
@@ -129,29 +201,48 @@ export function ReportarBugsPage() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="description" className="text-sm font-medium">Descrição do bug</label>
-            <textarea id="description" value={form.description} onChange={(e) => update("description", e.target.value)} placeholder="Explique o que aconteceu, em qual tela e como reproduzir." rows={6} className={`${inputClass} resize-y`} required />
+          <div className="form-field">
+            <label htmlFor="description">Descrição do bug</label>
+            <textarea
+              id="description"
+              value={form.description}
+              onChange={(event) => update("description", event.target.value)}
+              placeholder="Explique o que aconteceu, em qual tela e como reproduzir."
+              rows={7}
+              className="field resize-y"
+              required
+            />
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="attachment" className="text-sm font-medium">Anexar imagem ou vídeo (opcional)</label>
-            <label htmlFor="attachment" className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border/70 bg-background/30 px-3 py-3 text-sm text-muted-foreground transition-colors duration-200 hover:border-primary/40 hover:text-foreground">
-              <Paperclip className="h-4 w-4" />
-              <span className="truncate">{form.file ? form.file.name : "Selecionar arquivo"}</span>
+          <div className="form-field">
+            <label htmlFor="attachment">
+              Imagem ou vídeo <span>(opcional)</span>
             </label>
-            <input id="attachment" type="file" accept="image/*,video/*" onChange={(e) => update("file", e.target.files?.[0] ?? null)} className="hidden" />
+            <label htmlFor="attachment" className="file-field">
+              <Paperclip />
+              <span>{form.file ? form.file.name : "Selecionar um arquivo"}</span>
+              <small>Imagem ou vídeo</small>
+            </label>
+            <input
+              id="attachment"
+              type="file"
+              accept="image/*,video/*"
+              onChange={(event) => update("file", event.target.files?.[0] ?? null)}
+              className="hidden"
+            />
           </div>
 
           {message && (
-            <div role="status" className={`animate-fade-up rounded-lg border px-3 py-2.5 text-sm ${message.type === "success" ? "border-primary/30 bg-primary/10 text-foreground" : "border-destructive/40 bg-destructive/10 text-destructive"}`}>
+            <div role="status" className={`form-message form-message--${message.type}`}>
+              {message.type === "success" && <CheckCircle2 />}
               {message.text}
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-2">
-            <button type="submit" disabled={submitting} className="btn-primary disabled:pointer-events-none disabled:opacity-60">
-              <Send className="h-4 w-4" />
+          <div className="support-form__footer">
+            <p>As informações serão usadas apenas para investigar o problema.</p>
+            <button type="submit" disabled={submitting} className="support-submit">
+              <Send />
               {submitting ? "Enviando..." : "Enviar relatório"}
             </button>
           </div>
