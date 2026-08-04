@@ -260,18 +260,18 @@ function IndexPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/75 px-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4 backdrop-blur-[2px]"
           onClick={() => setInfoOpen(null)}
         >
           <div
             ref={dialogRef}
             tabIndex={-1}
-            className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-xl"
+            className="surface-raised animate-fade-up w-full max-w-lg p-6 outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-[1.0625rem] font-semibold tracking-[-0.01em]">
                   {infoOpen === "about" && "Sobre o app"}
                   {infoOpen === "credits" && "Créditos"}
                   {infoOpen === "terms" && "Termos de uso"}
@@ -286,14 +286,14 @@ function IndexPage() {
                 type="button"
                 onClick={() => setInfoOpen(null)}
                 aria-label="Fechar"
-                className="rounded-md p-1 text-muted-foreground transition hover:text-foreground"
+                className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-muted/60 hover:text-foreground"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5">
                   <path d="M6 6l12 12M18 6L6 18" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
-            <div className="mt-5 max-h-[65vh] overflow-y-auto rounded-lg border border-border/70 bg-background/40 p-4 text-sm leading-relaxed text-muted-foreground">
+            <div className="surface-inset mt-5 max-h-[62vh] overflow-y-auto p-4 text-sm leading-relaxed text-muted-foreground">
               {infoOpen === "about" && (
                 <div className="space-y-3">
                   <p>
@@ -309,9 +309,9 @@ function IndexPage() {
                     Microsoft ou marcas relacionadas.
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 text-xs">
-                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">Android</span>
-                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">TV Box</span>
-                    <span className="rounded-full border border-border/70 bg-background/40 px-3 py-1">Open source</span>
+                    <span className="chip">Android</span>
+                    <span className="chip">TV Box</span>
+                    <span className="chip">Open source</span>
                   </div>
                 </div>
               )}
