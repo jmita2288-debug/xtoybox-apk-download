@@ -476,14 +476,14 @@ function IndexPage() {
       </section>
 
       <section id="comunidade" className="mx-auto max-w-5xl px-5 py-4 sm:px-6 sm:py-6">
-        <div className="rounded-xl border border-border/70 bg-card/55 p-5 sm:p-6" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="surface p-5 sm:p-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#5865F2]/20 bg-[#5865F2]/10 text-[#8b95ff]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/12 text-[#9aa3ff]">
                 <DiscordIcon className="h-4 w-6" />
               </div>
               <div>
-                <h2 className="text-[15px] font-semibold sm:text-base">Comunidade no Discord</h2>
+                <h2 className="text-[15px] font-semibold tracking-[-0.01em] sm:text-base">Comunidade no Discord</h2>
                 <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
                   Dúvidas, avisos de novas versões e reporte de bugs.
                 </p>
@@ -493,7 +493,7 @@ function IndexPage() {
               href={XTOYBOX_COMMUNITY_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/10 px-4 py-2.5 text-sm font-medium text-[#c4c9ff] transition-colors duration-200 hover:border-[#5865F2]/40 hover:bg-[#5865F2]/15"
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#5865F2]/25 bg-[#5865F2]/10 px-4 text-sm font-medium text-[#c8ccff] transition-colors duration-200 hover:border-[#5865F2]/45 hover:bg-[#5865F2]/18"
             >
               <DiscordIcon className="h-4 w-5" />
               Entrar no Discord
@@ -503,21 +503,21 @@ function IndexPage() {
       </section>
 
       <section className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">Perguntas frequentes</h2>
-        </div>
-        <div className="divide-y divide-border/50 overflow-hidden rounded-xl border border-border/70 bg-card/45">
+        <SectionHeading eyebrow="Ajuda" title="Perguntas frequentes" />
+        <div className="surface divide-y divide-border/40 overflow-hidden">
           {[
             { q: "Como instalar o APK?", a: "Baixe o arquivo pelo botão acima, abra-o no Android e siga as instruções de instalação." },
             { q: "Funciona em quais dispositivos?", a: "Android em celulares e TV Box. Não há versão para iOS, PC ou consoles." },
             { q: "Por que pede permissão de fontes desconhecidas?", a: "O Android exige essa permissão para instalar APKs fora da Play Store. Pode ser desativada depois." },
           ].map((item) => (
             <details key={item.q} className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors hover:bg-card">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-card/70">
                 <span>{item.q}</span>
                 <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180 group-open:text-primary" />
               </summary>
-              <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">{item.a}</div>
+              <div className="animate-fade-up px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
+                {item.a}
+              </div>
             </details>
           ))}
         </div>
