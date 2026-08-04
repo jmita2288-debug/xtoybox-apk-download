@@ -89,6 +89,30 @@ function DiscordIcon({ className }: IconProps) {
 }
 
 export function Index() {
+  return <IndexPage />;
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}) {
+  return (
+    <div className="mb-7 max-w-xl">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 className="mt-2 text-[1.375rem] font-semibold sm:text-[1.625rem]">{title}</h2>
+      {description && (
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+      )}
+    </div>
+  );
+}
+
+function IndexPage() {
   const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
   const [apkMetadata, setApkMetadata] = useState<ApkMetadata>(() => createFallbackApkMetadata());
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
