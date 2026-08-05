@@ -88,6 +88,11 @@
   --surface-2: oklch(0.17 0.009 145);
   --line: oklch(1 0 0 / 14%);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --button-primary: oklch(0.72 0.15 128);
+  --button-primary-hover: oklch(0.75 0.155 128);
+  --button-primary-text: oklch(0.18 0.015 128);
+  --download-cta-bg: oklch(0.18 0.02 128);
+  --download-cta-text: oklch(0.94 0.01 128);
 }
 
 @layer base {
@@ -252,38 +257,44 @@
   justify-content: center;
   min-height: 42px;
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: 0.8rem;
-  font-weight: 750;
+  font-weight: 640;
+  letter-spacing: 0.01em;
   text-decoration: none;
   transition:
     transform 160ms ease,
     background-color 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .header-download {
   gap: 8px;
   padding: 0 17px;
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--button-primary);
+  color: var(--button-primary-text);
+  box-shadow: inset 0 1px 0 0 oklch(1 0 0 / 12%), 0 1px 2px 0 oklch(0 0 0 / 12%);
 }
 
 .header-download:hover {
   transform: translateY(-1px);
-  background: color-mix(in oklab, var(--primary) 92%, white);
+  background: var(--button-primary-hover);
+  box-shadow: inset 0 1px 0 0 oklch(1 0 0 / 16%), 0 4px 12px -2px oklch(0 0 0 / 22%);
 }
 
 .menu-trigger {
   width: 42px;
   border-color: var(--line);
-  background: var(--surface-1);
-  color: var(--foreground);
+  background: transparent;
+  color: var(--muted-foreground);
 }
 
 .menu-trigger:hover {
-  border-color: color-mix(in oklab, var(--primary) 42%, var(--line));
-  background: var(--surface-2);
+  border-color: color-mix(in oklab, var(--primary) 35%, var(--line));
+  background: var(--surface-1);
+  color: var(--foreground);
 }
 
 .site-menu-content {
@@ -398,13 +409,21 @@
 
 .dialog-panel__header button {
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   place-items: center;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 8px;
+  background: var(--surface-1);
   color: var(--muted-foreground);
-  font-size: 1.35rem;
+  font-size: 1.1rem;
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.dialog-panel__header button:hover {
+  border-color: color-mix(in oklab, var(--primary) 35%, var(--line));
+  background: var(--surface-2);
+  color: var(--foreground);
 }
 
 .dialog-panel__body {
@@ -513,24 +532,28 @@
 .action-primary,
 .action-secondary {
   display: inline-flex;
-  min-height: 50px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 0 20px;
-  border-radius: 7px;
-  font-size: 0.86rem;
-  font-weight: 750;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 640;
+  letter-spacing: 0.01em;
   text-decoration: none;
   transition:
     transform 160ms ease,
     background-color 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .action-primary {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--button-primary);
+  color: var(--button-primary-text);
+  box-shadow: inset 0 1px 0 0 oklch(1 0 0 / 12%), 0 1px 2px 0 oklch(0 0 0 / 12%);
 }
 
 .action-secondary {
@@ -539,13 +562,16 @@
   color: var(--foreground);
 }
 
-.action-primary:hover,
-.action-secondary:hover {
-  transform: translateY(-2px);
+.action-primary:hover {
+  transform: translateY(-1px);
+  background: var(--button-primary-hover);
+  box-shadow: inset 0 1px 0 0 oklch(1 0 0 / 16%), 0 4px 12px -2px oklch(0 0 0 / 22%);
 }
 
 .action-secondary:hover {
-  border-color: color-mix(in oklab, var(--primary) 38%, var(--line));
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 35%, var(--line));
+  background: var(--surface-2);
 }
 
 .hero-facts {
@@ -857,12 +883,19 @@
 
 .showcase-controls button {
   position: static !important;
-  width: 42px !important;
-  height: 42px !important;
+  width: 40px !important;
+  height: 40px !important;
   transform: none !important;
   border: 1px solid var(--line) !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   background: var(--surface-1) !important;
+  color: var(--muted-foreground) !important;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease !important;
+}
+
+.showcase-controls button:hover {
+  border-color: color-mix(in oklab, var(--primary) 35%, var(--line)) !important;
+  background: var(--surface-2) !important;
   color: var(--foreground) !important;
 }
 
@@ -966,9 +999,9 @@
 }
 
 .showcase-dots button {
-  width: 26px;
-  height: 3px;
-  border-radius: 0;
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
   background: var(--line);
   transition:
     width 220ms ease,
@@ -976,7 +1009,7 @@
 }
 
 .showcase-dots button.is-active {
-  width: 48px;
+  width: 40px;
   background: var(--primary);
 }
 
