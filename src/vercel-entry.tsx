@@ -1,10 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { DownloadCounter } from "./components/DownloadCounter";
 import { RefinedIndex } from "./routes/index-refined";
 import { ReportarBugsPage } from "./routes/reportar-bugs";
 import "./styles.css";
 import "./refined-site.css";
+import "./download-counter.css";
 
 const rootElement = document.getElementById("root");
 
@@ -19,7 +21,12 @@ function App() {
     return <ReportarBugsPage />;
   }
 
-  return <RefinedIndex />;
+  return (
+    <>
+      <RefinedIndex />
+      <DownloadCounter />
+    </>
+  );
 }
 
 createRoot(rootElement).render(
