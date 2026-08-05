@@ -1,3 +1,5 @@
 Trigger deploy for current site version.
 
 Clean deployment trigger after Vercel ignored-build rule update.
+
+Forced production redeploy: 2026-08-05 09:21 UTC.
