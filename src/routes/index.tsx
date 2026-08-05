@@ -436,7 +436,7 @@ function IndexPage() {
               <div className="hero-actions">
                 <a href="/api/download" className="action-primary">
                   <Download className="h-[18px] w-[18px]" />
-                  Baixar versão {apkMetadata.versionName}
+                  Baixar APK
                 </a>
                 <a href="#interface" className="action-secondary">
                   Ver a interface
