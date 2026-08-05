@@ -6,3 +6,4 @@ Forced production redeploy: 2026-08-05 09:21 UTC.
 Forced download counter deploy: 2026-08-05 10:22 UTC.
 Retry download counter deploy: 2026-08-05 10:25 UTC.
 Retry after cooldown: 2026-08-05 10:29 UTC.
+User-requested deploy retry: 2026-08-05 10:33 UTC.
