@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">XTOYBOX</title>
+  <desc id="desc">Site oficial do projeto XTOYBOX para Android</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F8FBF6"/>
+      <stop offset="1" stop-color="#EAF4E6"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#62CE4E"/>
+      <stop offset="1" stop-color="#36A92D"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#244B24" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="360" rx="34" fill="url(#background)"/>
+  <circle cx="1080" cy="56" r="165" fill="#DDF0D7" opacity="0.72"/>
+  <circle cx="72" cy="326" r="130" fill="#EDF7E9"/>
+
+  <g transform="translate(78 72)" filter="url(#shadow)">
+    <rect width="216" height="216" rx="48" fill="#FFFFFF" stroke="#D7E5D3" stroke-width="2"/>
+    <path d="M58 127c0-29 21-52 50-52s50 23 50 52l13 27c5 11-7 22-17 15l-23-17H85l-23 17c-10 7-22-4-17-15l13-27Z" fill="url(#accent)"/>
+    <rect x="78" y="108" width="34" height="10" rx="5" fill="#173018"/>
+    <rect x="90" y="96" width="10" height="34" rx="5" fill="#173018"/>
+    <circle cx="135" cy="105" r="7" fill="#173018"/>
+    <circle cx="151" cy="121" r="7" fill="#173018"/>
+    <path d="M79 149 137 91" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  </g>
+
+  <g transform="translate(350 82)" fill="#182018" font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="0" y="72" font-size="68" font-weight="800" letter-spacing="5">XTOYBOX</text>
+    <text x="2" y="118" font-size="21" font-weight="600" fill="#3C6F39">SITE OFICIAL · ANDROID</text>
+    <text x="2" y="166" font-size="25" font-weight="500" fill="#566256">Remote Play do console e acesso a experiências</text>
+    <text x="2" y="202" font-size="25" font-weight="500" fill="#566256">compatíveis com jogos na nuvem.</text>
+  </g>
+
+  <g transform="translate(350 292)" font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect width="184" height="38" rx="19" fill="#FFFFFF" stroke="#CFE0CA"/>
+    <circle cx="22" cy="19" r="6" fill="#49BD35"/>
+    <text x="38" y="25" font-size="14" font-weight="700" fill="#335033">Projeto independente</text>
+  </g>
+</svg>
