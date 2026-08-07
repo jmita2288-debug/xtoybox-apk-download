@@ -1,363 +1,225 @@
 <p align="center">
-  <img src="src/assets/logo-xtoybox.png" alt="XTOYBOX" width="96" height="96" />
-</p>
-
-<h1 align="center">XTOYBOX</h1>
-
-<p align="center">
-  App Android modificado para jogos na nuvem, Remote Play e uso em celular ou TV Box.
+  <img src="./docs/readme-banner.svg" alt="XTOYBOX — site oficial do projeto para Android" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://xtoybox.cloud"><strong>Site oficial</strong></a>
   ·
-  <a href="https://discord.gg/abh27Dwktt"><strong>Comunidade</strong></a>
+  <a href="https://xtoybox.cloud/api/download"><strong>Baixar APK</strong></a>
   ·
-  <a href="https://github.com/jmita2288-debug/xtoybox-apk-download/releases"><strong>Releases do APK</strong></a>
+  <a href="https://github.com/jmita2288-debug/xtoybox-apk-download/releases"><strong>Releases</strong></a>
+  ·
+  <a href="https://discord.gg/abh27Dwktt"><strong>Comunidade</strong></a>
 </p>
 
 <p align="center">
-  <img alt="Android" src="https://img.shields.io/badge/Android-APK-7ED957?style=for-the-badge&logo=android&logoColor=111" />
-  <img alt="Open Source" src="https://img.shields.io/badge/Base-XStreaming-7ED957?style=for-the-badge&logo=github&logoColor=111" />
-  <img alt="Downloads reais" src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-badge.json" />
-  <img alt="React" src="https://img.shields.io/badge/Site-React-61DAFB?style=for-the-badge&logo=react&logoColor=111" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=fff" />
-  <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000?style=for-the-badge&logo=vercel&logoColor=fff" />
+  <img alt="Total de downloads do XTOYBOX" src="https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-badge.json" />
 </p>
 
----
+## Sobre este repositório
 
-## Sobre o XTOYBOX
+Este repositório contém o **site oficial do XTOYBOX**. Ele reúne a apresentação do projeto, a versão atual do APK, o fluxo de download, informações de suporte e os dados usados pelo contador de downloads.
 
-**XTOYBOX** é um projeto Android voltado para jogar na nuvem e usar Remote Play de forma mais prática em celulares, TV Box e dispositivos com controle.
+O site também funciona como ponto central para:
 
-O projeto nasceu a partir de uma base **open source do XStreaming**, mas recebeu modificações próprias, ajustes visuais, melhorias de desempenho, correções de bugs e mudanças na experiência de uso.
+- apresentar o aplicativo e suas principais formas de uso;
+- disponibilizar o APK mais recente;
+- exibir versão, tamanho e data de atualização;
+- manter o contador de downloads;
+- direcionar usuários para suporte, comunidade e reporte de problemas.
 
-A ideia não é fingir que isso é uma empresa gigante ou um produto corporativo com vinte departamentos e café ruim em copo descartável. O XTOYBOX é um projeto independente, feito por um desenvolvedor iniciante, por diversão, aprendizado e vontade de modificar/melhorar um app que já tinha uma boa base.
+## O que é o XTOYBOX
 
-> O objetivo é simples: melhorar a experiência, testar ideias, corrigir problemas reais e deixar o app mais agradável para quem usa jogos na nuvem.
+O XTOYBOX é um projeto independente para Android voltado ao uso remoto do ecossistema Xbox. O aplicativo oferece recursos de **Remote Play do próprio console** e acesso a experiências compatíveis disponibilizadas por serviços oficiais de jogos na nuvem.
 
----
+O XTOYBOX **não opera servidores próprios de cloud gaming** e não substitui serviços, contas ou assinaturas oficiais. Dependendo do recurso utilizado, uma conta Xbox, um console compatível ou uma assinatura válida podem ser necessários.
 
-## Base open source
+O aplicativo foi desenvolvido a partir da base open source do **XStreaming** e recebeu modificações próprias, incluindo:
 
-O XTOYBOX é baseado em um projeto open source do **XStreaming**.
+- reorganização da biblioteca e de outras telas;
+- ajustes de navegação para celular, TV Box e controle;
+- melhorias visuais e de legibilidade;
+- correções de bugs e ajustes de estabilidade;
+- otimizações de carregamento, imagens e resposta da interface;
+- mudanças em perfil, conquistas, detalhes de jogos e modo TV.
 
-A partir dessa base, foram feitas modificações próprias para adaptar melhor o app ao uso pretendido:
+O projeto continua em evolução, com mudanças feitas a partir de testes, problemas encontrados no uso real e feedback da comunidade.
 
-- melhorias visuais na interface;
-- ajustes em telas do app;
-- reorganização de áreas como biblioteca, perfil e detalhes;
-- correções de bugs encontrados durante testes;
-- ajustes de desempenho e navegação;
-- melhorias para uso em TV Box e controle;
-- mudanças para deixar a experiência mais direta e confortável.
+## Principais formas de uso
 
-A base original continua sendo importante para o projeto. O XTOYBOX existe justamente como uma modificação feita sobre essa estrutura, com foco em aprendizado, personalização e melhoria prática.
-
----
-
-## O que foi modificado
-
-As modificações variam entre visual, comportamento e organização do app. Entre os principais pontos trabalhados estão:
-
-| Área | O que foi feito |
+| Recurso | Descrição |
 | --- | --- |
-| **Interface** | Ajustes visuais para deixar o app mais moderno, escuro, limpo e organizado. |
-| **Biblioteca** | Melhor organização das listas de jogos, categorias e cards. |
-| **Perfil** | Melhorias no visual da conta, progresso e atalhos. |
-| **Conquistas** | Ajustes na apresentação de progresso, pontuação e jogos com conquistas. |
-| **TV Box** | Adaptações de escala, navegação e uso com controle. |
-| **Desempenho** | Correções para reduzir atrasos em abertura de telas, detalhes e listas. |
-| **Streaming** | Ajustes para melhorar estabilidade e experiência durante o uso. |
-| **Banners e imagens** | Correções de zoom, cortes, bordas e carregamento visual. |
+| **Remote Play** | Conexão com o próprio console Xbox para jogar em outro dispositivo compatível. |
+| **Jogos compatíveis na nuvem** | Acesso a experiências oferecidas por serviços oficiais, conforme a disponibilidade da conta. |
+| **Celular e TV Box** | Interface adaptada para toque, controle físico e telas maiores. |
+| **Biblioteca e perfil** | Navegação por jogos, histórico, favoritos, progresso e conquistas. |
 
-Nem tudo está perfeito e nem tudo está finalizado. O projeto segue em evolução, com testes, correções e mudanças feitas conforme os problemas aparecem. Desenvolvimento real, infelizmente, não vem com botão mágico de “corrigir tudo sem quebrar nada”.
-
----
-
-## Funções do app
-
-O XTOYBOX foi pensado para facilitar o acesso a jogos na nuvem e Remote Play no Android.
-
-Principais funções:
-
-- jogar na nuvem em dispositivos Android;
-- usar Remote Play;
-- navegar pela biblioteca de jogos;
-- abrir detalhes de jogos;
-- acompanhar favoritos, histórico e progresso;
-- visualizar conquistas;
-- usar o app em celular ou TV Box;
-- navegar com controle Bluetooth/USB;
-- receber melhorias e versões pelo site oficial.
-
----
-
-## Downloads do APK
+## Como o download funciona
 
 <p align="center">
-  <a href="https://xtoybox.cloud">
-    <img alt="Downloads reais do XTOYBOX" src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-badge.json" />
-  </a>
+  <img src="./docs/download-flow.svg" alt="Fluxo de download do site XTOYBOX" width="100%" />
 </p>
 
+Todos os botões de download do site utilizam a rota:
 
-```txt
-public/download-stats.json
-```
-
-
-
-```txt
-public/download-badge.json
-```
- 
-
-## Sobre o site
-
-Este repositório contém o **site oficial do XTOYBOX**.
-
-O site foi criado para apresentar o projeto, divulgar versões, facilitar o download do APK e manter informações importantes em um lugar mais organizado.
-
-Ele também serve para:
-
-- mostrar uma visão geral do app;
-- exibir imagens/telas do XTOYBOX;
-- informar a versão mais recente;
-- disponibilizar o APK para download;
-- mostrar notas de atualização;
-- direcionar usuários para suporte e comunidade;
-- manter dados como contador de downloads e metadados da versão.
-
-O site foi criado com apoio do **Lovable/MVP**, usado para acelerar a construção da primeira versão visual e facilitar ajustes rápidos. Depois disso, o projeto recebeu correções manuais, ajustes de layout, melhorias na API e mudanças para manter a identidade do XTOYBOX.
-
----
-
-## Site oficial
-
-<p align="center">
-  <a href="https://xtoybox.cloud">
-    <img alt="Acessar site" src="https://img.shields.io/badge/Acessar-xtoybox.cloud-7ED957?style=for-the-badge&logo=vercel&logoColor=111" />
-  </a>
-</p>
-
-O botão de download do site usa a rota:
-
-```txt
+```text
 /api/download
 ```
 
-Essa rota tenta registrar o download e redireciona o usuário para o APK mais recente configurado no projeto.
+Essa rota registra a solicitação no contador persistente e depois redireciona o usuário para o APK configurado como versão atual.
 
----
+Os principais arquivos envolvidos são:
 
-## Como usar
+| Arquivo | Função |
+| --- | --- |
+| `public/latest.json` | Define a versão atual, a URL do APK, as notas e a data de publicação. |
+| `public/download-stats.json` | Mantém o total geral e a divisão dos downloads por versão. |
+| `public/download-badge.json` | Fornece a contagem abreviada exibida neste README. |
+| `api/download.js` | Registra o download e realiza o redirecionamento. |
+| `api/apk-metadata.js` | Reúne metadados da versão e das releases para o site. |
 
-1. Acesse o site oficial:
+### Persistência do contador
 
-```txt
-https://xtoybox.cloud
-```
+Em produção, a função de download precisa de um token com permissão para atualizar os arquivos de estatísticas no repositório.
 
-2. Toque em **Baixar APK**.
+Variável recomendada:
 
-3. Instale o APK no Android.
-
-4. Se o Android pedir permissão para instalar apps de fontes desconhecidas, permita apenas para o navegador ou gerenciador de arquivos usado.
-
-5. Abra o XTOYBOX e faça os testes no seu dispositivo.
-
-> Baixe sempre pelo site oficial ou pela página de releases do projeto. APK externo nunca deve ser tratado como risco zero, então use com atenção.
-
----
-
-## Tecnologias usadas no site
-
-O site foi construído com:
-
-- **React**
-- **TypeScript**
-- **Vite**
-- **TanStack Router**
-- **Tailwind CSS**
-- **Embla Carousel**
-- **Lucide React**
-- **Vercel**
-
-Também existe configuração para trabalhar com metadados do APK, contador de downloads e redirects do arquivo mais recente.
-
----
-
-## Estrutura do repositório do site
-
-```txt
-.
-├── api/
-│   ├── apk-metadata.js       # API que monta dados da versão atual
-│   ├── download-badge.js     # Endpoint alternativo para badge abreviado
-│   └── download.js           # Rota de download e contador
-│
-├── public/
-│   ├── download-badge.json   # Badge abreviado usado pelo README
-│   ├── latest.json           # Versão mais recente do APK
-│   └── download-stats.json   # Estatísticas de downloads
-│
-├── src/
-│   ├── assets/               # Logo e imagens do site
-│   ├── components/           # Componentes de interface
-│   ├── lib/                  # Funções auxiliares
-│   ├── routes/               # Páginas e rotas
-│   └── styles.css            # Tema visual e estilos globais
-│
-├── vercel.json               # Build, redirects e deploy
-├── package.json              # Scripts e dependências
-└── README.md
-```
-
----
-
-## Metadados do APK
-
-A versão exibida no site é controlada por:
-
-```txt
-public/latest.json
-```
-
-Esse arquivo define:
-
-- nome do app;
-- versão mais recente;
-- código da versão;
-- URL do APK;
-- canal de release;
-- notas da atualização;
-- data de publicação.
-
-A API `/api/apk-metadata` usa essas informações para exibir o card de download no site.
-
----
-
-## Contador de downloads
-
-O contador de downloads usa o arquivo:
-
-```txt
-public/download-stats.json
-```
-
-Esse arquivo mantém o total geral e a divisão por versão. O site e o README usam essa mesma fonte para evitar números diferentes espalhados pelo projeto, porque aparentemente até estatística precisa de disciplina.
-
-Para funcionar em produção, a Vercel precisa ter uma variável com permissão para gravar no repositório:
-
-```txt
+```text
 GITHUB_STATS_TOKEN
 ```
 
-Também são aceitos estes nomes alternativos:
+Nomes alternativos aceitos pelo projeto:
 
-```txt
+```text
 SITE_REPO_TOKEN
 GH_TOKEN
 ```
 
-Sem esse token, o download continua funcionando, mas o contador pode não aumentar.
+Sem uma dessas variáveis, o APK ainda pode ser entregue, mas a atualização automática do contador pode não ser registrada.
 
----
+## Tecnologias
 
-## Rodando o site localmente
+O site utiliza uma base moderna em React e TypeScript, com os seguintes componentes principais:
 
-Instale as dependências:
+| Camada | Tecnologias |
+| --- | --- |
+| **Interface** | React, TypeScript, Tailwind CSS e Lucide React |
+| **Build** | Vite |
+| **Navegação** | TanStack Router |
+| **Componentes** | Radix UI e componentes próprios |
+| **Carrosséis** | Embla Carousel |
+| **Validação e formulários** | Zod e React Hook Form |
+| **Hospedagem** | Vercel |
+
+## Executando localmente
+
+Com Node.js e npm instalados, clone o repositório e execute:
 
 ```bash
 npm install
-```
-
-Inicie o ambiente de desenvolvimento:
-
-```bash
 npm run dev
 ```
 
-Gerar build de produção:
+Outros comandos disponíveis:
 
 ```bash
-npm run build
+npm run build      # gera o build de produção
+npm run preview    # abre uma prévia do build
+npm run lint       # executa as verificações do projeto
+npm run format     # formata os arquivos com Prettier
 ```
 
-Rodar preview local:
+## Estrutura do projeto
 
-```bash
-npm run preview
+```text
+.
+├── api/
+│   ├── apk-metadata.js
+│   ├── download-badge.js
+│   └── download.js
+├── docs/
+│   ├── download-flow.svg
+│   └── readme-banner.svg
+├── public/
+│   ├── download-badge.json
+│   ├── download-stats.json
+│   └── latest.json
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── lib/
+│   ├── routes/
+│   ├── download-counter.css
+│   ├── refined-site.css
+│   └── styles.css
+├── vercel.json
+├── vite.config.vercel.ts
+├── package.json
+└── README.md
 ```
 
----
+## Versão e metadados do APK
+
+A versão apresentada no site é controlada principalmente por:
+
+```text
+public/latest.json
+```
+
+Esse arquivo informa:
+
+- nome do aplicativo;
+- versão e código da versão;
+- URL do APK;
+- canal da release;
+- notas de atualização;
+- data de publicação.
+
+Ao publicar uma nova versão, essas informações devem ser revisadas para que o site, a API e os botões de download permaneçam sincronizados.
 
 ## Deploy
 
-O deploy do site é feito pela **Vercel**.
+A publicação do site é feita pela **Vercel**. As principais opções de produção ficam em `vercel.json`.
 
-Configuração principal:
-
-```txt
-vercel.json
-```
-
-Build usado em produção:
+Comando de build utilizado:
 
 ```bash
 npx vite build --config vite.config.vercel.ts
 ```
 
-Diretório final:
+Diretório de saída:
 
-```txt
+```text
 dist
 ```
 
----
+## Origem e créditos
+
+O aplicativo XTOYBOX utiliza como base o projeto open source **XStreaming**, creditado a Geocld e distribuído sob a licença MIT no projeto original.
+
+A primeira versão visual deste site contou com apoio do **Lovable/MVP** para acelerar a estrutura inicial. Depois disso, o projeto recebeu alterações manuais de interface, conteúdo, APIs, responsividade, download e identidade visual.
+
+O XTOYBOX é mantido como um projeto independente, criado com foco em aprendizado, personalização e melhoria contínua.
 
 ## Comunidade e suporte
 
-A comunidade do XTOYBOX fica no Discord.
+Problemas, dúvidas e sugestões podem ser enviados pelos canais do projeto:
 
-Use o Discord para:
+- [Comunidade no Discord](https://discord.gg/abh27Dwktt)
+- [Página para reportar bugs](https://xtoybox.cloud/reportar-bugs)
+- [Releases do APK](https://github.com/jmita2288-debug/xtoybox-apk-download/releases)
 
-- tirar dúvidas;
-- acompanhar avisos;
-- reportar bugs;
-- enviar feedbacks;
-- acompanhar versões e mudanças.
+Relatos com modelo do aparelho, versão do Android, versão do XTOYBOX e etapas para reproduzir o problema ajudam bastante na investigação.
 
-<p align="center">
-  <a href="https://discord.gg/abh27Dwktt">
-    <img alt="Discord" src="https://img.shields.io/badge/Entrar_no_Discord-5865F2?style=for-the-badge&logo=discord&logoColor=fff" />
-  </a>
-</p>
+## Aviso
 
----
+O XTOYBOX é um projeto independente e não possui vínculo, parceria, aprovação ou afiliação com Microsoft, Xbox, Xbox Cloud Gaming ou Game Pass.
 
-## Aviso importante
-
-O XTOYBOX é um projeto independente.
-
-Ele **não é oficial da Microsoft, Xbox, Xbox Cloud Gaming ou Game Pass**. Também não possui vínculo, parceria, aprovação ou afiliação com essas marcas.
-
-Nomes, serviços e marcas citados pertencem aos seus respectivos donos.
-
----
-
-## Nota do desenvolvedor
-
-Este projeto foi feito por um desenvolvedor iniciante, com foco em aprendizado, prática e diversão.
-
-A ideia sempre foi testar, modificar, melhorar e entender como as coisas funcionam na prática. Algumas partes podem mudar bastante com o tempo, principalmente conforme novos bugs aparecem ou novas ideias surgem.
-
-Se você usa o XTOYBOX, testa versões, reporta problemas ou manda feedback, isso ajuda muito o projeto a evoluir.
+Todos os nomes, marcas e serviços citados pertencem aos seus respectivos proprietários.
 
 ---
 
 <p align="center">
-  XTOYBOX — modificação independente baseada em open source, feita por aprendizado e diversão.
+  <strong>XTOYBOX</strong><br />
+  Projeto independente para Android, baseado em software open source.
 </p>
