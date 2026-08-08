@@ -33,13 +33,19 @@ export type ApkMetadata = {
 
 export const fallbackLatestMetadata: LatestMetadata = {
   appName: "XTOYBOX",
-  latestVersionName: "1.0.5",
-  latestVersionCode: 5,
+  latestVersionName: "1.1.15",
+  latestVersionCode: 115,
   apkUrl:
-    "https://github.com/jmita2288-debug/XTOYBOX/releases/download/xtoybox-v1.0.5-latest/XTOYBOX-v1.0.5.apk",
+    "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.15.apk",
+  pageUrl: "https://xtoybox.cloud/",
+  releaseNotes: [
+    "Melhorias no streaming, controles virtuais e otimização geral do aplicativo.",
+  ],
+  publishedAt: "2026-08-08",
 };
 
-const GITHUB_RELEASE_REPO = "jmita2288-debug/XTOYBOX";
+const GITHUB_RELEASE_REPO = "jmita2288-debug/xtoybox-apk-download";
+const GITHUB_RELEASE_TAG = "xtoybox-latest";
 
 export function formatBytes(bytes: number | null) {
   if (!bytes || bytes <= 0) return null;
@@ -55,10 +61,6 @@ export function formatBytes(bytes: number | null) {
 
   const precision = unitIndex === 0 ? 0 : 1;
   return `${value.toFixed(precision)} ${units[unitIndex]}`;
-}
-
-function normalizeVersion(version: string) {
-  return version.trim().replace(/^v/i, "");
 }
 
 function getApkFileName(apkUrl: string) {
@@ -130,10 +132,8 @@ async function fetchDownloadStats() {
 }
 
 async function fetchGitHubReleaseData(latest: LatestMetadata) {
-  const version = normalizeVersion(latest.latestVersionName);
-  const tag = `xtoybox-v${version}-latest`;
   const response = await fetch(
-    `https://api.github.com/repos/${GITHUB_RELEASE_REPO}/releases/tags/${tag}`,
+    `https://api.github.com/repos/${GITHUB_RELEASE_REPO}/releases/tags/${GITHUB_RELEASE_TAG}`,
     { cache: "no-store" },
   );
 
