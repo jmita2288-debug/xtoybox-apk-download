@@ -7,6 +7,7 @@ const REPO_NAME = 'xtoybox-apk-download';
 const STATS_PATH = 'public/download-stats.json';
 const BADGE_PATH = 'public/download-badge.json';
 const BRANCH = 'main';
+const PUBLIC_DOWNLOAD_BASE = 'https://xtoybox-apk-download.vercel.app/downloads';
 
 function encodeBase64(value) {
   return Buffer.from(value, 'utf8').toString('base64');
@@ -40,7 +41,6 @@ function wait(ms) {
 
 function formatCompactNumber(value) {
   const number = Number(value || 0);
-
   if (!Number.isFinite(number) || number <= 0) return '0';
 
   const units = [
@@ -48,13 +48,11 @@ function formatCompactNumber(value) {
     { value: 1_000_000, suffix: 'M' },
     { value: 1_000, suffix: 'k' },
   ];
-
   const unit = units.find((item) => number >= item.value);
   if (!unit) return String(Math.floor(number));
 
   const compact = number / unit.value;
   const rounded = compact >= 10 ? Math.round(compact) : Math.round(compact * 10) / 10;
-
   return `${rounded}${unit.suffix}`;
 }
 
@@ -72,7 +70,6 @@ function createDownloadBadge(stats) {
 
 async function fetchJson(url, options = {}) {
   const response = await fetch(url, options);
-
   if (!response.ok) {
     const text = await response.text().catch(() => '');
     throw new Error(`Request failed: ${response.status}${text ? ` - ${text.slice(0, 160)}` : ''}`);
@@ -81,17 +78,27 @@ async function fetchJson(url, options = {}) {
   const contentType = response.headers.get('content-type') || '';
   if (!contentType.includes('json') && !contentType.includes('text/plain')) {
     const text = await response.text().catch(() => '');
-    const preview = text.slice(0, 80);
-    throw new Error(`Resposta nao e JSON (content-type: ${contentType}): ${preview}`);
+    throw new Error(`Resposta nao e JSON (content-type: ${contentType}): ${text.slice(0, 80)}`);
   }
-
   return response.json();
 }
 
-// Lê latest.json do sistema de arquivos local do runtime da Vercel.
-// Isso é muito mais confiável do que um self-fetch HTTP, pois evita o
-// roteamento da Vercel CDN (incluindo o rewrite /(.*) -> /index.html)
-// e não depende de propagação de cache ou domínio.
+function normalizeLatestMetadata(data) {
+  const version = String(data?.latestVersionName || '').trim().replace(/^v/i, '');
+  if (!/^\d+(?:\.\d+){1,3}$/.test(version)) {
+    throw new Error('latestVersionName invalida');
+  }
+
+  return {
+    ...data,
+    latestVersionName: version,
+    latestVersionCode: Number(data?.latestVersionCode || 0),
+    apkUrl: `${PUBLIC_DOWNLOAD_BASE}/XTOYBOX-v${version}.apk`,
+    releaseChannel: 'public',
+    testRelease: false,
+  };
+}
+
 function readLatestJsonFromFilesystem() {
   try {
     const __filename = fileURLToPath(import.meta.url);
@@ -103,27 +110,23 @@ function readLatestJsonFromFilesystem() {
       resolve(process.cwd(), 'dist/latest.json'),
     ];
 
-    for (const path of candidates) {
+    for (const filePath of candidates) {
       try {
-        const content = readFileSync(path, 'utf8');
-        const data = JSON.parse(content);
-        if (data?.apkUrl) return data;
+        const data = JSON.parse(readFileSync(filePath, 'utf8'));
+        if (data?.latestVersionName) return normalizeLatestMetadata(data);
       } catch {
-        // Tenta o próximo candidato
+        // Tenta o próximo candidato.
       }
     }
   } catch {
-    // Filesystem não disponível (edge runtime, etc.)
+    // Fallbacks de rede continuam abaixo.
   }
   return null;
 }
 
 async function fetchLatestMetadata(req) {
-  // 1. Tenta ler do filesystem local
-  const fromFs = readLatestJsonFromFilesystem();
-  if (fromFs) return fromFs;
-
-  // 2. Tenta via GitHub Contents API (com token para evitar rate limit)
+  // O repositório público é a fonte de verdade. Isso evita que um deploy antigo
+  // da Vercel continue apontando para um alias removido como XTOYBOX-latest.apk.
   const token = getStatsToken();
   if (token) {
     try {
@@ -137,26 +140,26 @@ async function fetchLatestMetadata(req) {
         `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/public/latest.json?ref=${BRANCH}&t=${Date.now()}`,
         { headers: ghHeaders, cache: 'no-store' },
       );
-      const content = Buffer.from(file.content || '', 'base64').toString('utf8');
-      const data = JSON.parse(content || '{}');
-      if (data?.apkUrl) return data;
+      const data = JSON.parse(Buffer.from(file.content || '', 'base64').toString('utf8') || '{}');
+      if (data?.latestVersionName) return normalizeLatestMetadata(data);
     } catch {
-      // Fallback
+      // Continua para a fonte pública sem autenticação.
     }
   }
 
-  // 3. Tenta via raw.githubusercontent.com
   try {
     const raw = await fetchJson(
       `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/public/latest.json?t=${Date.now()}`,
       { cache: 'no-store' },
     );
-    if (raw?.apkUrl) return raw;
+    if (raw?.latestVersionName) return normalizeLatestMetadata(raw);
   } catch {
-    // Fallback para self-fetch
+    // Continua para o bundle local.
   }
 
-  // 4. Fallback: self-fetch via HTTP
+  const fromFs = readLatestJsonFromFilesystem();
+  if (fromFs) return fromFs;
+
   const origin = getRequestOrigin(req);
   const candidates = uniqueValues([
     `${origin}/latest.json?t=${Date.now()}`,
@@ -165,12 +168,11 @@ async function fetchLatestMetadata(req) {
   ]);
 
   let lastError = null;
-
   for (const url of candidates) {
     try {
       const latest = await fetchJson(url, { cache: 'no-store' });
-      if (latest?.apkUrl) return latest;
-      lastError = new Error('latest.json sem apkUrl');
+      if (latest?.latestVersionName) return normalizeLatestMetadata(latest);
+      lastError = new Error('latest.json sem versao');
     } catch (err) {
       lastError = err;
     }
@@ -214,7 +216,7 @@ async function updateDownloadBadge(stats, headers) {
 async function incrementDownloadStats(latest) {
   const token = getStatsToken();
   if (!token) {
-    console.warn('Token de estatisticas ausente. Configure GITHUB_STATS_TOKEN, SITE_REPO_TOKEN ou GH_TOKEN na Vercel.');
+    console.warn('Token de estatisticas ausente.');
     return null;
   }
 
@@ -225,12 +227,9 @@ async function incrementDownloadStats(latest) {
 
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      // Lê o SHA fresco a cada tentativa — essencial para evitar 409 Conflict
-      // quando o PUT anterior falhou ou o arquivo foi atualizado por outra instância
       const freshFileUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${STATS_PATH}?ref=${BRANCH}&t=${Date.now()}`;
       const file = await fetchJson(freshFileUrl, { headers, cache: 'no-store' });
-      const currentContent = Buffer.from(file.content || '', 'base64').toString('utf8');
-      const currentStats = JSON.parse(currentContent || '{}');
+      const currentStats = JSON.parse(Buffer.from(file.content || '', 'base64').toString('utf8') || '{}');
       const currentVersions = currentStats.versions && typeof currentStats.versions === 'object'
         ? currentStats.versions
         : {};
@@ -257,13 +256,11 @@ async function incrementDownloadStats(latest) {
       });
 
       await updateDownloadBadge(nextStats, headers);
-
       return nextStats;
     } catch (err) {
       lastError = err;
       const message = String(err?.message || err || '');
       const canRetry = message.includes('409') || message.toLowerCase().includes('sha');
-
       if (!canRetry || attempt === 3) break;
       await wait(150 * attempt);
     }
@@ -281,13 +278,9 @@ export default async function handler(req, res) {
 
     const latest = await fetchLatestMetadata(req);
     const apkUrl = latest.apkUrl;
-
-    if (!apkUrl) {
-      throw new Error('apkUrl ausente no latest.json');
-    }
+    if (!apkUrl) throw new Error('apkUrl ausente');
 
     let counted = false;
-
     if (req.method === 'GET') {
       const stats = await incrementDownloadStats(latest).catch((err) => {
         console.error('[download] Falha ao registrar download:', err?.message || err);
