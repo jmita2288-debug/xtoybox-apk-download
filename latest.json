@@ -1,19 +1,14 @@
 {
   "appName": "XTOYBOX",
-  "latestVersionName": "1.1.14",
-  "latestVersionCode": 114,
-  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.14.apk",
+  "latestVersionName": "1.1.15",
+  "latestVersionCode": 115,
+  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-latest.apk",
+  "versionedApkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.15.apk",
   "pageUrl": "https://xtoybox-apk-download.vercel.app/",
   "releaseChannel": "public",
   "testRelease": false,
   "releaseNotes": [
-    "Melhorias gerais no sistema",
-    "Correcoes de bugs e ajustes de estabilidade",
-    "Reducao de input lag em navegacao e abertura de telas",
-    "Melhorias no modo TV",
-    "Otimizacao da Biblioteca e listas de jogos",
-    "Ajustes visuais em banners, escala e foco",
-    "Melhorias no foco e contorno para navegacao por controle"
+    "Melhorias no streaming, controles virtuais e otimização geral do aplicativo."
   ],
-  "publishedAt": "2026-06-24"
+  "publishedAt": "2026-08-08"
 }
