@@ -5,8 +5,12 @@ import { fileURLToPath } from 'node:url';
 const REPO_OWNER = 'jmita2288-debug';
 const REPO_NAME = 'xtoybox-apk-download';
 const BRANCH = 'main';
-const PUBLIC_DOWNLOAD_BASE = 'https://xtoybox-apk-download.vercel.app/downloads';
+const RELEASE_TAG = 'xtoybox-latest';
 const FALLBACK_VERSION = '1.1.15';
+
+function buildReleaseApkUrl(version) {
+  return `https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/${RELEASE_TAG}/XTOYBOX-v${version}.apk`;
+}
 
 function normalizeLatestMetadata(data) {
   const version = String(data?.latestVersionName || '').trim().replace(/^v/i, '');
@@ -17,7 +21,7 @@ function normalizeLatestMetadata(data) {
   return {
     ...data,
     latestVersionName: version,
-    apkUrl: `${PUBLIC_DOWNLOAD_BASE}/XTOYBOX-v${version}.apk`,
+    apkUrl: buildReleaseApkUrl(version),
     releaseChannel: 'public',
     testRelease: false,
   };
@@ -52,6 +56,9 @@ function readLatestJsonFromFilesystem() {
 }
 
 async function fetchLatestMetadata() {
+  const local = readLatestJsonFromFilesystem();
+  if (local) return local;
+
   try {
     const response = await fetch(
       `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/public/latest.json?t=${Date.now()}`,
@@ -63,11 +70,8 @@ async function fetchLatestMetadata() {
       if (data?.latestVersionName) return normalizeLatestMetadata(data);
     }
   } catch {
-    // Usa o arquivo empacotado ou o fallback abaixo.
+    // Usa o fallback abaixo.
   }
-
-  const local = readLatestJsonFromFilesystem();
-  if (local) return local;
 
   return normalizeLatestMetadata({
     appName: 'XTOYBOX',
@@ -85,12 +89,11 @@ export default async function handler(req, res) {
     const latest = await fetchLatestMetadata();
     if (!latest.apkUrl) throw new Error('apkUrl ausente');
 
-    // Não grave estatísticas no repositório durante um download.
-    // Cada gravação na branch main dispara a integração Git/Vercel e pode criar
-    // um ciclo de deployments. A contagem pública pode ser obtida pelas releases
-    // oficiais do GitHub sem alterar arquivos do projeto.
+    // O download é entregue pelo asset público da Release do GitHub.
+    // O GitHub registra o download de forma persistente sem alterar a branch main,
+    // evitando o antigo ciclo de commits e deployments da Vercel.
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-    res.setHeader('X-Download-Counted', '0');
+    res.setHeader('X-Download-Counted', 'github-release');
     return res.redirect(302, latest.apkUrl);
   } catch (err) {
     console.error('Falha no download:', err?.message || err);
