@@ -39,6 +39,13 @@ function normalizeVersion(value) {
   return version;
 }
 
+function normalizeSha256(value) {
+  const digest = String(value || '').trim();
+  if (!digest) return null;
+  const hash = digest.replace(/^sha256:/i, '').toLowerCase();
+  return /^[a-f0-9]{64}$/.test(hash) ? hash : null;
+}
+
 function getStatsToken() {
   return process.env.GITHUB_STATS_TOKEN || process.env.SITE_REPO_TOKEN || process.env.GH_TOKEN || '';
 }
@@ -119,6 +126,7 @@ async function fetchGitHubReleaseAsset(version) {
     browserDownloadUrl: asset.browser_download_url || null,
     size: Number(asset.size || 0) || null,
     downloadCount: Number(asset.download_count || 0),
+    sha256: normalizeSha256(asset.digest),
     publishedAt: release.published_at || null,
   };
 }
@@ -160,6 +168,7 @@ export default async function handler(req, res) {
       versionName: version,
       versionCode: Number(latest.latestVersionCode || 0),
       apkUrl,
+      apkSha256: releaseAsset?.sha256 ?? null,
       pageUrl: latest.pageUrl || 'https://xtoybox.cloud/',
       releaseNotes: Array.isArray(latest.releaseNotes) ? latest.releaseNotes : [],
       publishedAt,

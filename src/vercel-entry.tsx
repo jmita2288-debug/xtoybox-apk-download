@@ -4,13 +4,16 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { DownloadAdGate } from "./components/DownloadAdGate";
 import { DownloadCounter } from "./components/DownloadCounter";
 import { SocialContactEnhancer } from "./components/SocialContactEnhancer";
+import { TrustEnhancer } from "./components/TrustEnhancer";
 import { RefinedIndex } from "./routes/index-refined";
+import { DownloadSecurityPage, PrivacyPage, TermsPage } from "./routes/legal-pages";
 import { ReportarBugsPage } from "./routes/reportar-bugs";
 import "./styles.css";
 import "./refined-site.css";
 import "./download-counter.css";
 import "./download-ad-gate.css";
 import "./social-contact.css";
+import "./trust-legal.css";
 
 const rootElement = document.getElementById("root");
 
@@ -21,9 +24,10 @@ if (!rootElement) {
 function App() {
   const path = window.location.pathname.replace(/\/$/, "") || "/";
 
-  if (path === "/reportar-bugs") {
-    return <ReportarBugsPage />;
-  }
+  if (path === "/reportar-bugs") return <ReportarBugsPage />;
+  if (path === "/privacidade") return <PrivacyPage />;
+  if (path === "/termos") return <TermsPage />;
+  if (path === "/seguranca-download") return <DownloadSecurityPage />;
 
   return (
     <>
@@ -38,6 +42,7 @@ createRoot(rootElement).render(
     <App />
     <DownloadAdGate />
     <SocialContactEnhancer />
+    <TrustEnhancer />
     <SpeedInsights />
   </React.StrictMode>,
 );
