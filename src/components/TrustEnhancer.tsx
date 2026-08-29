@@ -27,6 +27,7 @@ function DownloadTrustLink() {
 function FooterTrustLinks() {
   return (
     <div className="xt-trust-footer-links" aria-label="Confiança e informações legais">
+      <a href="/xtoytouch">XtoyTouch</a>
       <a href="/seguranca-download">Segurança do download</a>
       <a href="/privacidade">Privacidade</a>
       <a href="/termos">Termos completos</a>

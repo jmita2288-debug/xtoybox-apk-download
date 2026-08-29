@@ -1,8 +1,25 @@
 {
   "installCommand": "npm install",
-  "buildCommand": "npx vite build --config vite.config.vercel.ts",
+  "buildCommand": "node scripts/build-xtoytouch.mjs && npx vite build --config vite.config.vercel.ts",
   "outputDirectory": "dist",
   "ignoreCommand": "node scripts/ignore-vercel-build.js",
+  "headers": [
+    {
+      "source": "/xtoytouch/XtoyTouch.user.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "inline" }
+      ]
+    },
+    {
+      "source": "/xtoytouch/XtoyTouch.meta.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
+      ]
+    }
+  ],
   "redirects": [
     {
       "source": "/downloads/XTOYBOX-v1.1.15.apk",
