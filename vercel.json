@@ -1,21 +1,21 @@
 {
   "installCommand": "npm install",
-  "buildCommand": "node scripts/build-xtoytouch.mjs && npx vite build --config vite.config.vercel.ts",
+  "buildCommand": "npx vite build --config vite.config.vercel.ts",
   "outputDirectory": "dist",
   "ignoreCommand": "node scripts/ignore-vercel-build.js",
   "headers": [
     {
       "source": "/xtoytouch/XtoyTouch.user.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=300" },
         { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "inline" }
+        { "key": "Content-Disposition", "value": "inline; filename=\"XtoyTouch.user.js\"" }
       ]
     },
     {
       "source": "/xtoytouch/XtoyTouch.meta.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=300" },
         { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
       ]
     }
@@ -38,6 +38,14 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/xtoytouch/XtoyTouch.user.js",
+      "destination": "/api/xtoytouch?mode=script"
+    },
+    {
+      "source": "/xtoytouch/XtoyTouch.meta.js",
+      "destination": "/api/xtoytouch?mode=meta"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
