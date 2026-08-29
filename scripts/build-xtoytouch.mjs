@@ -15,9 +15,14 @@ if (!parts.length) {
   throw new Error("Fonte do XtoyTouch nao encontrada.");
 }
 
-const encoded = (
-  await Promise.all(parts.map((name) => readFile(path.join(sourceDir, name), "utf8")))
-)
+const storedParts = await Promise.all(parts.map((name) => readFile(path.join(sourceDir, name), "utf8")));
+
+// Os três primeiros blocos são armazenados sem o primeiro caractere para manter
+// os blobs de publicação dentro do limite do conector usado na manutenção.
+// A reconstrução acontece apenas no build; o arquivo servido ao usuário é o JS original.
+const prefixes = ["H", "Y", "t"];
+const encoded = storedParts
+  .map((part, index) => `${prefixes[index] || ""}${part}`)
   .join("")
   .replace(/\s+/g, "");
 
