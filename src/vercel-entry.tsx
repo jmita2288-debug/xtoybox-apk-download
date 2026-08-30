@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { DownloadAdGate } from "./components/DownloadAdGate";
 import { DownloadCounter } from "./components/DownloadCounter";
+import { HomeUiEnhancer } from "./components/HomeUiEnhancer";
 import { SocialContactEnhancer } from "./components/SocialContactEnhancer";
 import { TrustEnhancer } from "./components/TrustEnhancer";
 import { RefinedIndex } from "./routes/index-refined";
@@ -16,6 +17,7 @@ import "./download-ad-gate.css";
 import "./social-contact.css";
 import "./trust-legal.css";
 import "./xtoytouch.css";
+import "./home-ui-enhancements.css";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");
@@ -27,7 +29,7 @@ function App() {
   if (path === "/termos") return <TermsPage />;
   if (path === "/seguranca-download") return <DownloadSecurityPage />;
   if (path === "/xtoytouch") return <XtoyTouchPage />;
-  return <><RefinedIndex /><DownloadCounter /></>;
+  return <><RefinedIndex /><DownloadCounter /><HomeUiEnhancer /></>;
 }
 
 createRoot(rootElement).render(
