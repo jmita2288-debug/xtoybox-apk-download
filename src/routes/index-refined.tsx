@@ -5,24 +5,28 @@ import screenPerfil from "@/assets/screens/perfil.png";
 import screenConquistas from "@/assets/screens/conquistas.png";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import {
-  ArrowRight,
   Bug,
-  Check,
-  ChevronDown,
+  ChevronRight,
   Cloud,
   Download,
   Gamepad2,
+  Instagram,
   Menu,
+  MessageCircle,
   MonitorSmartphone,
+  Moon,
   ShieldCheck,
   Smartphone,
+  Sun,
   Tv,
   X,
 } from "lucide-react";
 
-const XTOYBOX_COMMUNITY_URL = "https://discord.gg/abh27Dwktt";
+const INSTAGRAM_URL = "https://www.instagram.com/alexandre6902_/";
+const DISCORD_URL = "https://discord.gg/abh27Dwktt";
+const THEME_KEY = "xtoybox-home-theme";
 
-type InfoSection = "about" | "credits" | "terms";
+type HomeTheme = "light" | "dark";
 
 function createFallbackApkMetadata(): ApkMetadata {
   return {
@@ -42,521 +46,302 @@ function createFallbackApkMetadata(): ApkMetadata {
   };
 }
 
-const interfaceScreens = [
-  {
-    src: screenBiblioteca,
-    label: "Biblioteca",
-    title: "Jogos organizados em um só lugar",
-    description: "Encontre títulos compatíveis e acesse suas opções de jogo com menos etapas.",
-    alt: "Tela da biblioteca do XTOYBOX",
-  },
-  {
-    src: screenPerfil,
-    label: "Perfil",
-    title: "Conta e atividade com leitura simples",
-    description: "Informações importantes aparecem com hierarquia clara e sem excesso de elementos.",
-    alt: "Tela de perfil do XTOYBOX",
-  },
-  {
-    src: screenConquistas,
-    label: "Conquistas",
-    title: "Progresso fácil de acompanhar",
-    description: "Consulte conquistas e dados do jogo em uma interface consistente com o restante do app.",
-    alt: "Tela de conquistas do XTOYBOX",
-  },
-] as const;
-
-const featureItems = [
-  {
-    icon: Gamepad2,
-    title: "Remote Play do console",
-    description: "Conecte-se ao seu próprio Xbox para jogar em outro dispositivo compatível.",
-  },
-  {
-    icon: Cloud,
-    title: "Jogos compatíveis na nuvem",
-    description: "Acesse experiências disponibilizadas pelo Xbox Cloud Gaming, quando elegíveis para sua conta.",
-  },
-  {
-    icon: Smartphone,
-    title: "Toque ou controle físico",
-    description: "Use controles na tela ou um gamepad compatível, conforme sua preferência e dispositivo.",
-  },
-  {
-    icon: MonitorSmartphone,
-    title: "Celular e TV Box",
-    description: "Uma interface adaptada para telas menores e para navegação em ambientes de TV.",
-  },
-] as const;
-
-const faqItems = [
-  {
-    question: "O XTOYBOX é um serviço próprio de cloud gaming?",
-    answer:
-      "Não. O XTOYBOX não possui servidores próprios de jogos na nuvem. Ele oferece uma interface para Remote Play do seu console e acesso a experiências compatíveis disponibilizadas pelo Xbox Cloud Gaming.",
-  },
-  {
-    question: "Preciso ter um console Xbox?",
-    answer:
-      "Para usar o Remote Play, sim. Para jogos disponíveis pelo Xbox Cloud Gaming, a necessidade de console depende do serviço oficial, da sua região, da sua conta e do plano compatível.",
-  },
-  {
-    question: "Em quais dispositivos o aplicativo funciona?",
-    answer:
-      "O XTOYBOX é distribuído para Android e foi pensado para uso em celulares e TV Box compatíveis.",
-  },
-  {
-    question: "Como instalar o APK?",
-    answer:
-      "Baixe o arquivo pelo botão oficial do site, abra o APK no Android e siga as instruções do sistema. Talvez seja necessário permitir a instalação por fontes externas.",
-  },
-] as const;
-
-function Brand() {
-  return (
-    <a className="refined-brand" href="/" aria-label="Página inicial do XTOYBOX">
-      <span className="refined-brand__mark">
-        <img src={logo} alt="" />
-      </span>
-      <span className="refined-brand__text">
-        <strong>XTOYBOX</strong>
-        <small>Remote Play para Android</small>
-      </span>
-    </a>
-  );
+function getInitialTheme(): HomeTheme {
+  try {
+    const saved = window.localStorage.getItem(THEME_KEY) ?? window.localStorage.getItem("xtoybox-theme");
+    if (saved === "light" || saved === "dark") return saved;
+  } catch {
+    // Mantém o tema padrão quando o storage não está disponível.
+  }
+  return "dark";
 }
 
-function InfoModal({ section, onClose }: { section: InfoSection; onClose: () => void }) {
-  const content = {
-    about: {
-      title: "Sobre o XTOYBOX",
-      paragraphs: [
-        "O XTOYBOX é um aplicativo independente para Android, baseado em um projeto open source e adaptado para uso em celulares e TV Box.",
-        "A proposta é facilitar o Remote Play do seu console Xbox e o acesso a experiências compatíveis com o Xbox Cloud Gaming em uma interface organizada.",
-        "O projeto não opera servidores próprios de cloud gaming e não possui vínculo oficial com Microsoft ou Xbox.",
-      ],
-    },
-    credits: {
-      title: "Créditos",
-      paragraphs: [
-        "Base open source: XStreaming.",
-        "Copyright (c) 2024 Geocld. Licenciado sob a licença MIT.",
-        "Modificações, interface e otimizações do XTOYBOX por Alexandreios.",
-      ],
-    },
-    terms: {
-      title: "Termos de uso",
-      paragraphs: [
-        "O aplicativo é distribuído como APK externo. Baixe somente pelo site oficial do projeto e mantenha o arquivo atualizado.",
-        "O funcionamento de Remote Play e Xbox Cloud Gaming depende dos serviços, da conta, da rede, da região e dos requisitos definidos pela Microsoft.",
-        "O XTOYBOX é um projeto independente e não garante disponibilidade permanente de serviços de terceiros.",
-      ],
-    },
-  }[section];
-
-  return (
-    <div className="refined-modal" role="dialog" aria-modal="true" onClick={onClose}>
-      <div className="refined-modal__panel" onClick={(event) => event.stopPropagation()}>
-        <button type="button" className="refined-modal__close" onClick={onClose} aria-label="Fechar">
-          <X />
-        </button>
-        <span className="refined-eyebrow">Informações</span>
-        <h2>{content.title}</h2>
-        <div className="refined-modal__copy">
-          {content.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+function formatReleaseDate(value: string | null) {
+  if (!value) return null;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(parsed);
 }
+
+const galleryScreens = [
+  { src: screenBiblioteca, label: "Biblioteca", alt: "Tela da biblioteca do XTOYBOX" },
+  { src: screenPerfil, label: "Perfil", alt: "Tela de perfil do XTOYBOX" },
+  { src: screenConquistas, label: "Conquistas", alt: "Tela de conquistas do XTOYBOX" },
+] as const;
+
+const menuItems = [
+  { href: "/xtoytouch", label: "XtoyTouch", icon: Gamepad2 },
+  { href: "#como-funciona", label: "Como funciona", icon: Cloud },
+  { href: "#interface", label: "Interface", icon: MonitorSmartphone },
+  { href: "#recursos", label: "Recursos", icon: Smartphone },
+  { href: "#ajuda", label: "Ajuda", icon: ShieldCheck },
+  { href: "/reportar-bugs", label: "Reportar problema", icon: Bug },
+] as const;
 
 export function RefinedIndex() {
   const [apkMetadata, setApkMetadata] = useState<ApkMetadata>(() => createFallbackApkMetadata());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [infoOpen, setInfoOpen] = useState<InfoSection | null>(null);
+  const [theme, setTheme] = useState<HomeTheme>(() => getInitialTheme());
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   useEffect(() => {
     let active = true;
-
     fetchApkMetadata()
       .then((metadata) => {
         if (active) setApkMetadata(metadata);
       })
-      .catch(() => {
-        // O fallback mantém o botão de download disponível.
-      });
-
+      .catch(() => undefined);
     return () => {
       active = false;
     };
   }, []);
 
   useEffect(() => {
-    if (!infoOpen) return;
+    try {
+      window.localStorage.setItem(THEME_KEY, theme);
+      window.localStorage.setItem("xtoybox-theme", theme);
+    } catch {
+      // A escolha continua ativa na sessão atual.
+    }
+  }, [theme]);
+
+  useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setInfoOpen(null);
+      if (event.key === "Escape") setMobileMenuOpen(false);
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [infoOpen]);
+  }, []);
+
+  const releaseDate = formatReleaseDate(apkMetadata.lastUpdated ?? apkMetadata.publishedAt);
+  const releaseMeta = [
+    apkMetadata.versionName,
+    apkMetadata.apkSizeFormatted,
+    releaseDate,
+  ].filter(Boolean);
 
   return (
-    <div className="refined-site">
-      <header className="refined-header">
-        <div className="refined-container refined-header__inner">
-          <Brand />
+    <div className="pixel-site" data-theme={theme}>
+      <a className="pixel-skip" href="#hero">Ir para o conteúdo</a>
 
-          <nav className="refined-nav" aria-label="Navegação principal">
+      <header className="pixel-header" id="top">
+        <div className="pixel-shell pixel-header__inner">
+          <a className="pixel-brand" href="/" aria-label="Página inicial do XTOYBOX">
+            <img src={logo} alt="" />
+            <span>XTOYBOX</span>
+          </a>
+
+          <nav className="pixel-nav" aria-label="Navegação principal">
             <a href="#como-funciona">Como funciona</a>
             <a href="#interface">Interface</a>
             <a href="#recursos">Recursos</a>
             <a href="#ajuda">Ajuda</a>
           </nav>
 
-          <div className="refined-header__actions">
-            <a className="refined-button refined-button--small refined-button--primary" href="/api/download">
-              <Download />
-              Baixar APK
-            </a>
+          <div className="pixel-header__actions">
             <button
+              className="pixel-icon-btn pixel-theme-btn"
               type="button"
-              className="refined-menu-button"
+              aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+              onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
+            >
+              {theme === "dark" ? <Moon /> : <Sun />}
+            </button>
+            <a className="pixel-btn pixel-btn--primary pixel-btn--sm" href="/api/download">Baixar</a>
+            <button
+              className="pixel-icon-btn pixel-menu-btn"
+              type="button"
               aria-expanded={mobileMenuOpen}
-              aria-label="Abrir menu"
+              aria-controls="pixel-mobile-menu"
+              aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
               onClick={() => setMobileMenuOpen((current) => !current)}
             >
               {mobileMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
-
-        {mobileMenuOpen && (
-          <div className="refined-mobile-nav">
-            <div className="refined-container">
-              <a href="#como-funciona" onClick={() => setMobileMenuOpen(false)}>
-                Como funciona
-              </a>
-              <a href="#interface" onClick={() => setMobileMenuOpen(false)}>
-                Interface
-              </a>
-              <a href="#recursos" onClick={() => setMobileMenuOpen(false)}>
-                Recursos
-              </a>
-              <a href="#ajuda" onClick={() => setMobileMenuOpen(false)}>
-                Ajuda
-              </a>
-              <a href="/reportar-bugs" onClick={() => setMobileMenuOpen(false)}>
-                Reportar problema
-              </a>
-            </div>
-          </div>
-        )}
       </header>
 
-      {infoOpen && <InfoModal section={infoOpen} onClose={() => setInfoOpen(null)} />}
+      {mobileMenuOpen && (
+        <div className="pixel-menu" id="pixel-mobile-menu">
+          <div className="pixel-shell pixel-menu__inner">
+            <ul className="pixel-menu__list">
+              {menuItems.map(({ href, label, icon: Icon }) => (
+                <li key={label}>
+                  <a href={href} onClick={() => setMobileMenuOpen(false)}>
+                    <Icon />
+                    <span>{label}</span>
+                    <ChevronRight className="pixel-menu__arrow" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
       <main>
-        <section className="refined-hero">
-          <div className="refined-container refined-hero__grid">
-            <div className="refined-hero__copy">
-              <span className="refined-pill">Remote Play e jogos compatíveis na nuvem</span>
-              <h1>Seu Xbox em mais telas.</h1>
-              <p>
-                Use o XTOYBOX para jogar remotamente pelo seu console Xbox e acessar experiências
-                compatíveis com o Xbox Cloud Gaming em dispositivos Android.
-              </p>
-              <div className="refined-hero__actions">
-                <a className="refined-button refined-button--primary" href="/api/download">
-                  <Download />
-                  Baixar versão {apkMetadata.versionName}
-                </a>
-                <a className="refined-button refined-button--secondary" href="#como-funciona">
-                  Entender como funciona
-                  <ArrowRight />
-                </a>
-              </div>
-              <div className="refined-hero__note">
-                <ShieldCheck />
-                <span>
-                  Projeto independente. Conta, assinatura e serviços oficiais podem ser necessários.
-                </span>
-              </div>
-            </div>
-
-            <div className="refined-hero__visual" aria-label="Prévia da interface do XTOYBOX">
-              <div className="refined-visual-card refined-visual-card--main">
-                <div className="refined-visual-card__bar">
-                  <span>Biblioteca</span>
-                  <span>Android</span>
-                </div>
-                <img src={screenBiblioteca} alt="Biblioteca do XTOYBOX" />
-              </div>
-              <div className="refined-visual-card refined-visual-card--profile">
-                <img src={screenPerfil} alt="Perfil do XTOYBOX" />
-              </div>
-              <div className="refined-visual-card refined-visual-card--achievements">
-                <img src={screenConquistas} alt="Conquistas no XTOYBOX" />
-              </div>
-              <div className="refined-visual-badge">
-                <Check />
-                <span>
-                  <strong>Interface adaptável</strong>
-                  <small>Celular e TV Box</small>
-                </span>
-              </div>
-            </div>
+        <section className="pixel-hero" id="hero">
+          <div className="pixel-hero__media" aria-hidden="true">
+            <img className="pixel-hero__mark" src={logo} alt="" />
+            <img className="pixel-hero__shot" src={screenBiblioteca} alt="" />
+            <span className="pixel-hero__glow" />
+            <span className="pixel-hero__scrim" />
           </div>
-        </section>
 
-        <section className="refined-trust-strip" aria-label="Principais formas de uso">
-          <div className="refined-container refined-trust-strip__grid">
-            <div>
-              <Gamepad2 />
-              <span>
-                <strong>Remote Play</strong>
-                <small>Do seu próprio console</small>
-              </span>
-            </div>
-            <div>
-              <Cloud />
-              <span>
-                <strong>Xbox Cloud Gaming</strong>
-                <small>Quando disponível para sua conta</small>
-              </span>
-            </div>
-            <div>
-              <Smartphone />
-              <span>
-                <strong>Android</strong>
-                <small>Celular e TV Box</small>
-              </span>
-            </div>
-            <div>
-              <Tv />
-              <span>
-                <strong>Toque ou controle</strong>
-                <small>Escolha como jogar</small>
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <section id="como-funciona" className="refined-section refined-section--soft">
-          <div className="refined-container">
-            <div className="refined-section-heading refined-section-heading--center">
-              <span className="refined-eyebrow">Como funciona</span>
-              <h2>Duas formas de acessar seus jogos.</h2>
-              <p>
-                O XTOYBOX organiza o acesso ao Remote Play e às experiências compatíveis de jogos na
-                nuvem sem se apresentar como um serviço próprio de streaming.
-              </p>
-            </div>
-
-            <div className="refined-access-grid">
-              <article className="refined-access-card">
-                <span className="refined-access-card__icon">
-                  <Gamepad2 />
-                </span>
-                <div>
-                  <span className="refined-eyebrow">01 · Console</span>
-                  <h3>Remote Play do seu Xbox</h3>
-                  <p>
-                    Conecte-se ao console que você já possui para jogar em outro dispositivo Android
-                    compatível, dentro das condições da sua rede e da sua conta.
-                  </p>
-                  <ul>
-                    <li>
-                      <Check /> Requer console Xbox compatível
-                    </li>
-                    <li>
-                      <Check /> Usa sua biblioteca e sessão do console
-                    </li>
-                    <li>
-                      <Check /> A qualidade depende da conexão
-                    </li>
-                  </ul>
-                </div>
-              </article>
-
-              <article className="refined-access-card">
-                <span className="refined-access-card__icon refined-access-card__icon--cloud">
-                  <Cloud />
-                </span>
-                <div>
-                  <span className="refined-eyebrow">02 · Nuvem</span>
-                  <h3>Experiências compatíveis com Xbox Cloud Gaming</h3>
-                  <p>
-                    Acesse títulos oferecidos pelo serviço oficial da Microsoft, quando disponíveis
-                    para sua região, conta e assinatura. O XTOYBOX não hospeda esses jogos.
-                  </p>
-                  <ul>
-                    <li>
-                      <Check /> Catálogo e disponibilidade são definidos pela Microsoft
-                    </li>
-                    <li>
-                      <Check /> Uma assinatura compatível pode ser necessária
-                    </li>
-                    <li>
-                      <Check /> Não utiliza servidores próprios do XTOYBOX
-                    </li>
-                  </ul>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section id="interface" className="refined-section">
-          <div className="refined-container">
-            <div className="refined-section-heading">
-              <span className="refined-eyebrow">Interface</span>
-              <h2>Organizada para você chegar ao jogo mais rápido.</h2>
-              <p>
-                Mantivemos as telas que melhor representam o aplicativo e removemos imagens de fundo
-                que competiam com o conteúdo.
-              </p>
-            </div>
-
-            <div className="refined-screens-grid">
-              {interfaceScreens.map((screen) => (
-                <article className="refined-screen-card" key={screen.title}>
-                  <div className="refined-screen-card__image">
-                    <img src={screen.src} alt={screen.alt} loading="lazy" decoding="async" />
-                  </div>
-                  <div className="refined-screen-card__copy">
-                    <span>{screen.label}</span>
-                    <h3>{screen.title}</h3>
-                    <p>{screen.description}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="recursos" className="refined-section refined-section--soft">
-          <div className="refined-container">
-            <div className="refined-section-heading refined-section-heading--center">
-              <span className="refined-eyebrow">Recursos</span>
-              <h2>O essencial, apresentado com clareza.</h2>
-              <p>
-                Sem promessas exageradas: apenas os principais recursos disponíveis no aplicativo.
-              </p>
-            </div>
-
-            <div className="refined-feature-grid">
-              {featureItems.map(({ icon: Icon, title, description }) => (
-                <article className="refined-feature-card" key={title}>
-                  <span>
-                    <Icon />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="refined-community-section">
-          <div className="refined-container refined-community-card">
-            <div>
-              <span className="refined-eyebrow">Comunidade</span>
-              <h2>Acompanhe atualizações e envie seu feedback.</h2>
-              <p>
-                Entre no Discord para receber avisos de novas versões, tirar dúvidas e reportar
-                problemas encontrados no aplicativo.
-              </p>
-            </div>
-            <div className="refined-community-card__actions">
-              <a
-                className="refined-button refined-button--primary"
-                href={XTOYBOX_COMMUNITY_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Entrar no Discord
-                <ArrowRight />
-              </a>
-              <a className="refined-button refined-button--secondary" href="/reportar-bugs">
-                <Bug />
-                Reportar problema
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section id="ajuda" className="refined-section">
-          <div className="refined-container refined-faq-layout">
-            <div className="refined-section-heading">
-              <span className="refined-eyebrow">Ajuda</span>
-              <h2>Informações importantes antes de instalar.</h2>
-              <p>
-                Respostas diretas sobre funcionamento, requisitos e limites do projeto.
-              </p>
-            </div>
-
-            <div className="refined-faq-list">
-              {faqItems.map((item) => (
-                <details key={item.question}>
-                  <summary>
-                    <strong>{item.question}</strong>
-                    <ChevronDown />
-                  </summary>
-                  <p>{item.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="refined-download-section">
-          <div className="refined-container refined-download-card">
-            <div>
-              <span className="refined-eyebrow">Versão atual</span>
-              <h2>Baixe o XTOYBOX para Android.</h2>
-              <p>
-                Versão {apkMetadata.versionName}
-                {apkMetadata.apkSizeFormatted ? ` · ${apkMetadata.apkSizeFormatted}` : ""}
-                {apkMetadata.lastUpdated
-                  ? ` · Atualizada em ${new Date(apkMetadata.lastUpdated).toLocaleDateString("pt-BR")}`
-                  : ""}
-              </p>
-            </div>
-            <div>
-              <a className="refined-button refined-button--download" href="/api/download">
+          <div className="pixel-shell pixel-hero__content">
+            <h1>Seu Xbox em mais telas.</h1>
+            <p className="pixel-lede">Remote Play do seu console e jogos compatíveis na nuvem, no Android.</p>
+            <div className="pixel-hero__actions">
+              <a className="pixel-btn pixel-btn--primary" href="/api/download">
                 <Download />
-                Baixar APK
+                Baixar v{apkMetadata.versionName}
               </a>
-              <small>
-                Talvez seja necessário permitir a instalação de aplicativos por fontes externas.
-              </small>
+              <a className="pixel-link-arrow" href="#como-funciona">
+                Como funciona <ChevronRight />
+              </a>
             </div>
+            <div className="pixel-counter-mount refined-hero__visual" />
+          </div>
+        </section>
+
+        <section className="pixel-section" id="como-funciona">
+          <div className="pixel-shell">
+            <div className="pixel-modes">
+              <article>
+                <Gamepad2 />
+                <h2>Remote Play</h2>
+                <p>Do console que você já tem.</p>
+              </article>
+              <article>
+                <Cloud />
+                <h2>Cloud Gaming</h2>
+                <p>Títulos compatíveis da Microsoft.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="pixel-gallery-section" id="interface">
+          <div className="pixel-shell pixel-gallery__head">
+            <h2>Interface</h2>
+          </div>
+          <div
+            className="pixel-gallery"
+            onScroll={(event) => {
+              const node = event.currentTarget;
+              const maxScroll = Math.max(1, node.scrollWidth - node.clientWidth);
+              const progress = node.scrollLeft / maxScroll;
+              setGalleryIndex(Math.min(2, Math.max(0, Math.round(progress * 2))));
+            }}
+          >
+            {galleryScreens.map((screen) => (
+              <figure key={screen.label}>
+                <img src={screen.src} alt={screen.alt} loading="lazy" />
+                <figcaption>{screen.label}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="pixel-shell pixel-dots" aria-hidden="true">
+            {galleryScreens.map((screen, index) => (
+              <span key={screen.label} className={galleryIndex === index ? "is-active" : ""} />
+            ))}
+          </div>
+        </section>
+
+        <section className="pixel-section pixel-section--tight" id="recursos">
+          <div className="pixel-shell">
+            <ul className="pixel-specs">
+              <li><Smartphone /><span>Celular e TV Box</span></li>
+              <li><Gamepad2 /><span>Toque ou controle</span></li>
+              <li><Tv /><span>Sua biblioteca do console</span></li>
+              <li><ShieldCheck /><span>Release pública com SHA-256</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="pixel-section--rule">
+          <a className="pixel-shell pixel-inline-cta" href="/xtoytouch">
+            <Gamepad2 />
+            <span><strong>XtoyTouch</strong> — userscript complementar</span>
+            <ChevronRight />
+          </a>
+        </section>
+
+        <section className="pixel-section pixel-section--tight" id="ajuda">
+          <div className="pixel-shell pixel-faq-grid">
+            <h2>Ajuda</h2>
+            <div className="pixel-faq">
+              <details>
+                <summary>É um serviço próprio de cloud gaming?</summary>
+                <p>Não. O XTOYBOX organiza o acesso ao Remote Play e a experiências compatíveis disponibilizadas pela Microsoft.</p>
+              </details>
+              <details>
+                <summary>Preciso de um console Xbox?</summary>
+                <p>Para Remote Play, sim. Na nuvem, depende da sua conta, região e do serviço oficial.</p>
+              </details>
+              <details>
+                <summary>Quais dispositivos?</summary>
+                <p>Dispositivos Android compatíveis, incluindo celulares e TV Box.</p>
+              </details>
+              <details>
+                <summary>Como instalar o APK?</summary>
+                <p>Baixe pelo site oficial e, se necessário, permita a instalação por fontes externas no Android.</p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section className="pixel-section--rule" id="contato">
+          <ul className="pixel-shell pixel-channels">
+            <li>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
+                <Instagram /><span>Instagram</span><ChevronRight />
+              </a>
+            </li>
+            <li>
+              <a href={DISCORD_URL} target="_blank" rel="noreferrer">
+                <MessageCircle /><span>Discord</span><ChevronRight />
+              </a>
+            </li>
+            <li>
+              <a href="/reportar-bugs">
+                <Bug /><span>Reportar um problema</span><ChevronRight />
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section className="pixel-download" id="download">
+          <div className="pixel-shell pixel-download__inner">
+            <div>
+              <h2>Baixe para Android.</h2>
+              <p className="pixel-meta">{releaseMeta.join(" · ")}</p>
+            </div>
+            <a className="pixel-btn pixel-btn--primary" href="/api/download">
+              <Download />
+              Baixar APK
+            </a>
           </div>
         </section>
       </main>
 
-      <footer className="refined-footer">
-        <div className="refined-container refined-footer__top">
-          <Brand />
-          <nav aria-label="Links do rodapé">
-            <button type="button" onClick={() => setInfoOpen("about")}>
-              Sobre
-            </button>
-            <button type="button" onClick={() => setInfoOpen("credits")}>
-              Créditos
-            </button>
-            <button type="button" onClick={() => setInfoOpen("terms")}>
-              Termos
-            </button>
-            <a href="/reportar-bugs">Suporte</a>
+      <footer className="pixel-footer">
+        <div className="pixel-shell pixel-footer__inner">
+          <span className="pixel-footer__brand">XTOYBOX</span>
+          <nav className="pixel-footer__nav" aria-label="Rodapé">
+            <a href="/xtoytouch">XtoyTouch</a>
+            <a href="/seguranca-download">Segurança</a>
+            <a href="/privacidade">Privacidade</a>
+            <a href="/termos">Termos</a>
+            <a href="mailto:xtoybox@proton.me">Suporte</a>
           </nav>
-        </div>
-        <div className="refined-container refined-footer__bottom">
-          <p>Projeto independente, sem vínculo ou afiliação com Microsoft ou Xbox.</p>
-          <p>Xbox e marcas relacionadas pertencem aos seus respectivos proprietários.</p>
+          <p>Projeto independente, sem vínculo com Microsoft ou Xbox.</p>
         </div>
       </footer>
     </div>
