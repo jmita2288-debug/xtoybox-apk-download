@@ -15,63 +15,33 @@ if (!parts.length) {
   throw new Error("Fonte do XtoyTouch nao encontrada.");
 }
 
-const storedParts = await Promise.all(parts.map((name) => readFile(path.join(sourceDir, name), "utf8")));
-const cleanParts = storedParts.map((part) => part.replace(/\s+/g, ""));
-const metadataMarker = "// ==/UserScript==";
-const base64Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const encoded = (await Promise.all(
+  parts.map((name) => readFile(path.join(sourceDir, name), "utf8")),
+))
+  .join("")
+  .replace(/\s+/g, "");
 
-function decodeCandidate(prefixes) {
-  const encoded = cleanParts
-    .map((part, index) => `${prefixes[index] || ""}${part}`)
-    .join("");
+let script = gunzipSync(Buffer.from(encoded, "base64")).toString("utf8");
 
-  try {
-    const candidate = gunzipSync(Buffer.from(encoded, "base64")).toString("utf8");
-    if (!candidate.includes(metadataMarker) || !candidate.includes("@name         XtoyTouch - xCloud")) return null;
-    return candidate;
-  } catch {
-    return null;
-  }
-}
-
-// O primeiro bloco perdeu apenas o H de um cabeçalho gzip em Base64 (H4sI...).
-// Os dois blocos seguintes também foram armazenados sem o primeiro caractere.
-// Descobrimos esses dois caracteres durante o build para não depender de um
-// prefixo manual incorreto e quebrar a publicação do site.
-let script = null;
-let recoveredPrefixes = null;
-
-if (cleanParts.length >= 3) {
-  outer:
-  for (const secondPrefix of base64Alphabet) {
-    for (const thirdPrefix of base64Alphabet) {
-      const prefixes = ["H", secondPrefix, thirdPrefix];
-      const candidate = decodeCandidate(prefixes);
-      if (candidate) {
-        script = candidate;
-        recoveredPrefixes = prefixes;
-        break outer;
-      }
-    }
-  }
-} else {
-  script = decodeCandidate(["H"]);
-  recoveredPrefixes = script ? ["H"] : null;
-}
-
-if (!script) {
-  throw new Error("Nao foi possivel reconstruir a fonte do XtoyTouch.");
-}
-
-// A comunidade SafeZone nao faz mais parte do projeto. O namespace oficial
-// passa a pertencer exclusivamente ao XTOYBOX e e aplicado tanto no instalador
-// quanto no arquivo de metadata usado para atualizacoes.
+// Identidade oficial do projeto. Mantemos esse ajuste como salvaguarda para que
+// um pacote antigo nunca volte a publicar o namespace da antiga comunidade.
 script = script.replace(
   /^\/\/\s*@namespace\s+.*$/m,
   "// @namespace    https://xtoybox.cloud/",
 );
 
+// O arquivo completo já possui estas URLs. Este fallback serve apenas para
+// futuras fontes que sejam enviadas sem os campos de atualização.
+if (!/^\/\/\s*@updateURL\s+/m.test(script)) {
+  script = script.replace(
+    /^\/\/\s*@supportURL\s+.*$/m,
+    (line) => `${line}\n// @updateURL    https://xtoybox.cloud/xtoytouch/XtoyTouch.meta.js\n// @downloadURL  https://xtoybox.cloud/xtoytouch/XtoyTouch.user.js`,
+  );
+}
+
+const metadataMarker = "// ==/UserScript==";
 const metadataEnd = script.indexOf(metadataMarker);
+
 if (metadataEnd === -1) {
   throw new Error("Metadata do XtoyTouch nao encontrada.");
 }
@@ -83,5 +53,3 @@ await writeFile(path.join(outputDir, "XtoyTouch.user.js"), script, "utf8");
 await writeFile(path.join(outputDir, "XtoyTouch.meta.js"), metadata, "utf8");
 
 console.log(`XtoyTouch ${metadata.match(/@version\s+([^\s]+)/)?.[1] || ""} preparado para publicacao.`);
-console.log(`Prefixos recuperados: ${recoveredPrefixes?.join(",") || "n/a"}`);
-console.log("Namespace oficial: https://xtoybox.cloud/");
