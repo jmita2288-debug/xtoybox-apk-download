@@ -50,6 +50,15 @@ function getStatsToken() {
   return process.env.GITHUB_STATS_TOKEN || process.env.SITE_REPO_TOKEN || process.env.GH_TOKEN || '';
 }
 
+function buildGitHubHeaders(token = '') {
+  return {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'xtoybox-apk-metadata',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
 function readJsonFromFilesystem(fileName) {
   try {
     const __filename = fileURLToPath(import.meta.url);
@@ -92,19 +101,28 @@ async function fetchLatestMetadata() {
   return latest;
 }
 
+async function requestGitHubRelease(token = '') {
+  return fetch(
+    `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/tags/${RELEASE_TAG}?t=${Date.now()}`,
+    {
+      cache: 'no-store',
+      headers: buildGitHubHeaders(token),
+    },
+  );
+}
+
 async function fetchGitHubReleaseAsset(version) {
   const token = getStatsToken();
-  const headers = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'xtoybox-apk-metadata',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
+  let authMode = token ? 'token' : 'public';
+  let response = await requestGitHubRelease(token);
 
-  const response = await fetch(
-    `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/tags/${RELEASE_TAG}?t=${Date.now()}`,
-    { cache: 'no-store', headers },
-  );
+  // O repositório é público. Se um token expirar ou perder permissão, não devemos
+  // congelar o contador em 22.787: repetimos a leitura sem autenticação.
+  if (!response.ok && token && (response.status === 401 || response.status === 403)) {
+    console.warn(`[apk-metadata] Token rejeitado (${response.status}); tentando leitura pública da Release.`);
+    response = await requestGitHubRelease('');
+    authMode = 'public-fallback';
+  }
 
   if (!response.ok) {
     throw new Error(`Release do GitHub indisponivel: ${response.status}`);
@@ -128,6 +146,7 @@ async function fetchGitHubReleaseAsset(version) {
     downloadCount: Number(asset.download_count || 0),
     sha256: normalizeSha256(asset.digest),
     publishedAt: release.published_at || null,
+    authMode,
   };
 }
 
@@ -178,6 +197,7 @@ export default async function handler(req, res) {
       apkSizeFormatted: formatBytes(apkSizeBytes),
       source: 'server-api',
       counterSource: releaseAsset ? 'github-release-delta' : 'historical-fallback',
+      githubStatsAuth: releaseAsset?.authMode ?? null,
       releaseDownloadCount: releaseAsset?.downloadCount ?? null,
       releaseDownloadBaseline: Number(RELEASE_DOWNLOAD_BASELINES[version] || 0),
       historicalDownloadBase: HISTORICAL_DOWNLOAD_BASE,
