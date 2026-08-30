@@ -18,6 +18,7 @@ import "./social-contact.css";
 import "./trust-legal.css";
 import "./xtoytouch.css";
 import "./home-ui-enhancements.css";
+import "./home-menu-refinement.css";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");

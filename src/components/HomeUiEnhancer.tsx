@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Gamepad2, Moon, Sun } from "lucide-react";
+import { ChevronRight, Moon, Sun } from "lucide-react";
 
 type HomeTheme = "light" | "dark";
 
@@ -107,19 +107,11 @@ export function HomeUiEnhancer() {
         createPortal(
           <>
             <a className="home-menu-xtoytouch" href="/xtoytouch">
-              <span className="home-menu-xtoytouch__icon" aria-hidden="true">
-                <Gamepad2 />
-              </span>
-              <span>
-                <strong>XtoyTouch</strong>
-                <small>HUD e controles para xCloud</small>
-              </span>
+              <span>XtoyTouch</span>
+              <ChevronRight aria-hidden="true" />
             </a>
             <div className="home-menu-theme">
-              <span>
-                <strong>Aparência</strong>
-                <small>{theme === "dark" ? "Modo escuro" : "Modo claro"}</small>
-              </span>
+              <span>{theme === "dark" ? "Modo escuro" : "Modo claro"}</span>
               <ThemeSwitch theme={theme} onToggle={toggleTheme} className="home-theme-toggle--menu" />
             </div>
           </>,
