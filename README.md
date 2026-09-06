@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img alt="Total de downloads do XTOYBOX" src="https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjmita2288-debug%2Fxtoybox-apk-download%2Fmain%2Fpublic%2Fdownload-badge.json" />
+  <img alt="Total de downloads do XTOYBOX" src="https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fxtoybox.cloud%2Fapi%2Fdownload-badge" />
 </p>
 
 ## Sobre este repositório
@@ -25,7 +25,7 @@ O site também funciona como ponto central para:
 - apresentar o aplicativo e suas principais formas de uso;
 - disponibilizar o APK mais recente;
 - exibir versão, tamanho e data de atualização;
-- manter o contador de downloads;
+- manter o contador acumulado de downloads;
 - direcionar usuários para suporte, comunidade e reporte de problemas.
 
 ## O que é o XTOYBOX
@@ -66,36 +66,47 @@ Todos os botões de download do site utilizam a rota:
 /api/download
 ```
 
-Essa rota registra a solicitação no contador persistente e depois redireciona o usuário para o APK configurado como versão atual.
+Essa rota redireciona o usuário para o APK oficial publicado na Release do GitHub. O contador público não depende de um commit novo a cada clique: o GitHub mantém o `download_count` do asset da versão atual e a API do site combina esse valor com a base acumulada das versões anteriores.
 
-Os principais arquivos envolvidos são:
+Isso evita criar commits e deployments apenas para registrar downloads e também impede que o total público volte para zero quando o APK atual começa uma nova contagem na Release.
 
-| Arquivo | Função |
+Os principais arquivos e endpoints envolvidos são:
+
+| Arquivo / endpoint | Função |
 | --- | --- |
-| `public/latest.json` | Define a versão atual, a URL do APK, as notas e a data de publicação. |
-| `public/download-stats.json` | Mantém o total geral e a divisão dos downloads por versão. |
-| `public/download-badge.json` | Fornece a contagem abreviada exibida neste README. |
-| `api/download.js` | Registra o download e realiza o redirecionamento. |
-| `api/apk-metadata.js` | Reúne metadados da versão e das releases para o site. |
+| `public/latest.json` | Define a versão pública atual, URL do APK, notas e data de publicação. |
+| `api/download.js` | Redireciona para o APK oficial da versão atual. |
+| `api/apk-metadata.js` | Consulta a Release e calcula o total acumulado usado pelo site. |
+| `api/download-badge.js` | Gera dinamicamente o contador exibido neste README. |
+| `public/download-stats.json` | Snapshot histórico mantido por compatibilidade; não é a fonte principal do contador atual. |
+| `public/download-badge.json` | Snapshot antigo do badge; o README não depende mais desse arquivo. |
 
-### Persistência do contador
+### Contador acumulado
 
-Em produção, a função de download precisa de um token com permissão para atualizar os arquivos de estatísticas no repositório.
-
-Variável recomendada:
+A fonte principal do número exibido no site é:
 
 ```text
-GITHUB_STATS_TOKEN
+https://xtoybox.cloud/api/apk-metadata
 ```
 
-Nomes alternativos aceitos pelo projeto:
+O badge deste README consulta:
+
+```text
+https://xtoybox.cloud/api/download-badge
+```
+
+Assim, o site e o README usam o mesmo total calculado em produção.
+
+O `GITHUB_STATS_TOKEN` pode ser utilizado pelo backend para consultar a API do GitHub com autenticação. Como o repositório e a Release pública são acessíveis sem autenticação, a API possui fallback para leitura pública caso o token esteja ausente, expirado ou seja rejeitado.
+
+Nomes alternativos ainda aceitos pelo backend:
 
 ```text
 SITE_REPO_TOKEN
 GH_TOKEN
 ```
 
-Sem uma dessas variáveis, o APK ainda pode ser entregue, mas a atualização automática do contador pode não ser registrada.
+Esses tokens não são usados para criar um commit a cada download.
 
 ## Tecnologias
 
@@ -175,7 +186,7 @@ Esse arquivo informa:
 - notas de atualização;
 - data de publicação.
 
-Ao publicar uma nova versão, essas informações devem ser revisadas para que o site, a API e os botões de download permaneçam sincronizados.
+Ao publicar uma nova versão, essas informações devem permanecer sincronizadas com a Release para que o site, a API e os botões de download apontem para o mesmo APK.
 
 ## Deploy
 
