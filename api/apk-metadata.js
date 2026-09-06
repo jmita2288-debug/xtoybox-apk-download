@@ -7,12 +7,30 @@ const REPO_NAME = 'xtoybox-apk-download';
 const BRANCH = 'main';
 const RELEASE_TAG = 'xtoybox-latest';
 
-// Snapshot do contador antigo no momento em que a gravação por commits foi desativada.
-// A partir desta base, novos downloads são obtidos do contador real do asset no GitHub.
-const HISTORICAL_DOWNLOAD_BASE = 22_787;
+// O contador do GitHub pertence ao asset de cada versão e pode voltar a zero
+// quando o APK da Release é substituído. Mantemos uma base acumulada por versão
+// para que o total público do projeto não regrida ao publicar um APK novo.
+const VERSION_DOWNLOAD_BASES = {
+  '1.1.15': 22_787,
+  '1.1.16': 25_300,
+};
+
 const RELEASE_DOWNLOAD_BASELINES = {
   '1.1.15': 1_089,
+  '1.1.16': 0,
 };
+
+function getDownloadBase(version) {
+  if (Number.isFinite(VERSION_DOWNLOAD_BASES[version])) {
+    return Number(VERSION_DOWNLOAD_BASES[version]);
+  }
+
+  const knownBases = Object.values(VERSION_DOWNLOAD_BASES)
+    .map(Number)
+    .filter(Number.isFinite);
+
+  return knownBases.length ? Math.max(...knownBases) : 0;
+}
 
 function formatBytes(bytes) {
   const value = Number(bytes || 0);
@@ -116,8 +134,8 @@ async function fetchGitHubReleaseAsset(version) {
   let authMode = token ? 'token' : 'public';
   let response = await requestGitHubRelease(token);
 
-  // O repositório é público. Se um token expirar ou perder permissão, não devemos
-  // congelar o contador em 22.787: repetimos a leitura sem autenticação.
+  // O repositório é público. Se um token expirar ou perder permissão, repetimos
+  // a leitura sem autenticação para não congelar o contador acumulado.
   if (!response.ok && token && (response.status === 401 || response.status === 403)) {
     console.warn(`[apk-metadata] Token rejeitado (${response.status}); tentando leitura pública da Release.`);
     response = await requestGitHubRelease('');
@@ -151,13 +169,15 @@ async function fetchGitHubReleaseAsset(version) {
 }
 
 function calculatePersistedTotal(version, releaseDownloadCount) {
+  const versionBase = getDownloadBase(version);
+
   if (!Number.isFinite(releaseDownloadCount) || releaseDownloadCount < 0) {
-    return HISTORICAL_DOWNLOAD_BASE;
+    return versionBase;
   }
 
   const releaseBaseline = Number(RELEASE_DOWNLOAD_BASELINES[version] || 0);
   const newDownloads = Math.max(0, releaseDownloadCount - releaseBaseline);
-  return HISTORICAL_DOWNLOAD_BASE + newDownloads;
+  return versionBase + newDownloads;
 }
 
 export default async function handler(req, res) {
@@ -179,6 +199,7 @@ export default async function handler(req, res) {
     const apkUrl = releaseAsset?.browserDownloadUrl || latest.apkUrl;
     const apkSizeBytes = releaseAsset?.size ?? null;
     const publishedAt = latest.publishedAt || releaseAsset?.publishedAt || null;
+    const downloadBase = getDownloadBase(version);
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
 
@@ -196,11 +217,11 @@ export default async function handler(req, res) {
       apkSizeBytes,
       apkSizeFormatted: formatBytes(apkSizeBytes),
       source: 'server-api',
-      counterSource: releaseAsset ? 'github-release-delta' : 'historical-fallback',
+      counterSource: releaseAsset ? 'github-release-delta' : 'version-base-fallback',
       githubStatsAuth: releaseAsset?.authMode ?? null,
       releaseDownloadCount: releaseAsset?.downloadCount ?? null,
       releaseDownloadBaseline: Number(RELEASE_DOWNLOAD_BASELINES[version] || 0),
-      historicalDownloadBase: HISTORICAL_DOWNLOAD_BASE,
+      historicalDownloadBase: downloadBase,
       latest,
     });
   } catch (error) {
