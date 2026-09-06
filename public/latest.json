@@ -1,13 +1,16 @@
 {
   "appName": "XTOYBOX",
-  "latestVersionName": "1.1.15",
-  "latestVersionCode": 115,
-  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.15.apk",
+  "latestVersionName": "1.1.16",
+  "latestVersionCode": 116,
+  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.16.apk",
   "pageUrl": "https://xtoybox-apk-download.vercel.app/",
   "releaseChannel": "public",
   "testRelease": false,
   "releaseNotes": [
-    "Melhorias no streaming, controles virtuais e otimização geral do aplicativo."
+    "Esta atualização inclui melhorias gerais, correções de bugs, otimizações no streaming e melhorias no sistema do aplicativo.",
+    "Também foi adicionada uma nova interface e um modo de teclado e mouse. Essa função de teclado e mouse ainda está em fase de testes e pode não funcionar em todos os dispositivos ou situações, então quem quiser pode testar e verificar a compatibilidade.",
+    "O início da sessão de streaming também recebeu melhorias e agora pode exibir informações de fila quando esse dado estiver disponível.",
+    "Qualquer dúvida ou problema com a nova versão, entre em contato comigo."
   ],
-  "publishedAt": "2026-08-08"
+  "publishedAt": "2026-09-06"
 }

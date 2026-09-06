@@ -7,20 +7,40 @@
     {
       "source": "/xtoytouch/XtoyTouch.user.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=300" },
-        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "inline; filename=\"XtoyTouch.user.js\"" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=300"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"XtoyTouch.user.js\""
+        }
       ]
     },
     {
       "source": "/xtoytouch/XtoyTouch.meta.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=300" },
-        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=300"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        }
       ]
     }
   ],
   "redirects": [
+    {
+      "source": "/downloads/XTOYBOX-v1.1.16.apk",
+      "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.16.apk",
+      "permanent": false
+    },
     {
       "source": "/downloads/XTOYBOX-v1.1.15.apk",
       "destination": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.15.apk",
