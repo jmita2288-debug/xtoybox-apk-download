@@ -1,0 +1,36 @@
+name: Notify Discord update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - public/latest.json
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Notify XTOYBOX bot
+        shell: bash
+        env:
+          BOT_URL: https://xtoybox-discord-bot.vercel.app/api/cron-xtoybox
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          OIDC_RESPONSE="$(curl --fail --silent --show-error \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=xtoybox-discord-bot-update")"
+
+          OIDC_TOKEN="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["value"])' <<<"${OIDC_RESPONSE}")"
+
+          curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${OIDC_TOKEN}" \
+            "${BOT_URL}?source=github-release&commit=${COMMIT_SHA}"
