@@ -7,10 +7,12 @@
   "releaseChannel": "public",
   "testRelease": false,
   "releaseNotes": [
-    "Esta atualização inclui melhorias gerais, correções de bugs, otimizações no streaming e melhorias no sistema do aplicativo.",
-    "Também foi adicionada uma nova interface e um modo de teclado e mouse. Essa função de teclado e mouse ainda está em fase de testes e pode não funcionar em todos os dispositivos ou situações, então quem quiser pode testar e verificar a compatibilidade.",
-    "O início da sessão de streaming também recebeu melhorias e agora pode exibir informações de fila quando esse dado estiver disponível.",
-    "Qualquer dúvida ou problema com a nova versão, entre em contato comigo."
+    "Esta atualização traz novas correções de estabilidade e desempenho para deixar o aplicativo mais rápido e consistente durante o uso.",
+    "A Biblioteca recebeu melhorias no carregamento e agora consegue disponibilizar o catálogo corretamente desde a primeira abertura, mantendo a virtualização para preservar a fluidez. A pesquisa também foi otimizada para reduzir travamentos enquanto o usuário digita e o trabalho pesado de cache passou a acontecer fora das interações principais da interface.",
+    "O sistema de fila do xCloud foi ajustado para evitar aumentos artificiais no tempo estimado, impedir que a estimativa desapareça durante mudanças temporárias de estado e tornar a consulta de tempo de espera independente da conexão principal do streaming.",
+    "A área de Conquistas recebeu melhorias no carregamento das capas dos jogos, tratamento para imagens indisponíveis e atualização visual para combinar melhor com a nova interface do XTOYBOX. A tela principal, os detalhes e os cards internos agora seguem o mesmo padrão de cores, tipografia e ícones.",
+    "O modo de teclado e mouse continua disponível em fase de testes. A compatibilidade pode variar conforme o aparelho, o adaptador utilizado e o suporte oferecido pelo próprio jogo e pelo xCloud.",
+    "Também foram mantidas as melhorias de streaming, controles virtuais, resposta ao toque e estabilidade geral presentes na versão 1.1.16."
   ],
-  "publishedAt": "2026-09-06"
+  "publishedAt": "2026-09-07"
 }

@@ -6,7 +6,7 @@ const REPO_OWNER = 'jmita2288-debug';
 const REPO_NAME = 'xtoybox-apk-download';
 const BRANCH = 'main';
 const RELEASE_TAG = 'xtoybox-latest';
-const FALLBACK_VERSION = '1.1.15';
+const FALLBACK_VERSION = '1.1.16';
 
 function buildReleaseApkUrl(version) {
   return `https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/${RELEASE_TAG}/XTOYBOX-v${version}.apk`;

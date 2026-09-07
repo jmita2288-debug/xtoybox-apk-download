@@ -33,22 +33,27 @@ export type ApkMetadata = {
 
 const GITHUB_RELEASE_REPO = "jmita2288-debug/xtoybox-apk-download";
 const GITHUB_RELEASE_TAG = "xtoybox-latest";
-const HISTORICAL_DOWNLOAD_BASE = 22_787;
+const HISTORICAL_DOWNLOAD_BASE = 25_852;
 const RELEASE_DOWNLOAD_BASELINES: Record<string, number> = {
-  "1.1.15": 1_089,
+  "1.1.16": 0,
 };
 
 export const fallbackLatestMetadata: LatestMetadata = {
   appName: "XTOYBOX",
-  latestVersionName: "1.1.15",
-  latestVersionCode: 115,
+  latestVersionName: "1.1.16",
+  latestVersionCode: 116,
   apkUrl:
-    "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.15.apk",
+    "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.16.apk",
   pageUrl: "https://xtoybox.cloud/",
   releaseNotes: [
-    "Melhorias no streaming, controles virtuais e otimização geral do aplicativo.",
+    "Esta atualização traz novas correções de estabilidade e desempenho para deixar o aplicativo mais rápido e consistente durante o uso.",
+    "A Biblioteca recebeu melhorias no carregamento e agora consegue disponibilizar o catálogo corretamente desde a primeira abertura, mantendo a virtualização para preservar a fluidez. A pesquisa também foi otimizada para reduzir travamentos enquanto o usuário digita e o trabalho pesado de cache passou a acontecer fora das interações principais da interface.",
+    "O sistema de fila do xCloud foi ajustado para evitar aumentos artificiais no tempo estimado, impedir que a estimativa desapareça durante mudanças temporárias de estado e tornar a consulta de tempo de espera independente da conexão principal do streaming.",
+    "A área de Conquistas recebeu melhorias no carregamento das capas dos jogos, tratamento para imagens indisponíveis e atualização visual para combinar melhor com a nova interface do XTOYBOX. A tela principal, os detalhes e os cards internos agora seguem o mesmo padrão de cores, tipografia e ícones.",
+    "O modo de teclado e mouse continua disponível em fase de testes. A compatibilidade pode variar conforme o aparelho, o adaptador utilizado e o suporte oferecido pelo próprio jogo e pelo xCloud.",
+    "Também foram mantidas as melhorias de streaming, controles virtuais, resposta ao toque e estabilidade geral presentes na versão 1.1.16.",
   ],
-  publishedAt: "2026-08-08",
+  publishedAt: "2026-09-07",
 };
 
 export function formatBytes(bytes: number | null) {

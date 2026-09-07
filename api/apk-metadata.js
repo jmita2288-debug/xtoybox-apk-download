@@ -12,7 +12,7 @@ const RELEASE_TAG = 'xtoybox-latest';
 // para que o total público do projeto não regrida ao publicar um APK novo.
 const VERSION_DOWNLOAD_BASES = {
   '1.1.15': 22_787,
-  '1.1.16': 25_300,
+  '1.1.16': 25_852,
 };
 
 const RELEASE_DOWNLOAD_BASELINES = {
