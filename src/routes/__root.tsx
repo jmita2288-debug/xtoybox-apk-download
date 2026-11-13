@@ -74,7 +74,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "XTOYBOX — App Android para jogar na nuvem" },
-      { name: "description", content: "XTOYBOX é um projeto independente baseado no XStreaming, com interface em Português Brasil para Android e TV Box." },
+      { name: "description", content: "XTOYBOX é um projeto independente, com interface em Português Brasil para Android e TV Box." },
       { name: "theme-color", content: "#8af000" },
       { property: "og:title", content: "XTOYBOX" },
       { property: "og:description", content: "App Android para jogar na nuvem em Português Brasil." },

@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Copy,
-  Download,
-  ExternalLink,
-  FileCheck2,
-  Mail,
-  ShieldCheck,
-} from "lucide-react";
-import logo from "@/assets/logo-xtoybox.png";
+import { ChevronRight, Copy, ExternalLink, FileCheck2, Mail, ShieldCheck } from "lucide-react";
+import { usePageMetadata } from "@/lib/page-metadata";
+import { DownloadButton } from "@/components/xt/DownloadButton";
+import { PageHead, SUPPORT_EMAIL, SiteShell, type XtPage } from "@/components/xt/SiteChrome";
 
-const SUPPORT_EMAIL = "xtoybox@proton.me";
 const RELEASE_PAGE = "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/tag/xtoybox-latest";
 const FALLBACK_SHA256 = "1e75f0dcab47773c3a146717ebdade7e49b6859a769aabb9bdafed15c04edf5e";
 
@@ -23,101 +15,89 @@ type SecurityMetadata = {
   publishedAt?: string | null;
 };
 
-function upsertMeta(attribute: "name" | "property", key: string, content: string) {
-  let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
-  if (!element) {
-    element = document.createElement("meta");
-    element.setAttribute(attribute, key);
-    document.head.appendChild(element);
-  }
-  element.content = content;
-}
-
-function usePageMetadata(title: string, description: string, path: string) {
-  useEffect(() => {
-    document.title = title;
-    upsertMeta("name", "description", description);
-    upsertMeta("property", "og:title", title);
-    upsertMeta("property", "og:description", description);
-    upsertMeta("property", "og:url", `https://xtoybox.cloud${path}`);
-
-    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
-    }
-    canonical.href = `https://xtoybox.cloud${path}`;
-  }, [description, path, title]);
-}
-
-function LegalHeader() {
-  return (
-    <header className="legal-header">
-      <div className="legal-container legal-header__inner">
-        <a className="legal-brand" href="/" aria-label="Página inicial do XTOYBOX">
-          <img src={logo} alt="" />
-          <span>
-            <strong>XTOYBOX</strong>
-            <small>Informações oficiais</small>
-          </span>
-        </a>
-        <nav className="legal-header__nav" aria-label="Informações do projeto">
-          <a href="/seguranca-download">Segurança</a>
-          <a href="/privacidade">Privacidade</a>
-          <a href="/termos">Termos</a>
-        </nav>
-        <a className="legal-back" href="/">
-          <ArrowLeft /> Voltar ao site
-        </a>
-      </div>
-    </header>
-  );
-}
-
-function LegalFooter() {
-  return (
-    <footer className="legal-footer">
-      <div className="legal-container legal-footer__inner">
-        <div>
-          <strong>XTOYBOX</strong>
-          <p>Projeto independente, sem vínculo ou afiliação com Microsoft ou Xbox.</p>
-        </div>
-        <div className="legal-footer__links">
-          <a href="/privacidade">Privacidade</a>
-          <a href="/termos">Termos</a>
-          <a href="/seguranca-download">Segurança do download</a>
-          <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 function LegalShell({
-  eyebrow,
+  page,
   title,
   intro,
   children,
 }: {
-  eyebrow: string;
+  page: XtPage;
   title: string;
   intro: string;
   children: React.ReactNode;
 }) {
+  const [tocItems, setTocItems] = useState<Array<{ id: string; title: string }>>([]);
+
+  // O sumário é montado a partir das seções renderizadas, sem duplicar nenhum texto.
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>(".xt-doc__body > .legal-card"));
+    const items = sections.map((section, index) => {
+      section.id = section.id || `secao-${index + 1}`;
+      section.setAttribute("data-reveal", "");
+      return { id: section.id, title: section.querySelector("h2")?.textContent?.trim() ?? `Seção ${index + 1}` };
+    });
+    setTocItems(items);
+
+    if (!("IntersectionObserver" in window)) return;
+    const spy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          document.querySelectorAll<HTMLElement>(".xt-toc a").forEach((link) => {
+            if (link.dataset.target === entry.target.id) link.setAttribute("aria-current", "true");
+            else link.removeAttribute("aria-current");
+          });
+        });
+      },
+      { rootMargin: "-20% 0px -70% 0px" },
+    );
+    sections.forEach((section) => spy.observe(section));
+    return () => spy.disconnect();
+  }, []);
+
+  const goTo = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    event.preventDefault();
+    const details = event.currentTarget.closest("details");
+    // Fecha o painel antes de rolar, para o destino não "fugir" quando a altura mudar.
+    details?.removeAttribute("open");
+    window.requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      });
+    });
+  };
+
+  const tocList = (
+    <ol>
+      {tocItems.map((item) => (
+        <li key={item.id}>
+          <a href={`#${item.id}`} data-target={item.id} onClick={(event) => goTo(event, item.id)}>
+            {item.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
+
   return (
-    <div className="legal-page">
-      <LegalHeader />
-      <main className="legal-container legal-main">
-        <section className="legal-hero">
-          <span>{eyebrow}</span>
-          <h1>{title}</h1>
-          <p>{intro}</p>
-        </section>
-        <div className="legal-content">{children}</div>
-      </main>
-      <LegalFooter />
-    </div>
+    <SiteShell page={page}>
+      <div className="xt-wrap xt-page">
+        <PageHead title={title} lede={intro} />
+        <div className="xt-doc">
+          <details className="xt-tocm">
+            <summary>
+              Nesta página
+              <ChevronRight className="xt-i" />
+            </summary>
+            {tocList}
+          </details>
+          <nav className="xt-toc" aria-label="Nesta página">
+            {tocList}
+          </nav>
+          <div className="xt-doc__body">{children}</div>
+        </div>
+      </div>
+    </SiteShell>
   );
 }
 
@@ -130,7 +110,7 @@ export function PrivacyPage() {
 
   return (
     <LegalShell
-      eyebrow="PRIVACIDADE"
+      page="privacidade"
       title="Política de Privacidade"
       intro="O que o aplicativo realmente acessa, o que fica no seu aparelho e como o site trata as informações que você envia."
     >
@@ -317,7 +297,7 @@ export function TermsPage() {
 
   return (
     <LegalShell
-      eyebrow="TERMOS"
+      page="termos"
       title="Termos de Uso"
       intro="Regras simples para usar o aplicativo e o site XTOYBOX com segurança e sem promessas que dependem de serviços externos."
     >
@@ -430,7 +410,7 @@ export function TermsPage() {
       <section className="legal-card">
         <h2>9. Serviços e conteúdos de terceiros</h2>
         <p>
-          Microsoft, Xbox, GitHub, Discord, Instagram e outros serviços acessados por links ou funções próprias mantêm seus próprios
+          Microsoft, Xbox, GitHub, Discord e outros serviços acessados por links ou funções próprias mantêm seus próprios
           termos e políticas. O XTOYBOX não controla contas, assinaturas, conteúdos, disponibilidade ou decisões tomadas por essas
           plataformas. Ao utilizar um serviço externo, as regras desse serviço também se aplicam.
         </p>
@@ -511,87 +491,92 @@ export function DownloadSecurityPage() {
   };
 
   return (
-    <LegalShell
-      eyebrow="DOWNLOAD OFICIAL"
-      title="Segurança do download"
-      intro="Informações para você confirmar a origem e a integridade do APK antes de instalar."
-    >
-      <section className="legal-card legal-card--highlight legal-security-intro">
-        <ShieldCheck />
-        <div>
-          <h2>Arquivo publicado na Release oficial</h2>
-          <p>
-            O botão de download do site redireciona para o asset público da Release do projeto no GitHub. O site não reconstrói
-            nem altera o APK durante esse redirecionamento.
-          </p>
-        </div>
-      </section>
+    <SiteShell page="seguranca-download">
+      <div className="xt-wrap xt-page">
+        <PageHead
+          title="Segurança do download"
+          lede="Informações para você confirmar a origem e a integridade do APK antes de instalar."
+        />
+        <div className="xt-sgrid xt-doc__body">
+          <section className="legal-card legal-card--highlight legal-security-intro" style={{ gridArea: "hl" }} data-reveal>
+            <h2>Arquivo publicado na Release oficial</h2>
+            <p>
+              O botão de download do site redireciona para o asset público da Release do projeto no GitHub. O site não
+              reconstrói nem altera o APK durante esse redirecionamento.
+            </p>
+          </section>
 
-      <section className="legal-card">
-        <div className="security-status">
-          <span className="security-status__icon"><CheckCircle2 /></span>
-          <div>
-            <small>VERSÃO PÚBLICA ATUAL</small>
-            <h2>{fileName}</h2>
+          <div className="xt-sbox xt-card" data-reveal>
+            <p className="xt-kick">Versão pública atual</p>
+            <h2 className="xt-fn" translate="no">
+              {fileName}
+            </h2>
+            <dl className="xt-meta">
+              <div>
+                <dt>Versão</dt>
+                <dd>{version}</dd>
+              </div>
+              <div>
+                <dt>Tamanho</dt>
+                <dd>{metadata?.apkSizeFormatted || "107,2 MB"}</dd>
+              </div>
+              <div>
+                <dt>Origem</dt>
+                <dd>GitHub Release</dd>
+              </div>
+            </dl>
+
+            <div className="xt-hash">
+              <div>
+                <small>SHA-256</small>
+                <code>{sha256}</code>
+              </div>
+              <button
+                type="button"
+                className="xt-btn xt-btn--secondary"
+                data-state={copied ? "done" : undefined}
+                onClick={copyHash}
+              >
+                <span className="xt-btn__icon" aria-hidden="true">
+                  <Copy className="xt-i-idle" />
+                  <ShieldCheck className="xt-i-done" />
+                </span>
+                <span>{copied ? "Copiado" : "Copiar"}</span>
+              </button>
+            </div>
+
+            <p className="xt-help">
+              O SHA-256 funciona como uma impressão digital do arquivo. Se o valor calculado no APK que você recebeu for
+              diferente do valor acima, não instale esse arquivo e faça o download novamente pela fonte oficial.
+            </p>
+
+            <div className="xt-btnrow">
+              <DownloadButton href="/api/download">Baixar APK oficial</DownloadButton>
+              <a className="xt-btn xt-btn--secondary" href={RELEASE_PAGE} target="_blank" rel="noreferrer">
+                <span>Ver Release no GitHub</span>
+                <ExternalLink className="xt-i" />
+              </a>
+            </div>
           </div>
+
+          <section className="legal-card" style={{ gridArea: "ver" }} data-reveal>
+            <h2>Como verificar</h2>
+            <p>
+              Usuários que desejarem uma conferência técnica podem calcular o SHA-256 do APK com um gerenciador de
+              arquivos ou uma ferramenta de checksum compatível com o aparelho e comparar o resultado, caractere por
+              caractere, com o valor publicado acima.
+            </p>
+          </section>
+
+          <section className="legal-card" style={{ gridArea: "fnd" }} data-reveal>
+            <h2>Encontrou algo diferente?</h2>
+            <p>Não instale o arquivo e entre em contato com o projeto para que possamos verificar.</p>
+            <a className="legal-contact" href={`mailto:${SUPPORT_EMAIL}`}>
+              <Mail /> {SUPPORT_EMAIL}
+            </a>
+          </section>
         </div>
-
-        <div className="security-grid">
-          <div>
-            <small>Versão</small>
-            <strong>{version}</strong>
-          </div>
-          <div>
-            <small>Tamanho</small>
-            <strong>{metadata?.apkSizeFormatted || "107,2 MB"}</strong>
-          </div>
-          <div>
-            <small>Origem</small>
-            <strong>GitHub Release</strong>
-          </div>
-        </div>
-
-        <div className="hash-box">
-          <div>
-            <small>SHA-256</small>
-            <code>{sha256}</code>
-          </div>
-          <button type="button" onClick={copyHash}>
-            <Copy /> {copied ? "Copiado" : "Copiar"}
-          </button>
-        </div>
-
-        <p className="hash-help">
-          O SHA-256 funciona como uma impressão digital do arquivo. Se o valor calculado no APK que você recebeu for diferente do
-          valor acima, não instale esse arquivo e faça o download novamente pela fonte oficial.
-        </p>
-
-        <div className="legal-actions">
-          <a className="legal-primary-button" href="/api/download">
-            <Download /> Baixar APK oficial
-          </a>
-          <a className="legal-secondary-button" href={RELEASE_PAGE} target="_blank" rel="noreferrer">
-            Ver Release no GitHub <ExternalLink />
-          </a>
-        </div>
-      </section>
-
-      <section className="legal-card">
-        <h2>Como verificar</h2>
-        <p>
-          Usuários que desejarem uma conferência técnica podem calcular o SHA-256 do APK com um gerenciador de arquivos ou uma
-          ferramenta de checksum compatível com o aparelho e comparar o resultado, caractere por caractere, com o valor publicado
-          acima.
-        </p>
-      </section>
-
-      <section className="legal-card">
-        <h2>Encontrou algo diferente?</h2>
-        <p>Não instale o arquivo e entre em contato com o projeto para que possamos verificar.</p>
-        <a className="legal-contact" href={`mailto:${SUPPORT_EMAIL}`}>
-          <Mail /> {SUPPORT_EMAIL}
-        </a>
-      </section>
-    </LegalShell>
+      </div>
+    </SiteShell>
   );
 }

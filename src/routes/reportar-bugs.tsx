@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, Bug, CheckCircle2, Paperclip, Send } from "lucide-react";
-import logo from "@/assets/logo-xtoybox.png";
+import { CheckCircle2, Paperclip, Send } from "lucide-react";
+import { PageHead, SiteShell } from "@/components/xt/SiteChrome";
+import { SpeedLinesIcon } from "@/components/xt/icons";
 
 export const Route = createFileRoute("/reportar-bugs")({
   head: () => ({
@@ -85,71 +86,45 @@ export function ReportarBugsPage() {
   };
 
   return (
-    <main className="support-page">
-      <header className="site-header">
-        <div className="site-container site-header__inner">
-          <a href="/" className="brand-lockup" aria-label="Voltar para a página inicial">
-            <span className="brand-lockup__mark">
-              <img src={logo} alt="" />
-            </span>
-            <span className="brand-lockup__copy">
-              <strong>XTOYBOX</strong>
-              <small>Central de suporte</small>
-            </span>
-          </a>
-          <a href="/" className="support-back">
-            <ArrowLeft /> Voltar ao site
-          </a>
-        </div>
-      </header>
-
-      <section className="site-container support-layout">
-        <aside className="support-intro">
-          <span className="support-label">SUPORTE / 01</span>
-          <div className="support-intro__icon">
-            <Bug />
-          </div>
-          <h1>
-            Ajude a gente
-            <br />a melhorar.
-          </h1>
-          <p>
-            Um bom relatório encurta o caminho entre encontrar um problema e entregar a correção.
-          </p>
-          <ol className="support-guide">
-            <li>
-              <span>01</span>
-              <div>
-                <strong>Descreva o momento</strong>
-                <small>Conte em qual tela o problema apareceu.</small>
-              </div>
-            </li>
-            <li>
-              <span>02</span>
-              <div>
-                <strong>Explique como repetir</strong>
-                <small>Liste os passos que levaram ao erro.</small>
-              </div>
-            </li>
-            <li>
-              <span>03</span>
-              <div>
-                <strong>Envie uma referência</strong>
-                <small>Imagem ou vídeo ajudam quando disponíveis.</small>
-              </div>
-            </li>
-          </ol>
-        </aside>
-
-        <form onSubmit={handleSubmit} className="support-form">
-          <div className="support-form__heading">
-            <span>RELATÓRIO DE BUG</span>
-            <h2>Conte o que aconteceu.</h2>
-            <p>Preencha os campos com o máximo de detalhes possível.</p>
+    <SiteShell page="reportar-bugs">
+      <div className="xt-wrap xt-page">
+        <div className="xt-rep">
+          <div>
+            <PageHead
+              title="Ajude a gente a melhorar."
+              lede="Um bom relatório encurta o caminho entre encontrar um problema e entregar a correção."
+            />
+            <ol className="xt-steps">
+              <li>
+                <span>
+                  Descreva o momento
+                  <small>Conte em qual tela o problema apareceu.</small>
+                </span>
+              </li>
+              <li>
+                <span>
+                  Explique como repetir
+                  <small>Liste os passos que levaram ao erro.</small>
+                </span>
+              </li>
+              <li>
+                <span>
+                  Envie uma referência
+                  <small>Imagem ou vídeo ajudam quando disponíveis.</small>
+                </span>
+              </li>
+            </ol>
           </div>
 
-          <div className="support-form__grid">
-            <div className="form-field">
+          <form onSubmit={handleSubmit} className="xt-form xt-card">
+            <h2 className="xt-h3" style={{ fontSize: 24 }}>
+              Conte o que aconteceu.
+            </h2>
+            <p className="xt-fine" style={{ margin: "6px 0 22px" }}>
+              Preencha os campos com o máximo de detalhes possível.
+            </p>
+
+            <div className="xt-field">
               <label htmlFor="name">Nome ou apelido</label>
               <input
                 id="name"
@@ -157,41 +132,47 @@ export function ReportarBugsPage() {
                 value={form.name}
                 onChange={(event) => update("name", event.target.value)}
                 placeholder="Como podemos te chamar"
-                className="field"
+                className="xt-input"
+                autoComplete="nickname"
                 required
               />
             </div>
-            <div className="form-field">
-              <label htmlFor="appVersion">Versão do app</label>
-              <input
-                id="appVersion"
-                type="text"
-                value={form.appVersion}
-                onChange={(event) => update("appVersion", event.target.value)}
-                placeholder="Ex.: 1.1.14"
-                className="field"
-                required
-              />
+            <div className="xt-grid2">
+              <div className="xt-field">
+                <label htmlFor="appVersion">Versão do app</label>
+                <input
+                  id="appVersion"
+                  type="text"
+                  value={form.appVersion}
+                  onChange={(event) => update("appVersion", event.target.value)}
+                  placeholder="Ex.: 1.1.14"
+                  className="xt-input"
+                  autoComplete="off"
+                  spellCheck={false}
+                  required
+                />
+              </div>
+              <div className="xt-field">
+                <label htmlFor="deviceModel">Modelo do aparelho</label>
+                <input
+                  id="deviceModel"
+                  type="text"
+                  value={form.deviceModel}
+                  onChange={(event) => update("deviceModel", event.target.value)}
+                  placeholder="Ex.: Samsung, Xiaomi, TV Box"
+                  className="xt-input"
+                  autoComplete="off"
+                  required
+                />
+              </div>
             </div>
-            <div className="form-field">
-              <label htmlFor="deviceModel">Modelo do aparelho</label>
-              <input
-                id="deviceModel"
-                type="text"
-                value={form.deviceModel}
-                onChange={(event) => update("deviceModel", event.target.value)}
-                placeholder="Ex.: Samsung, Xiaomi, TV Box"
-                className="field"
-                required
-              />
-            </div>
-            <div className="form-field">
+            <div className="xt-field">
               <label htmlFor="deviceType">Tipo de aparelho</label>
               <select
                 id="deviceType"
                 value={form.deviceType}
                 onChange={(event) => update("deviceType", event.target.value as DeviceType)}
-                className="field"
+                className="xt-input"
               >
                 <option value="Celular">Celular</option>
                 <option value="TV Box">TV Box</option>
@@ -199,55 +180,63 @@ export function ReportarBugsPage() {
                 <option value="Outro">Outro</option>
               </select>
             </div>
-          </div>
-
-          <div className="form-field">
-            <label htmlFor="description">Descrição do bug</label>
-            <textarea
-              id="description"
-              value={form.description}
-              onChange={(event) => update("description", event.target.value)}
-              placeholder="Explique o que aconteceu, em qual tela e como reproduzir."
-              rows={7}
-              className="field resize-y"
-              required
-            />
-          </div>
-
-          <div className="form-field">
-            <label htmlFor="attachment">
-              Imagem ou vídeo <span>(opcional)</span>
-            </label>
-            <label htmlFor="attachment" className="file-field">
-              <Paperclip />
-              <span>{form.file ? form.file.name : "Selecionar um arquivo"}</span>
-              <small>Imagem ou vídeo</small>
-            </label>
-            <input
-              id="attachment"
-              type="file"
-              accept="image/*,video/*"
-              onChange={(event) => update("file", event.target.files?.[0] ?? null)}
-              className="hidden"
-            />
-          </div>
-
-          {message && (
-            <div role="status" className={`form-message form-message--${message.type}`}>
-              {message.type === "success" && <CheckCircle2 />}
-              {message.text}
+            <div className="xt-field">
+              <label htmlFor="description">Descrição do bug</label>
+              <textarea
+                id="description"
+                value={form.description}
+                onChange={(event) => update("description", event.target.value)}
+                placeholder="Explique o que aconteceu, em qual tela e como reproduzir."
+                rows={7}
+                className="xt-input"
+                required
+              />
             </div>
-          )}
+            <div className="xt-field">
+              <span className="xt-label">
+                Imagem ou vídeo <span>(opcional)</span>
+              </span>
+              <input
+                id="attachment"
+                type="file"
+                accept="image/*,video/*"
+                onChange={(event) => update("file", event.target.files?.[0] ?? null)}
+                className="xt-file-input"
+              />
+              <label htmlFor="attachment" className="xt-file">
+                <Paperclip />
+                <span>{form.file ? form.file.name : "Selecionar um arquivo"}</span>
+                <small>Imagem ou vídeo</small>
+              </label>
+            </div>
 
-          <div className="support-form__footer">
-            <p>As informações serão usadas apenas para investigar o problema.</p>
-            <button type="submit" disabled={submitting} className="support-submit">
-              <Send />
-              {submitting ? "Enviando..." : "Enviar relatório"}
-            </button>
-          </div>
-        </form>
-      </section>
-    </main>
+            {message && (
+              <div role="status" className={`xt-msg xt-msg--${message.type}`}>
+                {message.type === "success" && <CheckCircle2 />}
+                {message.text}
+              </div>
+            )}
+
+            <div className="xt-form__foot">
+              <p>As informações serão usadas apenas para investigar o problema.</p>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="xt-btn xt-btn--primary"
+                data-state={submitting ? "loading" : undefined}
+                aria-busy={submitting || undefined}
+              >
+                <span className="xt-btn__icon" aria-hidden="true">
+                  <Send className="xt-i-idle" />
+                  <SpeedLinesIcon className="xt-i-load" />
+                </span>
+                <span>{submitting ? "Enviando..." : "Enviar relatório"}</span>
+                <i className="xt-btn__bar" aria-hidden="true" />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </SiteShell>
   );
 }

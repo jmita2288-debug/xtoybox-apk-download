@@ -3,19 +3,12 @@ import { createRoot } from "react-dom/client";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { DownloadAdGate } from "./components/DownloadAdGate";
 import { DownloadCounter } from "./components/DownloadCounter";
-import { SocialContactEnhancer } from "./components/SocialContactEnhancer";
-import { TrustEnhancer } from "./components/TrustEnhancer";
 import { RefinedIndex } from "./routes/index-refined";
+import { DownloadsPage } from "./routes/downloads-page";
 import { DownloadSecurityPage, PrivacyPage, TermsPage } from "./routes/legal-pages";
 import { ReportarBugsPage } from "./routes/reportar-bugs";
 import { XtoyTouchPage } from "./routes/xtoytouch";
-import "./styles.css";
-import "./pixel-home.css";
-import "./download-counter.css";
-import "./download-ad-gate.css";
-import "./social-contact.css";
-import "./trust-legal.css";
-import "./xtoytouch.css";
+import "./xt-ui.css";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");
@@ -27,15 +20,19 @@ function App() {
   if (path === "/termos") return <TermsPage />;
   if (path === "/seguranca-download") return <DownloadSecurityPage />;
   if (path === "/xtoytouch") return <XtoyTouchPage />;
-  return <><RefinedIndex /><DownloadCounter /></>;
+  if (path === "/downloads") return <DownloadsPage />;
+  return (
+    <>
+      <RefinedIndex />
+      <DownloadCounter />
+    </>
+  );
 }
 
 createRoot(rootElement).render(
   <React.StrictMode>
     <App />
     <DownloadAdGate />
-    <SocialContactEnhancer />
-    <TrustEnhancer />
     <SpeedInsights />
   </React.StrictMode>,
 );

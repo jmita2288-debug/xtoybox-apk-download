@@ -394,9 +394,6 @@ function IndexPage() {
               )}
               {infoOpen === "credits" && (
                 <div className="space-y-3">
-                  <p>Base open source: XStreaming.</p>
-                  <p>Copyright (c) 2024 Geocld.</p>
-                  <p>Licenciado sob a licença MIT.</p>
                   <p>Modificações e otimizações por Alexandreios (XTOYBOX).</p>
                 </div>
               )}
