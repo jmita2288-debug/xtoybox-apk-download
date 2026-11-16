@@ -217,7 +217,6 @@ O XTOYBOX é mantido como um projeto independente, criado com foco em aprendizad
 Problemas, dúvidas e sugestões podem ser enviados pelos canais do projeto:
 
 - [Comunidade no Discord](https://discord.gg/abh27Dwktt)
-- [Página para reportar bugs](https://xtoybox.cloud/reportar-bugs)
 - [Releases do APK](https://github.com/jmita2288-debug/xtoybox-apk-download/releases)
 
 Relatos com modelo do aparelho, versão do Android, versão do XTOYBOX e etapas para reproduzir o problema ajudam bastante na investigação.

@@ -5,6 +5,9 @@ export type XtTheme = "light" | "dark";
 // Mantém as chaves já usadas pelo site para não perder a escolha dos visitantes.
 const THEME_KEYS = ["xtoybox-home-theme", "xtoybox-theme"] as const;
 
+/** Cor da barra do navegador em cada tema (igual ao fundo da página). */
+export const THEME_COLOR: Record<XtTheme, string> = { dark: "#09090a", light: "#f6f6f4" };
+
 function readTheme(): XtTheme {
   try {
     for (const key of THEME_KEYS) {
@@ -12,7 +15,7 @@ function readTheme(): XtTheme {
       if (saved === "light" || saved === "dark") return saved;
     }
   } catch {
-    // Storage indisponível: usa o tema padrão.
+    // Sem acesso ao armazenamento: segue o padrão escuro.
   }
   return "dark";
 }
@@ -22,13 +25,11 @@ export function useXtTheme() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", theme === "light" ? "#f4f7f0" : "#070b09");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[theme]);
     try {
       for (const key of THEME_KEYS) window.localStorage.setItem(key, theme);
     } catch {
-      // A escolha continua valendo na sessão atual.
+      // Sem acesso ao armazenamento: o tema vale apenas nesta visita.
     }
   }, [theme]);
 

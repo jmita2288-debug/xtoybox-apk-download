@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Gamepad2, Info, Move, Play, Puzzle, Scale, SlidersHorizontal, Tag, Download } from "lucide-react";
 import hudImage from "../assets/screens/xtoytouch-hud.webp";
 import editorImage from "../assets/screens/xtoytouch-editor.webp";
 import panelImage from "../assets/screens/xtoytouch-painel.webp";
@@ -69,15 +69,19 @@ export function XtoyTouchPage() {
         <div className="xtt-hero">
           <div>
             <PageHead
+              Icon={Gamepad2}
               title="XtoyTouch"
               lede="Controles virtuais para Xbox Cloud Gaming no navegador, com HUDs por jogo, editor visual e um painel de ajustes pensado para uso durante a sessão."
             />
             <div className="xtt-version">
               <span>
-                <i />
+                <Tag className="xt-i" aria-hidden="true" />
                 Versão <b>{version}</b>
               </span>
-              <span>Licença MIT</span>
+              <span>
+                <Scale className="xt-i" aria-hidden="true" />
+                Licença MIT
+              </span>
             </div>
             <div className="xt-cta">
               <DownloadButton href={INSTALL_URL}>Instalar XtoyTouch</DownloadButton>
@@ -102,14 +106,23 @@ export function XtoyTouchPage() {
           <p className="xtt-lede2">O essencial do XtoyTouch, sem ocupar a tela com informações desnecessárias.</p>
           <div className="xtt-feat">
             <div data-reveal>
+              <span className="xtt-ico" aria-hidden="true">
+                <Gamepad2 className="xt-i" />
+              </span>
               <h3 className="xt-h3">HUD virtual</h3>
               <p>Controles de toque sobre o streaming com perfis de HUD para diferentes jogos.</p>
             </div>
             <div data-reveal>
+              <span className="xtt-ico" aria-hidden="true">
+                <Move className="xt-i" />
+              </span>
               <h3 className="xt-h3">Editor de HUD</h3>
               <p>Mova, redimensione e organize os controles diretamente na área de jogo.</p>
             </div>
             <div data-reveal>
+              <span className="xtt-ico" aria-hidden="true">
+                <SlidersHorizontal className="xt-i" />
+              </span>
               <h3 className="xt-h3">Painel de ajustes</h3>
               <p>Configurações do script reunidas em uma interface própria e acessível durante o uso.</p>
             </div>
@@ -146,18 +159,21 @@ export function XtoyTouchPage() {
               <h2 className="xt-h2">Três passos.</h2>
               <ol className="xt-steps">
                 <li>
+                  <Puzzle className="xt-i xt-steps__ico" aria-hidden="true" />
                   <span>
                     Instale um gerenciador
                     <small>Use um gerenciador compatível, como Tampermonkey, Violentmonkey ou Userscripts.</small>
                   </span>
                 </li>
                 <li>
+                  <Download className="xt-i xt-steps__ico" aria-hidden="true" />
                   <span>
                     Abra o instalador
                     <small>Toque em “Instalar XtoyTouch” e confirme a instalação no seu gerenciador.</small>
                   </span>
                 </li>
                 <li>
+                  <Play className="xt-i xt-steps__ico" aria-hidden="true" />
                   <span>
                     Abra o Xbox Cloud Gaming
                     <small>Com o script ativado, acesse o xCloud pelo navegador compatível.</small>
@@ -188,9 +204,12 @@ export function XtoyTouchPage() {
               </DownloadButton>
             </aside>
           </div>
-          <p className="xt-note" style={{ marginTop: 36 }} data-reveal>
-            <b style={{ color: "var(--xt-text)" }}>Projeto independente.</b> O XtoyTouch é um userscript independente
-            para uso no navegador e não é afiliado, endossado ou patrocinado pela Microsoft ou Xbox.
+          <p className="xt-note xtt-note" data-reveal>
+            <Info className="xt-i" aria-hidden="true" />
+            <span>
+              <b>Projeto independente.</b> O XtoyTouch é um userscript independente para uso no navegador e não é
+              afiliado, endossado ou patrocinado pela Microsoft ou Xbox.
+            </span>
           </p>
         </section>
       </div>

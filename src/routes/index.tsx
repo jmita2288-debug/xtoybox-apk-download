@@ -24,7 +24,6 @@ import Autoplay from "embla-carousel-autoplay";
 import {
   ArrowDown,
   ArrowRight,
-  Bug,
   Calendar,
   ChevronDown,
   Cloud,
@@ -317,17 +316,6 @@ function IndexPage() {
                     <strong>Créditos</strong>
                     <small>Origem e desenvolvimento</small>
                   </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild className="site-menu-item">
-                  <a href="/reportar-bugs">
-                    <span className="site-menu-item__icon">
-                      <Bug className="h-4 w-4" />
-                    </span>
-                    <span>
-                      <strong>Reportar bugs</strong>
-                      <small>Envie os detalhes</small>
-                    </span>
-                  </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setInfoOpen("terms")} className="site-menu-item">
                   <span className="site-menu-item__icon">
@@ -737,7 +725,6 @@ function IndexPage() {
             <button type="button" onClick={() => setInfoOpen("credits")}>
               Créditos
             </button>
-            <a href="/reportar-bugs">Reportar bugs</a>
             <button type="button" onClick={() => setInfoOpen("terms")}>
               Termos
             </button>

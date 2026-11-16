@@ -1,21 +1,18 @@
-import { useEffect, useRef, useState, type AnchorHTMLAttributes, type ComponentType, type MouseEvent, type ReactNode } from "react";
-import { Check, Download } from "lucide-react";
-import { SpeedLinesIcon } from "./icons";
+import { useEffect, useRef, useState, type AnchorHTMLAttributes, type ComponentType, type MouseEvent } from "react";
+import { Check, Download, LoaderCircle } from "lucide-react";
 
-type DownloadButtonProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "className" | "children"> & {
-  href: string;
-  variant?: "primary" | "secondary";
+type Variant = "primary" | "secondary" | "store";
+
+type DownloadButtonProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> & {
+  variant?: Variant;
   full?: boolean;
-  className?: string;
   Icon?: ComponentType<{ className?: string }>;
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
-type ButtonState = "idle" | "loading" | "done";
-
 /**
- * Link de download com feedback visual. Continua sendo um <a href="...">: o DownloadAdGate e o
- * DownloadCounter escutam cliques em a[href="/api/download"], e a navegação nunca é bloqueada aqui.
+ * Link de download com retorno visual. Continua sendo um <a href>, então o contador
+ * e o gate de anúncio (que escutam `a[href="/api/download"]`) seguem funcionando.
  */
 export function DownloadButton({
   variant = "primary",
@@ -26,7 +23,7 @@ export function DownloadButton({
   children,
   ...rest
 }: DownloadButtonProps) {
-  const [state, setState] = useState<ButtonState>("idle");
+  const [state, setState] = useState<"idle" | "loading" | "done">("idle");
   const timers = useRef<number[]>([]);
 
   useEffect(() => () => timers.current.forEach((id) => window.clearTimeout(id)), []);
@@ -55,7 +52,7 @@ export function DownloadButton({
       >
         <span className="xt-btn__icon" aria-hidden="true">
           <Icon className="xt-i-idle" />
-          <SpeedLinesIcon className="xt-i-load" />
+          <LoaderCircle className="xt-i-load" />
           <Check className="xt-i-done" />
         </span>
         <span>{children}</span>

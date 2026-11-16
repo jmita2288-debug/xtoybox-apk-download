@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
-import heroImage from "@/assets/hero-xtoybox.webp";
+import heroPhone from "@/assets/hero-phone.webp";
+import heroPhoneSm from "@/assets/hero-phone-sm.webp";
 import screenBiblioteca from "@/assets/screens/biblioteca.webp";
 import screenPerfil from "@/assets/screens/perfil.webp";
 import screenConquistas from "@/assets/screens/conquistas.webp";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
-import { DownloadButton } from "@/components/xt/DownloadButton";
+import { AndroidShowcase } from "@/components/xt/AndroidShowcase";
 import { DiscordIcon } from "@/components/xt/icons";
 import { DISCORD_URL, SiteShell } from "@/components/xt/SiteChrome";
+import { StoreButtons } from "@/components/xt/StoreButtons";
 
 function createFallbackApkMetadata(): ApkMetadata {
   return {
@@ -39,10 +41,10 @@ export function formatReleaseDate(value: string | null) {
   }).format(parsed);
 }
 
-const galleryScreens = [
-  { src: screenBiblioteca, label: "Biblioteca", note: "Capas, categorias e acesso rápido.", alt: "Tela da biblioteca do XTOYBOX" },
-  { src: screenPerfil, label: "Perfil", note: "Conta, conquistas e histórico.", alt: "Tela de perfil do XTOYBOX" },
-  { src: screenConquistas, label: "Conquistas", note: "Pontuação e progresso por jogo.", alt: "Tela de conquistas do XTOYBOX" },
+export const galleryScreens = [
+  { src: screenBiblioteca, label: "Biblioteca", note: "Sua biblioteca do console.", alt: "Tela da biblioteca do XTOYBOX" },
+  { src: screenPerfil, label: "Perfil", note: "Conta e histórico.", alt: "Tela de perfil do XTOYBOX" },
+  { src: screenConquistas, label: "Conquistas", note: "Progresso por jogo.", alt: "Tela de conquistas do XTOYBOX" },
 ] as const;
 
 export function RefinedIndex() {
@@ -64,31 +66,29 @@ export function RefinedIndex() {
 
   return (
     <SiteShell page="home">
-      <section className="xt-hero" id="hero">
-        <div className="xt-wrap xt-hero__grid">
+      <section className="xt-hero" id="download">
+        <div className="xt-hero__stage" aria-hidden="true">
+          <img
+            src={heroPhone}
+            srcSet={`${heroPhoneSm} 560w, ${heroPhone} 1000w`}
+            sizes="(min-width: 900px) 46vw, 88vw"
+            width={1000}
+            height={1469}
+            alt=""
+            decoding="async"
+            fetchPriority="high"
+          />
+        </div>
+        <div className="xt-wrap xt-hero__inner">
           <div className="xt-hero__copy">
             <h1 className="xt-h1">Seu Xbox em mais telas.</h1>
             <p className="xt-lede">Remote Play do seu console e jogos compatíveis na nuvem, no Android.</p>
-            <div className="xt-cta">
-              <DownloadButton href="/api/download">Baixar v{apkMetadata.versionName}</DownloadButton>
-              <a className="xt-link" href="#como-funciona">
-                Como funciona
-              </a>
-            </div>
+            <StoreButtons />
             <p className="xt-fine">
-              Para celular e TV Box com Android.
-              {releaseDate ? ` Atualizado em ${releaseDate}.` : ""}
+              <span translate="no">v{apkMetadata.versionName}</span>
+              {releaseDate ? `, atualizado em ${releaseDate}` : ""}
+              {apkMetadata.apkSizeFormatted ? `, ${apkMetadata.apkSizeFormatted}` : ""}
             </p>
-            {/* O DownloadCounter monta o total de downloads ao vivo neste elemento. */}
-            <div className="xt-counter-mount refined-hero__visual" />
-          </div>
-          <div className="xt-device">
-            <img
-              src={heroImage}
-              width={1200}
-              height={540}
-              alt="Tela de jogo no XTOYBOX com painel de desempenho e controles virtuais"
-            />
           </div>
         </div>
       </section>
@@ -99,24 +99,33 @@ export function RefinedIndex() {
             Duas formas de jogar
           </h2>
           <div className="xt-two">
-            <article className="xt-card" data-reveal>
+            <article data-reveal>
               <h3 className="xt-h3">Remote Play</h3>
               <p>
                 Transmita o jogo do seu próprio console Xbox para o celular ou a TV Box. É preciso ter um console
                 compatível.
               </p>
             </article>
-            <article className="xt-card" data-reveal>
+            <article data-reveal>
               <h3 className="xt-h3">Jogos na nuvem</h3>
               <p>
-                Acesse títulos compatíveis oferecidos pelo serviço oficial da Microsoft. A disponibilidade depende da
-                sua conta e da sua região.
+                Acesse títulos compatíveis oferecidos pelo serviço oficial da Microsoft. A disponibilidade depende da sua
+                conta e da sua região.
               </p>
             </article>
           </div>
           <p className="xt-note" data-reveal>
             O XTOYBOX não opera servidores próprios de cloud gaming.
           </p>
+        </div>
+      </section>
+
+      <section className="xt-section" id="interface" data-spy-section>
+        <div className="xt-wrap">
+          <h2 className="xt-h2" data-reveal>
+            Interface
+          </h2>
+          <AndroidShowcase screens={galleryScreens} />
         </div>
       </section>
 
@@ -142,84 +151,6 @@ export function RefinedIndex() {
               </dd>
             </div>
           </dl>
-        </div>
-      </section>
-
-      <section className="xt-section" id="interface" data-spy-section style={{ paddingInline: 0 }}>
-        <div className="xt-wrap">
-          <h2 className="xt-h2" data-reveal>
-            Interface
-          </h2>
-        </div>
-        <div className="xt-rail" tabIndex={0} role="group" aria-label="Capturas de tela do aplicativo">
-          {galleryScreens.map((screen) => (
-            <figure key={screen.label}>
-              <img src={screen.src} width={420} height={746} alt={screen.alt} loading="lazy" decoding="async" />
-              <figcaption>
-                <b>{screen.label}</b>
-                {screen.note}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section className="xt-section" id="download">
-        <div className="xt-wrap">
-          <div className="xt-dlbox xt-card" data-reveal>
-            <div>
-              <h2 className="xt-h2" style={{ marginBottom: 14 }}>
-                XTOYBOX
-              </h2>
-              <p className="xt-ver" translate="no">
-                v{apkMetadata.versionName}
-              </p>
-              <dl className="xt-meta">
-                {releaseDate ? (
-                  <div>
-                    <dt>Atualizado</dt>
-                    <dd>{releaseDate}</dd>
-                  </div>
-                ) : null}
-                {apkMetadata.apkSizeFormatted ? (
-                  <div>
-                    <dt>Tamanho</dt>
-                    <dd>{apkMetadata.apkSizeFormatted}</dd>
-                  </div>
-                ) : null}
-                <div>
-                  <dt>Formato</dt>
-                  <dd>APK para Android</dd>
-                </div>
-              </dl>
-              <DownloadButton href="/api/download">Baixar APK</DownloadButton>
-              <p>
-                <a className="xt-link" href="/downloads">
-                  Versões anteriores e notas
-                </a>
-              </p>
-            </div>
-            <ol className="xt-steps" aria-label="Como instalar">
-              <li>
-                <span>
-                  Baixe o APK
-                  <small>Use apenas o botão deste site.</small>
-                </span>
-              </li>
-              <li>
-                <span>
-                  Permita fontes externas
-                  <small>O Android pede isso para instalar fora da Play Store. Dá para desativar depois.</small>
-                </span>
-              </li>
-              <li>
-                <span>
-                  Abra o arquivo e instale
-                  <small>Depois entre com a sua conta Xbox no app.</small>
-                </span>
-              </li>
-            </ol>
-          </div>
         </div>
       </section>
 
@@ -253,13 +184,6 @@ export function RefinedIndex() {
               </summary>
               <p>Dispositivos Android compatíveis, incluindo celulares e TV Box.</p>
             </details>
-            <details data-reveal>
-              <summary>
-                Como instalar o APK?
-                <ChevronRight className="xt-i" />
-              </summary>
-              <p>Baixe pelo site oficial e, se necessário, permita a instalação por fontes externas no Android.</p>
-            </details>
           </div>
         </div>
       </section>
@@ -274,37 +198,12 @@ export function RefinedIndex() {
             </span>
             <ChevronRight className="xt-i" />
           </a>
-          <ul className="xt-rows">
-            <li data-reveal>
-              <a href="/xtoytouch">
-                <span>
-                  XtoyTouch
-                  <small>Userscript complementar para o xCloud no navegador</small>
-                </span>
-                <ChevronRight className="xt-i" />
-              </a>
-            </li>
-            <li data-reveal>
-              <a href="/seguranca-download">
-                <span>
-                  Segurança do download
-                  <small>Origem e SHA-256 do APK</small>
-                </span>
-                <ChevronRight className="xt-i" />
-              </a>
-            </li>
-            <li data-reveal>
-              <a href="/reportar-bugs">
-                <span>
-                  Reportar um problema
-                  <small>Conte o que aconteceu</small>
-                </span>
-                <ChevronRight className="xt-i" />
-              </a>
-            </li>
-          </ul>
         </div>
       </section>
+
+      <div className="xt-wrap">
+        <div className="xt-counter-mount" />
+      </div>
     </SiteShell>
   );
 }

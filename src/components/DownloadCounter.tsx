@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Download } from "lucide-react";
 import { fetchApkMetadata } from "@/lib/apkMetadata";
 
 const DOWNLOAD_URL = "/api/download";
@@ -84,6 +83,8 @@ export function DownloadCounter() {
   const [targetValue, setTargetValue] = useState(0);
   const [displayValue, setDisplayValue] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [seen, setSeen] = useState(false);
+  const asideRef = useRef<HTMLElement>(null);
   const displayValueRef = useRef(0);
   const targetValueRef = useRef(0);
   const canonicalValueRef = useRef(0);
@@ -96,7 +97,7 @@ export function DownloadCounter() {
 
   useEffect(() => {
     const findMountNode = () => {
-      const node = document.querySelector<HTMLElement>(".refined-hero__visual");
+      const node = document.querySelector<HTMLElement>(".xt-counter-mount");
       if (node) setMountNode(node);
       return Boolean(node);
     };
@@ -110,6 +111,27 @@ export function DownloadCounter() {
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
   }, []);
+
+  // A contagem só anima quando o bloco entra na tela.
+  useEffect(() => {
+    const node = asideRef.current;
+    if (!node || seen) return;
+    if (!("IntersectionObserver" in window)) {
+      setSeen(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSeen(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [mountNode, hasLoaded, targetValue, seen]);
 
   useEffect(() => {
     let cancelled = false;
@@ -209,6 +231,7 @@ export function DownloadCounter() {
 
   useEffect(() => {
     if (targetValue <= 0) return;
+    if (!seen && displayValueRef.current === 0) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const from = displayValueRef.current;
@@ -220,13 +243,13 @@ export function DownloadCounter() {
       return;
     }
 
-    const duration = from === 0 ? 1_500 : 700;
+    const duration = from === 0 ? 2_000 : 700;
     const startedAt = performance.now();
     let animationFrame = 0;
 
     const animate = (now: number) => {
       const progress = Math.min((now - startedAt) / duration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const easedProgress = progress >= 1 ? 1 : 1 - Math.pow(2, -10 * progress);
       const nextValue = Math.round(from + difference * easedProgress);
 
       displayValueRef.current = nextValue;
@@ -239,26 +262,46 @@ export function DownloadCounter() {
 
     animationFrame = window.requestAnimationFrame(animate);
     return () => window.cancelAnimationFrame(animationFrame);
-  }, [targetValue]);
+  }, [targetValue, seen]);
 
   if (!mountNode) return null;
+  if (hasLoaded && targetValue <= 0) return null;
+
+  const loading = !hasLoaded || targetValue <= 0;
 
   return createPortal(
-    <aside className="refined-download-counter" aria-label="Total de downloads realizados">
-      <div className="refined-download-counter__heading">
-        <span className="refined-download-counter__icon" aria-hidden="true">
-          <Download />
+    <aside
+      ref={asideRef}
+      className="xt-count"
+      data-in={seen ? "true" : "false"}
+      data-loading={loading ? "true" : undefined}
+      aria-label="Total de downloads realizados"
+    >
+      <i className="xt-count__rule" aria-hidden="true" />
+      <div className="xt-count__grid">
+        <p className="xt-count__label">Downloads realizados</p>
+        <p className="xt-count__value" aria-hidden="true">
+          {loading
+            ? "0"
+            : formatDownloads(displayValue)
+                .split("")
+                .map((char, index) =>
+                  /\d/.test(char) ? (
+                    char
+                  ) : (
+                    <span className="xt-count__sep" key={index}>
+                      {char}
+                    </span>
+                  ),
+                )}
+        </p>
+        <span className="xt-sr" role="status">
+          {loading ? "" : `${formatDownloads(targetValue)} downloads realizados`}
         </span>
-        <span>Downloads realizados</span>
+        <p className="xt-count__note">
+          {loading ? "Carregando a contagem atual..." : "Total registrado pelo site e pelas releases oficiais."}
+        </p>
       </div>
-      <strong className="refined-download-counter__value" aria-live="polite">
-        {formatDownloads(displayValue)}
-      </strong>
-      <p>
-        {hasLoaded && targetValue > 0
-          ? "Total registrado pelo site e pelas releases oficiais."
-          : "Carregando a contagem atual..."}
-      </p>
     </aside>,
     mountNode,
   );

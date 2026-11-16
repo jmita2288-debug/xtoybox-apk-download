@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
+import logo from "@/assets/logo-x.webp";
 import { fetchApkMetadata, fallbackLatestMetadata, type ApkMetadata } from "@/lib/apkMetadata";
 import { usePageMetadata } from "@/lib/page-metadata";
 import { DownloadButton } from "@/components/xt/DownloadButton";
-import { PageHead, SiteShell } from "@/components/xt/SiteChrome";
-import { formatReleaseDate } from "./index-refined";
+import { SiteShell } from "@/components/xt/SiteChrome";
+import { formatReleaseDate, galleryScreens } from "./index-refined";
 
 // Versões que têm redirecionamento /downloads/XTOYBOX-v{versão}.apk configurado no vercel.json.
 const REDIRECTED_VERSIONS = ["1.1.16", "1.1.15", "1.1.14", "1.1.13"] as const;
@@ -54,23 +55,56 @@ export function DownloadsPage() {
   return (
     <SiteShell page="downloads">
       <div className="xt-wrap xt-page">
-        <PageHead title="Downloads" lede="Baixe sempre pelo site oficial, de preferência a versão mais recente." />
+        <a className="xt-crumb" href="/">
+          <ChevronRight className="xt-i" />
+          Início
+        </a>
+
+        <div className="xt-apphead">
+          <img className="xt-apphead__icon xt-appr__icon--logo" src={logo} width={104} height={104} alt="" />
+          <div>
+            <h1 translate="no">XTOYBOX</h1>
+            <p>Remote Play e jogos compatíveis na nuvem.</p>
+          </div>
+          <DownloadButton href="/api/download">Baixar APK</DownloadButton>
+        </div>
+
+        <dl className="xt-specs">
+          <div>
+            <dt>Versão atual</dt>
+            <dd translate="no">{apkMetadata.versionName}</dd>
+          </div>
+          <div>
+            <dt>Tamanho</dt>
+            <dd>{apkMetadata.apkSizeFormatted ?? "Indisponível"}</dd>
+          </div>
+          <div>
+            <dt>Compatível com</dt>
+            <dd>Android e TV Box</dd>
+          </div>
+          <div>
+            <dt>Atualizado em</dt>
+            <dd>{releaseDate ?? "Indisponível"}</dd>
+          </div>
+        </dl>
+
+        <h2 className="xt-h2 xt-h2--sm" style={{ marginTop: 0 }}>
+          Capturas de tela
+        </h2>
+        <div className="xt-rail xt-shots-page" tabIndex={0} role="group" aria-label="Capturas de tela do aplicativo">
+          {galleryScreens.map((screen) => (
+            <figure key={screen.label}>
+              <img src={screen.src} width={420} height={746} alt={screen.alt} loading="lazy" decoding="async" />
+              <figcaption>
+                <b>{screen.label}</b>
+                {screen.note}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
         <div className="xt-dgrid">
           <div>
-            <div className="xt-cur xt-card" data-reveal>
-              <div>
-                <h3 className="xt-h3" translate="no">
-                  XTOYBOX v{apkMetadata.versionName}
-                </h3>
-                <p>
-                  Versão atual.
-                  {releaseDate ? ` Atualizada em ${releaseDate}.` : ""}
-                  {apkMetadata.apkSizeFormatted ? ` ${apkMetadata.apkSizeFormatted}.` : ""}
-                </p>
-              </div>
-              <DownloadButton href="/api/download">Baixar APK</DownloadButton>
-            </div>
-
             {apkMetadata.releaseNotes.length > 0 ? (
               <>
                 <h2 className="xt-h2 xt-h2--sm">Notas da versão</h2>
@@ -93,7 +127,6 @@ export function DownloadsPage() {
               </a>
             </p>
           </div>
-
           <div>
             <h2 className="xt-h2 xt-h2--sm" style={{ marginTop: 0 }}>
               Versões anteriores

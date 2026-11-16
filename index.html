@@ -8,12 +8,12 @@
       name="description"
       content="XTOYBOX é um projeto independente para Remote Play do seu Xbox e acesso a experiências compatíveis com Xbox Cloud Gaming em dispositivos Android."
     />
-    <meta name="theme-color" content="#070b09" />
+    <meta name="theme-color" content="#09090a" />
     <script>
       try {
         var xtTheme = localStorage.getItem("xtoybox-home-theme") || localStorage.getItem("xtoybox-theme");
         document.documentElement.dataset.theme = xtTheme === "light" ? "light" : "dark";
-        if (xtTheme === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f4f7f0");
+        if (xtTheme === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f6f6f4");
       } catch (e) {
         document.documentElement.dataset.theme = "dark";
       }
