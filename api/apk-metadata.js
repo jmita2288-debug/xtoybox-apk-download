@@ -1,36 +1,13 @@
-import { readFileSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const REPO_OWNER = 'jmita2288-debug';
-const REPO_NAME = 'xtoybox-apk-download';
-const BRANCH = 'main';
-const RELEASE_TAG = 'xtoybox-latest';
-
-// O contador do GitHub pertence ao asset de cada versão e pode voltar a zero
-// quando o APK da Release é substituído. Mantemos uma base acumulada por versão
-// para que o total público do projeto não regrida ao publicar um APK novo.
-const VERSION_DOWNLOAD_BASES = {
-  '1.1.15': 22_787,
-  '1.1.16': 25_852,
-};
-
-const RELEASE_DOWNLOAD_BASELINES = {
-  '1.1.15': 1_089,
-  '1.1.16': 0,
-};
-
-function getDownloadBase(version) {
-  if (Number.isFinite(VERSION_DOWNLOAD_BASES[version])) {
-    return Number(VERSION_DOWNLOAD_BASES[version]);
-  }
-
-  const knownBases = Object.values(VERSION_DOWNLOAD_BASES)
-    .map(Number)
-    .filter(Number.isFinite);
-
-  return knownBases.length ? Math.max(...knownBases) : 0;
-}
+import {
+  REPO_OWNER,
+  REPO_NAME,
+  RELEASE_TAG,
+  HISTORICAL_DOWNLOAD_BASE,
+  ASSET_DOWNLOAD_BASELINES,
+  loadAndroidLatest,
+  totalDownloads,
+  currentApkAsset,
+} from './_android-release.js';
 
 function formatBytes(bytes) {
   const value = Number(bytes || 0);
@@ -49,14 +26,6 @@ function formatBytes(bytes) {
   return `${size.toFixed(precision)} ${units[unitIndex]}`;
 }
 
-function normalizeVersion(value) {
-  const version = String(value || '').trim().replace(/^v/i, '');
-  if (!/^\d+(?:\.\d+){1,3}$/.test(version)) {
-    throw new Error('latestVersionName invalida');
-  }
-  return version;
-}
-
 function normalizeSha256(value) {
   const digest = String(value || '').trim();
   if (!digest) return null;
@@ -64,8 +33,9 @@ function normalizeSha256(value) {
   return /^[a-f0-9]{64}$/.test(hash) ? hash : null;
 }
 
+// Token só de leitura para a API do GitHub (o repositório é público; sem token há fallback).
 function getStatsToken() {
-  return process.env.GITHUB_STATS_TOKEN || process.env.SITE_REPO_TOKEN || process.env.GH_TOKEN || '';
+  return process.env.GITHUB_STATS_TOKEN || process.env.GH_TOKEN || process.env.SITE_REPO_TOKEN || '';
 }
 
 function buildGitHubHeaders(token = '') {
@@ -77,65 +47,20 @@ function buildGitHubHeaders(token = '') {
   };
 }
 
-function readJsonFromFilesystem(fileName) {
-  try {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-    const candidates = [
-      resolve(__dirname, `../public/${fileName}`),
-      resolve(__dirname, `../${fileName}`),
-      resolve(__dirname, `../dist/${fileName}`),
-      resolve(process.cwd(), `public/${fileName}`),
-      resolve(process.cwd(), fileName),
-      resolve(process.cwd(), `dist/${fileName}`),
-    ];
-
-    for (const filePath of candidates) {
-      try {
-        return JSON.parse(readFileSync(filePath, 'utf8'));
-      } catch {
-        // Tenta o próximo candidato.
-      }
-    }
-  } catch {
-    // Continua para a fonte remota.
-  }
-
-  return null;
-}
-
-async function fetchLatestMetadata() {
-  const local = readJsonFromFilesystem('latest.json');
-  if (local?.latestVersionName) return local;
-
-  const response = await fetch(
-    `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/public/latest.json?t=${Date.now()}`,
-    { cache: 'no-store' },
-  );
-
-  if (!response.ok) throw new Error(`latest.json indisponivel: ${response.status}`);
-  const latest = await response.json();
-  if (!latest?.latestVersionName) throw new Error('latest.json invalido');
-  return latest;
-}
-
 async function requestGitHubRelease(token = '') {
   return fetch(
     `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/tags/${RELEASE_TAG}?t=${Date.now()}`,
-    {
-      cache: 'no-store',
-      headers: buildGitHubHeaders(token),
-    },
+    { cache: 'no-store', headers: buildGitHubHeaders(token) },
   );
 }
 
-async function fetchGitHubReleaseAsset(version) {
+async function fetchRelease() {
   const token = getStatsToken();
   let authMode = token ? 'token' : 'public';
   let response = await requestGitHubRelease(token);
 
-  // O repositório é público. Se um token expirar ou perder permissão, repetimos
-  // a leitura sem autenticação para não congelar o contador acumulado.
+  // Se um token expirar ou perder permissão, repete a leitura sem autenticação
+  // para não congelar o contador acumulado.
   if (!response.ok && token && (response.status === 401 || response.status === 403)) {
     console.warn(`[apk-metadata] Token rejeitado (${response.status}); tentando leitura pública da Release.`);
     response = await requestGitHubRelease('');
@@ -146,38 +71,7 @@ async function fetchGitHubReleaseAsset(version) {
     throw new Error(`Release do GitHub indisponivel: ${response.status}`);
   }
 
-  const release = await response.json();
-  const expectedName = `XTOYBOX-v${version}.apk`;
-  const apkAssets = Array.isArray(release.assets)
-    ? release.assets.filter((asset) => String(asset?.name || '').toLowerCase().endsWith('.apk'))
-    : [];
-  const asset = apkAssets.find((item) => item.name === expectedName)
-    || apkAssets.find((item) => String(item.name || '').includes(version))
-    || null;
-
-  if (!asset) return null;
-
-  return {
-    name: asset.name,
-    browserDownloadUrl: asset.browser_download_url || null,
-    size: Number(asset.size || 0) || null,
-    downloadCount: Number(asset.download_count || 0),
-    sha256: normalizeSha256(asset.digest),
-    publishedAt: release.published_at || null,
-    authMode,
-  };
-}
-
-function calculatePersistedTotal(version, releaseDownloadCount) {
-  const versionBase = getDownloadBase(version);
-
-  if (!Number.isFinite(releaseDownloadCount) || releaseDownloadCount < 0) {
-    return versionBase;
-  }
-
-  const releaseBaseline = Number(RELEASE_DOWNLOAD_BASELINES[version] || 0);
-  const newDownloads = Math.max(0, releaseDownloadCount - releaseBaseline);
-  return versionBase + newDownloads;
+  return { release: await response.json(), authMode };
 }
 
 export default async function handler(req, res) {
@@ -187,28 +81,28 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: 'Metodo nao permitido' });
     }
 
-    const latest = await fetchLatestMetadata();
-    const version = normalizeVersion(latest.latestVersionName);
-    const releaseAsset = await fetchGitHubReleaseAsset(version).catch((error) => {
+    // Dados Android publicados pelo Dashboard (public/latest.json); o iOS fica fora.
+    const latest = await loadAndroidLatest();
+    const version = latest.latestVersionName;
+    const fetched = await fetchRelease().catch((error) => {
       console.warn('[apk-metadata] Falha ao consultar Release:', error?.message || error);
       return null;
     });
+    const asset = fetched ? currentApkAsset(fetched.release, latest) : null;
 
-    const releaseDownloads = releaseAsset?.downloadCount;
-    const downloadsTotal = calculatePersistedTotal(version, releaseDownloads);
-    const apkUrl = releaseAsset?.browserDownloadUrl || latest.apkUrl;
-    const apkSizeBytes = releaseAsset?.size ?? null;
-    const publishedAt = latest.publishedAt || releaseAsset?.publishedAt || null;
-    const downloadBase = getDownloadBase(version);
+    const downloadsTotal = fetched ? totalDownloads(fetched.release) : HISTORICAL_DOWNLOAD_BASE;
+    const apkSizeBytes = asset ? Number(asset.size || 0) || null : null;
+    const publishedAt = latest.publishedAt || fetched?.release?.published_at || null;
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
 
     return res.status(200).json({
       appName: latest.appName || 'XTOYBOX',
+      platform: 'android',
       versionName: version,
       versionCode: Number(latest.latestVersionCode || 0),
-      apkUrl,
-      apkSha256: releaseAsset?.sha256 ?? null,
+      apkUrl: latest.apkUrl,
+      apkSha256: asset ? normalizeSha256(asset.digest) : null,
       pageUrl: latest.pageUrl || 'https://xtoybox.cloud/',
       releaseNotes: Array.isArray(latest.releaseNotes) ? latest.releaseNotes : [],
       publishedAt,
@@ -217,11 +111,11 @@ export default async function handler(req, res) {
       apkSizeBytes,
       apkSizeFormatted: formatBytes(apkSizeBytes),
       source: 'server-api',
-      counterSource: releaseAsset ? 'github-release-delta' : 'version-base-fallback',
-      githubStatsAuth: releaseAsset?.authMode ?? null,
-      releaseDownloadCount: releaseAsset?.downloadCount ?? null,
-      releaseDownloadBaseline: Number(RELEASE_DOWNLOAD_BASELINES[version] || 0),
-      historicalDownloadBase: downloadBase,
+      counterSource: fetched ? 'github-release-apk-assets' : 'historical-base-fallback',
+      githubStatsAuth: fetched?.authMode ?? null,
+      releaseDownloadCount: asset ? Number(asset.download_count || 0) : null,
+      releaseDownloadBaseline: Number(ASSET_DOWNLOAD_BASELINES[version] || 0),
+      historicalDownloadBase: HISTORICAL_DOWNLOAD_BASE,
       latest,
     });
   } catch (error) {

@@ -1,5 +1,6 @@
 {
   "appName": "XTOYBOX",
+  "platform": "android",
   "latestVersionName": "1.1.16",
   "latestVersionCode": 116,
   "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.16.apk",

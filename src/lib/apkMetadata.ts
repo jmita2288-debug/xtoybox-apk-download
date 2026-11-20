@@ -31,12 +31,49 @@ export type ApkMetadata = {
   latest: LatestMetadata;
 };
 
+/**
+ * Android publicado pelo XTOYBOX Dashboard: public/latest.json + APK na Release
+ * `xtoybox-latest`. O iOS usa outro arquivo (latest-ios.json + .ipa, ver StoreButtons.tsx);
+ * aqui só entram dados com platform "android" (ou sem platform) e links .apk.
+ * Mesmas regras de api/_android-release.js (usado pelo servidor).
+ */
 const GITHUB_RELEASE_REPO = "jmita2288-debug/xtoybox-apk-download";
 const GITHUB_RELEASE_TAG = "xtoybox-latest";
 const HISTORICAL_DOWNLOAD_BASE = 25_852;
-const RELEASE_DOWNLOAD_BASELINES: Record<string, number> = {
+const COUNT_FROM_VERSION = "1.1.16";
+const ASSET_DOWNLOAD_BASELINES: Record<string, number> = {
   "1.1.16": 0,
 };
+const ARCHIVED_APK_DOWNLOADS = 0;
+const VERSION_RE = /^\d+(?:\.\d+){1,3}$/;
+const APK_ASSET_RE = /^XTOYBOX-v(\d+(?:\.\d+){1,3})\.apk$/i;
+
+function releaseAssetUrl(name: string) {
+  return `https://github.com/${GITHUB_RELEASE_REPO}/releases/download/${GITHUB_RELEASE_TAG}/${name}`;
+}
+
+function isApkUrl(value: unknown) {
+  try {
+    const url = new URL(String(value ?? ""));
+    return url.protocol === "https:" && url.pathname.toLowerCase().endsWith(".apk");
+  } catch {
+    return false;
+  }
+}
+
+function compareVersions(a: string, b: string) {
+  const pa = a.split(".").map(Number);
+  const pb = b.split(".").map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i += 1) {
+    const diff = (pa[i] || 0) - (pb[i] || 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
+function assetVersion(name: string) {
+  return name.match(APK_ASSET_RE)?.[1] ?? null;
+}
 
 export const fallbackLatestMetadata: LatestMetadata = {
   appName: "XTOYBOX",
@@ -112,17 +149,18 @@ export async function fetchLatestMetadata(): Promise<LatestMetadata> {
     throw new Error("latest.json indisponível");
   }
 
-  const data = (await response.json()) as Partial<LatestMetadata>;
+  const data = (await response.json()) as Partial<LatestMetadata> & { platform?: string };
+  const version = normalizeVersion(data.latestVersionName ?? "");
 
-  if (!data.latestVersionName || !data.apkUrl) {
+  if (String(data.platform ?? "android").toLowerCase() !== "android" || !VERSION_RE.test(version)) {
     throw new Error("latest.json inválido");
   }
 
   return {
     appName: data.appName ?? "XTOYBOX",
-    latestVersionName: normalizeVersion(data.latestVersionName),
+    latestVersionName: version,
     latestVersionCode: Number(data.latestVersionCode ?? 0),
-    apkUrl: data.apkUrl,
+    apkUrl: isApkUrl(data.apkUrl) ? String(data.apkUrl) : releaseAssetUrl(`XTOYBOX-v${version}.apk`),
     pageUrl: data.pageUrl,
     releaseNotes: Array.isArray(data.releaseNotes) ? data.releaseNotes : [],
     publishedAt: data.publishedAt,
@@ -135,9 +173,22 @@ async function fetchDownloadStats() {
   return (await response.json()) as DownloadStats;
 }
 
-function calculatePersistedTotal(version: string, releaseDownloadCount: number) {
-  const baseline = Number(RELEASE_DOWNLOAD_BASELINES[version] ?? 0);
-  return HISTORICAL_DOWNLOAD_BASE + Math.max(0, releaseDownloadCount - baseline);
+type ReleaseAsset = {
+  name: string;
+  size?: number;
+  download_count?: number;
+  browser_download_url?: string;
+};
+
+// Base histórica + downloads de cada APK (.apk) da Release a partir da 1.1.16.
+function calculatePersistedTotal(assets: ReleaseAsset[]) {
+  let total = HISTORICAL_DOWNLOAD_BASE + ARCHIVED_APK_DOWNLOADS;
+  for (const asset of assets) {
+    const version = assetVersion(asset.name);
+    if (!version || compareVersions(version, COUNT_FROM_VERSION) < 0) continue;
+    total += Math.max(0, Number(asset.download_count ?? 0) - Number(ASSET_DOWNLOAD_BASELINES[version] ?? 0));
+  }
+  return total;
 }
 
 async function fetchGitHubReleaseData(latest: LatestMetadata) {
@@ -148,39 +199,26 @@ async function fetchGitHubReleaseData(latest: LatestMetadata) {
 
   if (!response.ok) return null;
 
-  const release = (await response.json()) as {
-    published_at?: string;
-    assets?: Array<{
-      name: string;
-      size?: number;
-      download_count?: number;
-      browser_download_url?: string;
-    }>;
-  };
+  const release = (await response.json()) as { published_at?: string; assets?: ReleaseAsset[] };
 
   const version = normalizeVersion(latest.latestVersionName);
-  const expectedName = `XTOYBOX-v${version}.apk`;
-  const apkAssets = release.assets?.filter((asset) => asset.name.toLowerCase().endsWith(".apk")) ?? [];
-  const matchingAsset = apkAssets.find((asset) => asset.name === expectedName)
-    ?? apkAssets.find((asset) => asset.name.includes(version))
+  const apkAssets = (release.assets ?? []).filter((asset) => assetVersion(asset.name));
+  const urlName = decodeURIComponent(new URL(latest.apkUrl).pathname.split("/").pop() ?? "");
+  const matchingAsset = apkAssets.find((asset) => asset.name === urlName)
+    ?? apkAssets.find((asset) => assetVersion(asset.name) === version)
     ?? null;
 
-  if (!matchingAsset) return null;
-
-  const releaseDownloadCount = Number(matchingAsset.download_count ?? 0);
-  const downloadsTotal = calculatePersistedTotal(version, releaseDownloadCount);
-
   return {
-    downloadsTotal,
-    apkSizeBytes: matchingAsset.size ?? null,
+    downloadsTotal: calculatePersistedTotal(apkAssets),
+    apkSizeBytes: matchingAsset?.size ?? null,
     publishedAt: release.published_at,
-    browserDownloadUrl: matchingAsset.browser_download_url,
   };
 }
 
 export async function fetchApkMetadata(): Promise<ApkMetadata> {
   const serverMetadata = await fetchServerApkMetadata().catch(() => null);
-  if (serverMetadata?.apkUrl && serverMetadata.versionName) {
+  const serverPlatform = String((serverMetadata as { platform?: string } | null)?.platform ?? "android");
+  if (serverMetadata?.versionName && isApkUrl(serverMetadata.apkUrl) && serverPlatform === "android") {
     return serverMetadata;
   }
 
@@ -202,8 +240,7 @@ export async function fetchApkMetadata(): Promise<ApkMetadata> {
   const statsDownloads = typeof stats?.totalDownloads === "number" ? stats.totalDownloads : null;
   const latestWithGitHubAsset: LatestMetadata = {
     ...latest,
-    apkUrl: github?.browserDownloadUrl ?? latest.apkUrl,
-    publishedAt: github?.publishedAt ?? latest.publishedAt,
+    publishedAt: latest.publishedAt ?? github?.publishedAt,
   };
 
   return buildMetadata(

@@ -30,7 +30,7 @@
     <circle cx="50" cy="50" r="23" fill="#EAF2FF"/>
     <path d="M38 50h24M50 38v24" stroke="#356C9B" stroke-width="3" stroke-linecap="round"/>
     <text x="88" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="750" fill="#1B251B">Rota do site</text>
-    <text x="88" y="70" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#667066">Registra a solicitação</text>
+    <text x="88" y="70" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#667066">Lê a versão Android</text>
     <text x="28" y="116" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#355873">/api/download</text>
   </g>
 
@@ -43,5 +43,5 @@
     <text x="28" y="116" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#4E5850">Redirecionamento seguro</text>
   </g>
 
-  <text x="600" y="297" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#687368">A contagem é mantida em arquivo persistente no repositório e consultada pelo site.</text>
+  <text x="600" y="297" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#687368">O Dashboard publica o APK na Release; o contador soma os downloads de cada APK.</text>
 </svg>

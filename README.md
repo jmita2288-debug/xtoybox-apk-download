@@ -60,22 +60,40 @@ O projeto continua em evolução, com mudanças feitas a partir de testes, probl
   <img src="./docs/download-flow.svg" alt="Fluxo de download do site XTOYBOX" width="100%" />
 </p>
 
-Todos os botões de download do site utilizam a rota:
+Todos os botões de download Android do site utilizam a rota:
 
 ```text
 /api/download
 ```
 
-Essa rota redireciona o usuário para o APK oficial publicado na Release do GitHub. O contador público não depende de um commit novo a cada clique: o GitHub mantém o `download_count` do asset da versão atual e a API do site combina esse valor com a base acumulada das versões anteriores.
+Essa rota lê a publicação Android feita pelo **XTOYBOX Dashboard** e redireciona o usuário para o APK oficial na Release `xtoybox-latest` do GitHub. O contador público não depende de um commit novo a cada clique: o GitHub mantém o `download_count` de cada APK e a API do site soma esses valores à base acumulada das versões anteriores.
 
-Isso evita criar commits e deployments apenas para registrar downloads e também impede que o total público volte para zero quando o APK atual começa uma nova contagem na Release.
+### Publicação pelo XTOYBOX Dashboard
+
+Android e iOS são publicados pelo mesmo Dashboard, mas cada plataforma tem o seu próprio arquivo de metadados e o seu próprio tipo de arquivo na Release:
+
+| Plataforma | Metadados | Arquivo na Release `xtoybox-latest` | Usado por |
+| --- | --- | --- | --- |
+| **Android** | `public/latest.json` | `XTOYBOX-v<versão>.apk` | `/api/download`, `/api/apk-metadata`, verificação de atualização do app Android |
+| **iOS** | `public/latest-ios.json` | `XTOYBOX-v<versão>.ipa` | botão iOS (`StoreButtons.tsx`), app XTOYBOX-IOS |
+
+Regras aplicadas pelo site para não misturar as plataformas:
+
+- o botão Android só aceita dados com `platform: "android"` (ou sem `platform`, formato das versões anteriores) e links terminados em `.apk`;
+- versões precisam ser numéricas (`1.1.17`); versões com sufixo, como `1.1.17-test`, são recusadas;
+- se `apkUrl` estiver ausente, o site monta o link do asset `XTOYBOX-v<versão>.apk` na Release `xtoybox-latest`;
+- arquivos `.ipa` nunca entram no tamanho do APK nem no contador de downloads Android.
+
+O build do APK é feito no repositório do aplicativo (GitHub Actions, artefato `XTOYBOX-v<versão>.apk`) e a publicação é feita somente pelo Dashboard. Este repositório não gera nem envia APKs.
 
 Os principais arquivos e endpoints envolvidos são:
 
 | Arquivo / endpoint | Função |
 | --- | --- |
-| `public/latest.json` | Define a versão pública atual, URL do APK, notas e data de publicação. |
-| `api/download.js` | Redireciona para o APK oficial da versão atual. |
+| `public/latest.json` | Versão Android atual publicada pelo Dashboard: URL do APK, notas e data. |
+| `public/latest-ios.json` | Versão iOS atual publicada pelo Dashboard (não é lido pelo fluxo Android). |
+| `api/_android-release.js` | Regras compartilhadas do Android: leitura do `latest.json`, validação e contador. |
+| `api/download.js` | Redireciona para o APK oficial da versão Android atual. |
 | `api/apk-metadata.js` | Consulta a Release e calcula o total acumulado usado pelo site. |
 | `api/download-badge.js` | Gera dinamicamente o contador exibido neste README. |
 | `public/download-stats.json` | Snapshot histórico mantido por compatibilidade; não é a fonte principal do contador atual. |
@@ -145,15 +163,19 @@ npm run format     # formata os arquivos com Prettier
 ```text
 .
 ├── api/
+│   ├── _android-release.js
 │   ├── apk-metadata.js
 │   ├── download-badge.js
-│   └── download.js
+│   ├── download.js
+│   ├── game-likes.js
+│   └── xtoytouch.js
 ├── docs/
 │   ├── download-flow.svg
 │   └── readme-banner.svg
 ├── public/
 │   ├── download-badge.json
 │   ├── download-stats.json
+│   ├── latest-ios.json
 │   └── latest.json
 ├── src/
 │   ├── assets/
@@ -171,22 +193,21 @@ npm run format     # formata os arquivos com Prettier
 
 ## Versão e metadados do APK
 
-A versão apresentada no site é controlada principalmente por:
+A versão Android apresentada no site é controlada por:
 
 ```text
 public/latest.json
 ```
 
-Esse arquivo informa:
+Esse arquivo é gravado pelo XTOYBOX Dashboard ao publicar um APK e informa:
 
-- nome do aplicativo;
+- nome do aplicativo e plataforma (`android`);
 - versão e código da versão;
-- URL do APK;
-- canal da release;
+- URL do APK na Release `xtoybox-latest`;
 - notas de atualização;
 - data de publicação.
 
-Ao publicar uma nova versão, essas informações devem permanecer sincronizadas com a Release para que o site, a API e os botões de download apontem para o mesmo APK.
+O link curto `/downloads/XTOYBOX-v<versão>.apk` continua funcionando para qualquer versão e aponta para o asset de mesmo nome na Release `xtoybox-latest`.
 
 ## Deploy
 
