@@ -1,18 +1,22 @@
 {
   "appName": "XTOYBOX",
-  "latestVersionName": "1.1.16",
-  "latestVersionCode": 116,
-  "apkUrl": "https://xtoybox-apk-download.vercel.app/downloads/XTOYBOX-v1.1.16.apk",
+  "latestVersionName": "1.1.17",
+  "latestVersionCode": 117,
+  "apkUrl": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.17.apk",
   "pageUrl": "https://xtoybox-apk-download.vercel.app/",
   "releaseChannel": "public",
   "testRelease": false,
   "releaseNotes": [
-    "Esta atualização traz novas correções de estabilidade e desempenho para deixar o aplicativo mais rápido e consistente durante o uso.",
-    "A Biblioteca recebeu melhorias no carregamento e agora consegue disponibilizar o catálogo corretamente desde a primeira abertura, mantendo a virtualização para preservar a fluidez. A pesquisa também foi otimizada para reduzir travamentos enquanto o usuário digita e o trabalho pesado de cache passou a acontecer fora das interações principais da interface.",
-    "O sistema de fila do xCloud foi ajustado para evitar aumentos artificiais no tempo estimado, impedir que a estimativa desapareça durante mudanças temporárias de estado e tornar a consulta de tempo de espera independente da conexão principal do streaming.",
-    "A área de Conquistas recebeu melhorias no carregamento das capas dos jogos, tratamento para imagens indisponíveis e atualização visual para combinar melhor com a nova interface do XTOYBOX. A tela principal, os detalhes e os cards internos agora seguem o mesmo padrão de cores, tipografia e ícones.",
-    "O modo de teclado e mouse continua disponível em fase de testes. A compatibilidade pode variar conforme o aparelho, o adaptador utilizado e o suporte oferecido pelo próprio jogo e pelo xCloud.",
-    "Também foram mantidas as melhorias de streaming, controles virtuais, resposta ao toque e estabilidade geral presentes na versão 1.1.16."
+    "A versão 1.1.17 é uma das maiores atualizações do XTOYBOX, com novos recursos, correções importantes e melhorias de desempenho durante o streaming. A atualização instala por cima da versão anterior e mantém o seu login e as suas configurações.",
+    "Fortnite agora pode ser jogado na versão mobile, com os controles de toque do próprio jogo. Nos detalhes e no painel do streaming é possível escolher entre a versão Mobile e a versão Console. O modo de toque também ficou mais leve e responsivo, com menos travamentos durante a partida.",
+    "O painel de configurações do streaming foi redesenhado. Ele abre por um botão discreto no canto da tela e é organizado em três abas: Jogo (microfone, controle virtual, toque, editar controle e menu do Xbox), Imagem (resolução e ajuste da tela) e Sessão (tempo restante e desempenho). Alterações que dependem de uma nova sessão podem ser aplicadas pelo botão Reiniciar para aplicar.",
+    "A tela inicial ganhou a seção Meus jogos, com os jogos que a sua conta pode jogar na nuvem, além do acesso para ver todos.",
+    "O perfil e a sessão de jogo agora mostram o tempo de nuvem restante informado pelo Xbox, com avisos quando o tempo estiver acabando.",
+    "O login com a conta Microsoft ficou mais estável. A renovação automática da sessão foi corrigida e, se houver uma falha de conexão, o app mantém o seu login e oferece a opção de tentar novamente, em vez de pedir para entrar de novo. Quando um novo login for realmente necessário, o login MSAL continua disponível como alternativa.",
+    "O mouse voltou a funcionar durante o streaming junto com o teclado. A compatibilidade pode variar conforme o aparelho, o adaptador e o suporte do próprio jogo.",
+    "O editor de controles virtuais foi corrigido: aumentar um analógico não o empurra mais para cima, e a barreira invisível que impedia arrastar os controles até a parte de baixo da tela foi removida.",
+    "Também foram corrigidos o botão Desconectar, que agora volta corretamente para a tela inicial, o microfone, que agora desliga de verdade pelo painel, e o teclado da pesquisa. A versão traz ainda melhorias nos detalhes dos jogos, na estabilidade dos controles e no desempenho geral do aplicativo."
   ],
-  "publishedAt": "2026-09-07"
+  "publishedAt": "2026-11-19",
+  "releaseTitle": "a versão 1.1.17 é uma das maiores atualizações do XTOYBOX, com novos recursos"
 }
