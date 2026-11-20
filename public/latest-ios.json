@@ -1,14 +1,20 @@
 {
   "appName": "XTOYBOX",
   "platform": "ios",
-  "latestVersionName": "1.0.0",
-  "ipaUrl": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.0.0.ipa",
-  "releaseTitle": "XTOYBOX iOS 1.0.0 | Public Beta",
+  "latestVersionName": "1.1.3",
+  "ipaUrl": "https://github.com/jmita2288-debug/xtoybox-apk-download/releases/download/xtoybox-latest/XTOYBOX-v1.1.3.ipa",
+  "releaseTitle": "XTOYBOX iOS 1.1.3 - Fortnite mobile, login para todos e novo visual",
   "releaseNotes": [
-    "Primeira versão pública do XTOYBOX para iOS!",
-    "Esta versão marca o início da fase de testes públicos. O objetivo é permitir que a comunidade experimente o aplicativo, teste seus recursos e ajude a identificar possíveis bugs e problemas.",
-    "Feedbacks são muito importantes para melhorar a estabilidade e a experiência do aplicativo.",
-    "Novidades, melhorias e correções serão disponibilizadas nas próximas atualizações."
+    "a versão 1.1.3 é uma das maiores atualizações do XTOYBOX para iPhone, com melhorias de desempenho, estabilidade e um visual renovado em todo o app.",
+    "Fortnite agora pode ser jogado na versão mobile, com os controles de toque do próprio jogo funcionando desde o início da partida, sem travar. Na tela do jogo dá para escolher entre as versões Mobile e Windows.",
+    "login agora funciona para mais contas: quem não tem Game Pass entra normalmente e pode jogar no modo grátis com anúncios ou com horas de Cloud Playtime. Quando a conta precisa de algo, como criar o perfil Xbox, o app explica o motivo e mostra um botão para resolver no site da Xbox.",
+    "A biblioteca ficou muito mais rápida: seus jogos aparecem assim que o app abre. Ela também ganhou a categoria de jogos gratuitos, cards redesenhados e rolagem mais suave.",
+    "O microfone só pede permissão quando você liga no painel. Com ele desligado, o indicador laranja do iPhone não aparece, e o som do jogo agora sai na gravação de tela.",
+    "O painel de configurações do streaming foi reorganizado em abas (Jogo, Imagem e Sessão), com ícones novos e o tempo da sessão. Um aviso na tela mostra quando um controle conecta ou desconecta.",
+    "A tela do jogo agora mostra a capa oficial e um botão Jogar novo, a tela inicial ganhou destaques com transições suaves e o perfil foi redesenhado.",
+    "O tempo da conta e da sessão agora vem do próprio Xbox. O app também avisa quando um jogo gratuito precisa ser resgatado na conta Xbox ou quando o jogo exige Game Pass.",
+    "Também foram corrigidos a exibição da fila de espera e vários problemas de estabilidade, e os"
   ],
-  "publishedAt": "2026-11-18"
+  "publishedAt": "2026-11-20",
+  "latestVersionCode": 113
 }
