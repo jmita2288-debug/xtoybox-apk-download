@@ -1,44 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
-  <title id="title">XTOYBOX</title>
-  <desc id="desc">Site oficial do projeto XTOYBOX para Android</desc>
-  <defs>
-    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#F8FBF6"/>
-      <stop offset="1" stop-color="#EAF4E6"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#62CE4E"/>
-      <stop offset="1" stop-color="#36A92D"/>
-    </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#244B24" flood-opacity="0.14"/>
-    </filter>
-  </defs>
-
-  <rect width="1200" height="360" rx="34" fill="url(#background)"/>
-  <circle cx="1080" cy="56" r="165" fill="#DDF0D7" opacity="0.72"/>
-  <circle cx="72" cy="326" r="130" fill="#EDF7E9"/>
-
-  <g transform="translate(78 72)" filter="url(#shadow)">
-    <rect width="216" height="216" rx="48" fill="#FFFFFF" stroke="#D7E5D3" stroke-width="2"/>
-    <path d="M58 127c0-29 21-52 50-52s50 23 50 52l13 27c5 11-7 22-17 15l-23-17H85l-23 17c-10 7-22-4-17-15l13-27Z" fill="url(#accent)"/>
-    <rect x="78" y="108" width="34" height="10" rx="5" fill="#173018"/>
-    <rect x="90" y="96" width="10" height="34" rx="5" fill="#173018"/>
-    <circle cx="135" cy="105" r="7" fill="#173018"/>
-    <circle cx="151" cy="121" r="7" fill="#173018"/>
-    <path d="M79 149 137 91" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
-  </g>
-
-  <g transform="translate(350 82)" fill="#182018" font-family="Inter, Segoe UI, Arial, sans-serif">
-    <text x="0" y="72" font-size="68" font-weight="800" letter-spacing="5">XTOYBOX</text>
-    <text x="2" y="118" font-size="21" font-weight="600" fill="#3C6F39">SITE OFICIAL · ANDROID</text>
-    <text x="2" y="166" font-size="25" font-weight="500" fill="#566256">Remote Play do console e acesso a experiências</text>
-    <text x="2" y="202" font-size="25" font-weight="500" fill="#566256">compatíveis com jogos na nuvem.</text>
-  </g>
-
-  <g transform="translate(350 292)" font-family="Inter, Segoe UI, Arial, sans-serif">
-    <rect width="184" height="38" rx="19" fill="#FFFFFF" stroke="#CFE0CA"/>
-    <circle cx="22" cy="19" r="6" fill="#49BD35"/>
-    <text x="38" y="25" font-size="14" font-weight="700" fill="#335033">Projeto independente</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="t d">
+<title id="t">XTOYBOX</title>
+<desc id="d">Logo do XTOYBOX e descrição do repositório: site oficial e distribuição do cliente independente de Remote Play e Xbox Cloud Gaming.</desc>
+<defs>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f6f4"/><stop offset="1" stop-color="#d4d4d1"/></linearGradient>
+<linearGradient id="g" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c6f06e"/><stop offset="1" stop-color="#93c64f"/></linearGradient>
+</defs>
+<rect x="0.5" y="0.5" width="1199" height="299" rx="16" fill="#0c0c0d" stroke="#232325"/>
+<polygon points="84.0,77.5 145.2,77.5 211.4,150.0 145.2,222.4 84.0,222.4 149.8,150.0" fill="url(#w)"/>
+<polygon points="202.2,191.6 227.5,163.6 280.4,222.4 230.7,222.4" fill="url(#w)"/>
+<polygon points="232.1,77.5 275.8,77.5 226.6,132.3 205.0,109.8" fill="url(#g)"/>
+<line x1="336" x2="336" y1="92" y2="208" stroke="#2a2a2c"/>
+<g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" transform="translate(376 0)">
+<text x="0" y="138" font-size="58" font-weight="800" letter-spacing="5" fill="#f2f2f0">XTOYBOX</text>
+<text x="2" y="178" font-size="21" fill="#b4b3ad">Site oficial, downloads e documentação</text>
+<text x="2" y="207" font-size="17" fill="#85847f">Cliente independente para Xbox Cloud Gaming e Remote Play</text>
+<text x="2" y="248" font-size="15" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" fill="#85847f">xtoybox.cloud</text>
+</g>
 </svg>
